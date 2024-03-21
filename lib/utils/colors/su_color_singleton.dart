@@ -45,6 +45,8 @@ class SUColorSingleton {
 
   Color profileBgColor = const Color(0x40000000); //25%透明度-黑色
 
+  Color textDEColor = const Color(0xFFDEDEDE);
+
   double textFont20 = 16.sp;
   double textFont16 = 16.sp;
   double textSecFont12 = 12.sp;

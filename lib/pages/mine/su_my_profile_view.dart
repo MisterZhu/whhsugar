@@ -2,7 +2,6 @@ import 'package:sugar/pages/mine/su_mine_logic.dart';
 
 import '../../su_export_comment.dart';
 import '../../utils/cached_image.dart';
-import '../../utils/custom/custom_two_text_btn.dart';
 
 class SUMyProfilePage extends StatelessWidget {
   SUMyProfilePage({Key? key}) : super(key: key);

@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:sugar/su_export_comment.dart';
 
 import '../../utils/cached_image.dart';
-import '../../utils/custom/custom_two_text_btn.dart';
 import 'su_mine_logic.dart';
 
 class SUMinePage extends StatelessWidget {
@@ -142,7 +141,7 @@ class SUMinePage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
-                    child: CustomTwoTextButton(
+                    child: Buttons.doubleText(
                       topText: '9',
                       bottomText: 'chatted'.tr,
                       onPressed: () {
@@ -155,7 +154,7 @@ class SUMinePage extends StatelessWidget {
                   ),
                   SizedBox(width: 20.w), // 间距
                   Expanded(
-                    child: CustomTwoTextButton(
+                    child: Buttons.doubleText(
                       topText: '2',
                       bottomText: 'following'.tr,
                       onPressed: () {
@@ -169,7 +168,7 @@ class SUMinePage extends StatelessWidget {
                   ),
                   SizedBox(width: 20.w), // 间距
                   Expanded(
-                    child: CustomTwoTextButton(
+                    child: Buttons.doubleText(
                       topText: '1',
                       bottomText: 'subscribing'.tr,
                       onPressed: () {

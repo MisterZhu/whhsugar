@@ -82,22 +82,30 @@ class SUSearchList extends StatelessWidget {
     );
   }
 
-  Padding _rowListItem() {
+  Widget _rowListItem() {
     return Padding(
       padding: EdgeInsets.only(left: 8.w),
       child: Card(
         elevation: 4.0,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
+        // shape: RoundedRectangleBorder(
+        //   borderRadius: BorderRadius.circular(8.0),
+        // ),
         child: Container(
-          width: 150, // 卡片宽度
+          width: 96.w, // 卡片宽度
+          height: 160.h,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(8.0), // 添加圆角
+          ),
           child: Stack(
             children: [
               Positioned.fill(
-                child: Image.network(
-                  'https://qiniu.aimissu.top/temporary/image34.jpg',
-                  fit: BoxFit.cover,
+                child: ClipRRect(
+                  // 使用ClipRRect裁剪图片以显示圆角
+                  borderRadius: BorderRadius.circular(8.0),
+                  child: Image.network(
+                    'https://qiniu.aimissu.top/temporary/image34.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
               Positioned(
@@ -105,6 +113,8 @@ class SUSearchList extends StatelessWidget {
                 left: 0,
                 right: 0,
                 child: Container(
+                  // width: 96.w, // 卡片宽度
+                  // height: 54.h,
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
@@ -114,27 +124,32 @@ class SUSearchList extends StatelessWidget {
                         Color(0xBF212125),
                         Color(0xF2292A2E),
                       ],
-                      stops: [0.0, 0.7539, 0.95],
+                      stops: [0.0, 0.4, 1],
                     ),
                   ),
-                  padding: EdgeInsets.all(8.0),
-                  // color: Colors.black.withOpacity(0.5),
-                  child: const Column(
+                  padding: EdgeInsets.only(
+                      top: 5.w, left: 10.w, right: 10.w, bottom: 10.w),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'First Text',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16.0,
+                      Center(
+                        child: Text(
+                          'Carl',
+                          style: TextStyle(
+                            color: SUColorSingleton().textColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16.0,
+                          ),
                         ),
                       ),
+                      SizedBox(
+                        height: 7.h,
+                      ),
                       Text(
-                        'Second Text',
+                        'He’s the school bad boy,domisss',
                         style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.0,
+                          color: SUColorSingleton().textDEColor,
+                          fontSize: 10.0.sp,
                         ),
                       ),
                     ],
