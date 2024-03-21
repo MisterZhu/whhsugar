@@ -26,7 +26,7 @@ class SUHomePage extends StatelessWidget {
           leading: Builder(builder: (context) {
             return IconButton(
               icon: Image.asset(
-                "assets/images/su_home_mine.png",
+                Assets.homeMine,
                 width: 28.w,
                 height: 28.w,
               ),

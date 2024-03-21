@@ -1,14 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sugar/routes/su_router_path.dart';
-
 import 'package:sugar/su_app.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-
-import '../constants/su_asset.dart';
+import '../constants/assets.dart';
 
 class SUUtils {
   ///获取当前context
@@ -67,7 +63,7 @@ class SUUtils {
           errorWidget: (context, url, error) => const Icon(Icons.error));
     } else {
       return Image.asset(
-        url.isEmpty ? SUAsset.icon_home_tiger : url,
+        url.isEmpty ? Assets.homeMine : url,
         width: width,
         height: height,
         fit: fit,
