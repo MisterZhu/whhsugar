@@ -39,7 +39,10 @@ dependencies:
   dio: ^5.2.1+1
   #提示框组件 https://pub.dev/packages/fluttertoast/install
   fluttertoast: ^8.2.4
+  #WebView 插件 https://pub.dev/packages/webview_flutter/install
   webview_flutter: ^4.5.0
+  #基于腾讯x5引擎的webview的flutter插件，暂时只支持android使用 https://pub.dev/packages/x5_webview/install
+  #  x5_webview: ^0.3.4
   package_info: ^2.0.2
   get: ^4.6.5
   uuid: ^3.0.7
@@ -103,8 +106,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/images/home/
     - assets/images/common/
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

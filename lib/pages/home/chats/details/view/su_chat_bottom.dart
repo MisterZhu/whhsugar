@@ -17,13 +17,13 @@ class SUChatBottom extends StatelessWidget {
     ScreenUtil screenUtil = ScreenUtil(); // 创建 ScreenUtil 实例
     double screenHeight =
         screenUtil.bottomBarHeight; // 使用实例访问 bottomBarHeight 属性
-    print('---------------------------screenUtil = $screenHeight');
+    // print('---------------------------screenUtil = $screenHeight');
 // 获取屏幕底部的安全高度
     double bottomBarHeight = Get.bottomBarHeight;
-    print('---------------------------Get = $bottomBarHeight');
+    // print('---------------------------Get = $bottomBarHeight');
 
     double bottomPadding = MediaQuery.of(context).padding.bottom;
-    print('---------------------------MediaQuery = $bottomPadding');
+    // print('---------------------------MediaQuery = $bottomPadding');
 
     return Container(
       // color: Color(int.parse(bgColor.replaceAll('#', '0xFF'))),

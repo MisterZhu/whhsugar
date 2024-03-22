@@ -14,6 +14,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import 'constants/su_default_value.dart';
 import 'constants/su_translation.dart';
+import 'global/su_global_binding.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -51,6 +52,7 @@ void startApp() async {
       // defaultTransition: Transition.rightToLeft, // 转场动画
       getPages: SURouterPages.getPages,
       initialRoute: basePath,
+      initialBinding: SUGlobalBinding(),
       builder: EasyLoading.init(
         builder: (context, widget) {
           return MediaQuery(

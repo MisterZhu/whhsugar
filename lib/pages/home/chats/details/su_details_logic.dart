@@ -49,7 +49,7 @@ class SUDetailsLogic extends GetxController {
         height: imageSize.height / 3,
       ), // Region to analyze
     );
-    print('---------------------------imageSize : $imageSize');
+    // print('---------------------------imageSize : $imageSize');
   }
 
   Future<ui.Image> loadImage(Uint8List list) async {

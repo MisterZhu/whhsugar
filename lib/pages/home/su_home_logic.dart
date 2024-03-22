@@ -9,10 +9,11 @@ class SUHomeLogic extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    bus.on(SUDefVal.kWebBlockCode, onEventCallback);
+    // bus.on(SUDefVal.kWebBlockCode, onEventCallback);
   }
 
-  void onEventCallback(dynamic arg) {
-    debugPrint('--------------Event callback triggered with argument: $arg');
-  }
+  // void onEventCallback(dynamic arg) {
+  //   debugPrint('--------------Event callback triggered with argument: $arg');
+  //
+  // }
 }

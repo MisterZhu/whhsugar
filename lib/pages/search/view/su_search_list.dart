@@ -25,7 +25,7 @@ class SUSearchList extends StatelessWidget {
       child: Row(
         children: [
           Image.asset(
-            'assets/images/su_search_head.png',
+            Assets.homeSearchHead,
             width: 40.w,
             height: 40.w,
             fit: BoxFit.cover,

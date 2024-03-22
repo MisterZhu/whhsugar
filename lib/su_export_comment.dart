@@ -18,3 +18,5 @@ export 'package:sugar/utils/event_bus.dart';
 export 'package:sugar/widgets/base/texts.dart';
 export 'package:sugar/widgets/base/buttons.dart';
 export 'package:sugar/constants/assets.dart';
+export 'package:sugar/services/http_manager.dart';
+export 'package:sugar/widgets/loading/loading_util.dart';

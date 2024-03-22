@@ -76,11 +76,20 @@ class SUWebviewLogic extends GetxController {
             // 解析URL中的参数
             Uri uri = Uri.parse(request.url);
             String? code = uri.queryParameters['code'];
+            String? state = uri.queryParameters['state'];
+
             // 判断code是否有值
-            if (code != null && code.isNotEmpty) {
+            if (code != null &&
+                code.isNotEmpty &&
+                state != null &&
+                state.isNotEmpty) {
               // 在这里处理code有值的情况
               debugPrint('--------------------拦截到的code参数: $code');
-              bus.emit(SUDefVal.kWebBlockCode, code);
+              var params = {
+                "code": code,
+                "state": state,
+              };
+              bus.emit(SUDefVal.kWebBlockCode, params);
               SURouterHelper.back(null);
               // 返回NavigationDecision.prevent表示拦截请求
               return NavigationDecision.prevent;
