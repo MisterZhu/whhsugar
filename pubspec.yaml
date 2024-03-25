@@ -47,6 +47,8 @@ dependencies:
   get: ^4.6.5
   uuid: ^3.0.7
   shared_preferences: ^2.2.0
+  #flutter多种布局方式，无限轮播https://pub-web.flutter-io.cn/packages/flutter_swiper_null_safety/install
+  flutter_swiper_null_safety: ^1.0.2
 #  event_bus: ^2.0.0
   photo_view: ^0.14.0
   #loading动画库 https://pub.dev/packages/flutter_spinkit/install

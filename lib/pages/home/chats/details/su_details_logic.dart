@@ -61,8 +61,8 @@ class SUDetailsLogic extends GetxController {
   }
 
   String _getPreferredColorHex() {
-    // print(
-    //     '------------------dominantColor : ${paletteGenerator.dominantColor?.color.value.toRadixString(16).substring(2)}');
+    print(
+        '------------------dominantColor : ${paletteGenerator.dominantColor?.color.value.toRadixString(16).substring(2)}');
     // print(
     //     '------------------lightVibrantColor : ${paletteGenerator.lightVibrantColor?.color.value.toRadixString(16).substring(2)}');
     // print(
