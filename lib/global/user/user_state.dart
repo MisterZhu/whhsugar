@@ -1,16 +1,23 @@
+import 'package:get/get.dart';
+
 class UserState {
   String name;
   int age;
-  String avatar;
+  RxString avatar;
   String token;
 
-  UserState({this.name = '', this.age = 0, this.avatar = '', this.token = ''});
+  UserState({
+    this.name = '',
+    this.age = 0,
+    RxString? avatar, // 移除默认值，使得该参数可选
+    this.token = '',
+  }) : avatar = avatar ?? ''.obs; // 初始化avatar参数
   // 将User对象转换为Map
   Map<String, dynamic> toJson() {
     return {
       'name': name,
       'age': age,
-      'avatar': avatar,
+      'avatar': avatar.value, // 获取RxString的值
       'token': token,
     };
   }
@@ -20,7 +27,7 @@ class UserState {
     return UserState(
       name: json['name'] ?? '',
       age: json['age'] ?? 0,
-      avatar: json['avatar'] ?? '',
+      avatar: RxString(json['avatar'] ?? ''), // 使用RxString包装
       token: json['token'] ?? '',
     );
   }

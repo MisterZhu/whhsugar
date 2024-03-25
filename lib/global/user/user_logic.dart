@@ -8,13 +8,21 @@ import 'user_state.dart';
 
 class UserLogic extends GetxController {
   // final UserState model = UserState();
-  Rx<UserState> user = Rx<UserState>(UserState());
+  UserState user = UserState();
 
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     bus.on(SUDefVal.kWebBlockCode, onEventCallback);
+    user = UserState.fromJson({
+      'name': 'Lisa',
+      'age': 18,
+      'avatar': 'https://qiniu.aimissu.top/temporary/image34.jpg',
+      'token': '123456',
+    });
+
+    updateUser(user);
   }
 
   void onEventCallback(dynamic arg) {
@@ -25,8 +33,9 @@ class UserLogic extends GetxController {
   // 更新用户信息
   void updateUser(UserState newUser) async {
     // 更新用户信息
-    user(newUser);
-
+    // user(newUser);
+    user = newUser;
+    // user.refresh();
     // 保存用户信息到SharedPreferences
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('user_info', jsonEncode(newUser.toJson()));
@@ -38,7 +47,6 @@ class UserLogic extends GetxController {
     String? userInfoString = prefs.getString('user_info');
     if (userInfoString != null) {
       Map<String, dynamic> userInfoMap = jsonDecode(userInfoString);
-      user(UserState.fromJson(userInfoMap));
     }
   }
 

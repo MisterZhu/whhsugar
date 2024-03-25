@@ -1,5 +1,6 @@
 import 'package:sugar/pages/mine/su_mine_logic.dart';
 
+import '../../global/user/user_logic.dart';
 import '../../su_export_comment.dart';
 import '../../utils/cached_image.dart';
 
@@ -8,6 +9,8 @@ class SUMyProfilePage extends StatelessWidget {
 
   final logic = Get.find<SUMineLogic>();
   final state = Get.find<SUMineLogic>().state;
+  final UserLogic userLogic = Get.find<UserLogic>();
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<SUMineLogic>(
@@ -54,41 +57,56 @@ class SUMyProfilePage extends StatelessWidget {
                     // 子组件1：在中心
                     Align(
                       alignment: Alignment.center,
-                      child: Container(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(8.w),
-                          child: CachedImage(
-                            width: 64.w,
-                            height: 64.w,
-                            imageUrl: logic.state.avatar,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      ),
+                      child: Obx(() => ClipRRect(
+                            borderRadius: BorderRadius.circular(8.w),
+                            child: CachedImage(
+                              width: 64.w,
+                              height: 64.w,
+                              imageUrl: userLogic.user.avatar.value,
+                              fit: BoxFit.cover,
+                            ),
+                          )),
                     ),
                     // 子组件2：在中心偏右下角各50像素
                     Positioned(
                       right: 0.0, // 向右偏移50像素
                       bottom: 0.0, // 向下偏移50像素
-                      child: Container(
-                        height: 48.0.w,
-                        width: 48.0.w,
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15), // 白色透明度15%
-                          borderRadius: BorderRadius.circular(24.0.w), // 切圆角
-                        ),
-                        child: Center(
-                          child: Icon(
-                            Icons.camera_alt_rounded,
-                            color: SUColorSingleton().naviDefColor,
-                            size: 30.w,
+                      child: GestureDetector(
+                        onTap: () {
+                          if (userLogic.user.avatar.value ==
+                              'https://qiniu.aimissu.top/temporary/image39.jpg') {
+                            debugPrint('-------------------image39');
+
+                            userLogic.user.avatar.value =
+                                'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg';
+                          } else {
+                            debugPrint('-------------------!= image39');
+
+                            userLogic.user.avatar.value =
+                                'https://qiniu.aimissu.top/temporary/image39.jpg';
+                          }
+                          userLogic.updateUser(userLogic.user);
+                        },
+                        child: Container(
+                          height: 48.0.w,
+                          width: 48.0.w,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.15), // 白色透明度15%
+                            borderRadius: BorderRadius.circular(24.0.w), // 切圆角
                           ),
-                          // Image.asset(
-                          //   'assets/images/your_image.png', // 图片路径
-                          //   width: 30.0,
-                          //   height: 30.0,
-                          //   fit: BoxFit.contain,
-                          // ),
+                          child: Center(
+                            child: Icon(
+                              Icons.camera_alt_rounded,
+                              color: SUColorSingleton().naviDefColor,
+                              size: 30.w,
+                            ),
+                            // Image.asset(
+                            //   'assets/images/your_image.png', // 图片路径
+                            //   width: 30.0,
+                            //   height: 30.0,
+                            //   fit: BoxFit.contain,
+                            // ),
+                          ),
                         ),
                       ),
                     ),

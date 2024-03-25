@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sugar/su_export_comment.dart';
 
+import '../../global/user/user_logic.dart';
 import '../../utils/cached_image.dart';
 import 'su_mine_logic.dart';
 
@@ -16,6 +17,8 @@ class SUMinePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserLogic userLogic = Get.find<UserLogic>();
+
     return Drawer(
       child: Container(
         color: SCColors.color_1C1D1F,
@@ -35,17 +38,15 @@ class SUMinePage extends StatelessWidget {
                     // SizedBox(
                     //   width: 20.w,
                     // ),
-                    Container(
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8.w),
-                        child: CachedImage(
-                          width: 64.w,
-                          height: 64.w,
-                          imageUrl: logicDet.state.avatar,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
+                    Obx(() => ClipRRect(
+                          borderRadius: BorderRadius.circular(8.w),
+                          child: CachedImage(
+                            width: 64.w,
+                            height: 64.w,
+                            imageUrl: userLogic.user.avatar.value,
+                            fit: BoxFit.cover,
+                          ),
+                        )),
                     SizedBox(
                       width: 8.w,
                     ),

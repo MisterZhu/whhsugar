@@ -1,10 +1,12 @@
 import 'package:get/get.dart';
 
+import '../../global/user/user_state.dart';
 import '../../su_export_comment.dart';
 import 'su_home_state.dart';
 
 class SUHomeLogic extends GetxController {
   final SUHomeState state = SUHomeState();
+
   @override
   void onInit() {
     // TODO: implement onInit
