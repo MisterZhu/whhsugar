@@ -20,8 +20,29 @@ class SUDiscoverPage extends StatelessWidget {
 
   final state = Get.find<SUDiscoverLogic>().state;
 
+  void initWidget() {
+    logic.currentIndex = logic.pageController.initialPage;
+
+    // 准备新的数据源
+    logic.childrenView = [];
+    final context = Get.context;
+    for (int i = 0; i < logic.imageUrls.length; i++) {
+      logic.childrenView.add(buildPage(
+        context!,
+        'Page ${i + 1}',
+        Colors.white,
+        logic.imageUrls[i],
+      ));
+    }
+    logic.childrenView.insert(0, logic.childrenView.last);
+    logic.childrenView.add(logic.childrenView[1]);
+    logic.update([SUDefVal.kDiscover]);
+    debugPrint('-------logic.childrenView:${logic.childrenView.length}');
+  }
+
   @override
   Widget build(BuildContext context) {
+    initWidget();
     // state.pageController.addListener(() {
     //   int currentPage = state.pageController.page?.round() ?? 0;
     //   print('~~~~~~~~~~~~~~~~~~~Current Page: $currentPage');
@@ -48,39 +69,21 @@ class SUDiscoverPage extends StatelessWidget {
         //   }
         // },
         // child:
-        Stack(
-      children: [
-        Positioned.fill(
-          child: PageView(
-            controller: state.pageController, // Set the controller for PageView
-            children: [
-              // 页面1
-              buildPage(context, 'Page 1', Colors.white,
-                  'https://qiniu.aimissu.top/temporary/image34.jpg'),
-
-              // 页面2
-              buildPage(context, 'Page 2', Colors.green,
-                  'https://qiniu.aimissu.top/temporary/image39.jpg'),
-
-              // 页面3
-              buildPage(context, 'Page 3', Colors.orange,
-                  'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg'),
-
-              buildPage(context, 'Page 1', Colors.white,
-                  'https://qiniu.aimissu.top/temporary/image34.jpg'),
-
-              // 页面2
-              buildPage(context, 'Page 2', Colors.green,
-                  'https://qiniu.aimissu.top/temporary/image39.jpg'),
-
-              // 页面3
-              buildPage(context, 'Page 3', Colors.orange,
-                  'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg'),
-            ],
-          ),
-        ),
-      ],
-    );
+        GetBuilder<SUDiscoverLogic>(
+            id: SUDefVal.kDiscover,
+            builder: (logic) {
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    child: PageView(
+                      controller: logic.pageController,
+                      onPageChanged: logic.onPageChanged,
+                      children: logic.childrenView,
+                    ),
+                  ),
+                ],
+              );
+            });
     // );
   }
 
