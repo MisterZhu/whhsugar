@@ -143,6 +143,7 @@ class SUDefVal {
   /// 刷新聊天页面
   static const String kChatInput = "ChatInput";
   static const String kChatBottom = "ChatBottom";
+  static const String kDiscover = "Discover";
 
   static const String kChatSession = "ChatSession";
   static const String kChatMsgList = "ChatMsgList";

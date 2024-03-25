@@ -5,11 +5,41 @@ import 'su_discover_state.dart';
 
 class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
   final SUDiscoverState state = SUDiscoverState();
+  late List<Widget> childrenView = []; // 初始化为一个空的列表
+  int currentIndex = 0;
+  final PageController pageController = PageController();
+  List<String> imageUrls = [
+    'https://qiniu.aimissu.top/temporary/image34.jpg',
+    'https://qiniu.aimissu.top/temporary/image39.jpg',
+    'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg',
+    'https://qiniu.aimissu.top/temporary/image34.jpg',
+    'https://qiniu.aimissu.top/temporary/image39.jpg',
+    'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg',
+  ];
 
   @override
   void onInit() {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
+
+    // state.pageController.addListener(_handlePageScroll);
+  }
+
+  void onPageChanged(int index) async {
+    if (index == 0) {
+      // 当前选中的是第一个位置，自动选中倒数第二个位置
+      currentIndex = childrenView.length - 2;
+      await Future.delayed(const Duration(milliseconds: 300));
+      pageController.jumpToPage(currentIndex);
+    } else if (index == childrenView.length - 1) {
+      // 当前选中的是倒数第一个位置，自动选中第二个索引
+      currentIndex = 1;
+      await Future.delayed(const Duration(milliseconds: 300));
+      pageController.jumpToPage(currentIndex);
+    } else {
+      currentIndex = index;
+    }
+    // setState(() {});
   }
 
   @override

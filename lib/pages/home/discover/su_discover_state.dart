@@ -34,12 +34,23 @@ class SUDiscoverState {
       {"message": "Nice to meet you, too", "type": 2, "isSelect": false},
     ],
   };
+  List<String> dataList = [
+    'https://qiniu.aimissu.top/temporary/image34.jpg',
+    'https://qiniu.aimissu.top/temporary/image39.jpg',
+    'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg',
+    'https://qiniu.aimissu.top/temporary/image34.jpg',
+    'https://qiniu.aimissu.top/temporary/image39.jpg',
+    'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg',
+  ];
+
   ScrollController? scrollController;
-  final PageController pageController = PageController();
   late TextEditingController textEditingController;
   late FocusNode focusNode;
   late double keywordH;
   late String defColor = '#000000';
+  int currentIndex = 0;
+  List<Widget> childrenView = <Widget>[];
+
   SUDiscoverState() {
     keywordH = 0.0;
     scrollController = ScrollController();
