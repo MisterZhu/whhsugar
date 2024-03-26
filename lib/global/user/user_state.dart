@@ -1,38 +1,80 @@
 import 'package:get/get.dart';
 
+import 'package:get/get.dart';
+
 class UserState {
-  String name;
-  int age;
+  String id;
+  RxString name;
+  String displayName;
   RxString avatar;
+  // UserProperties properties;
+  String createdTime;
+  String updatedTime;
   String token;
 
   UserState({
-    this.name = '',
-    this.age = 0,
-    RxString? avatar, // 移除默认值，使得该参数可选
+    this.id = '',
+    this.displayName = '',
+    RxString? avatar,
+    RxString? name,
+    // required this.properties,
+    this.createdTime = '',
+    this.updatedTime = '',
     this.token = '',
-  }) : avatar = avatar ?? ''.obs; // 初始化avatar参数
-  // 将User对象转换为Map
+  })  : avatar = avatar ?? ''.obs,
+        name = name ?? ''.obs;
+
   Map<String, dynamic> toJson() {
     return {
-      'name': name,
-      'age': age,
-      'avatar': avatar.value, // 获取RxString的值
+      'id': id,
+      'name': name.value,
+      'displayName': displayName,
+      'avatar': avatar.value,
+      // 'properties': properties.toJson(),
+      'createdTime': createdTime,
+      'updatedTime': updatedTime,
       'token': token,
     };
   }
 
-  // 从Map中构建User对象
   factory UserState.fromJson(Map<String, dynamic> json) {
     return UserState(
-      name: json['name'] ?? '',
-      age: json['age'] ?? 0,
-      avatar: RxString(json['avatar'] ?? ''), // 使用RxString包装
+      id: json['id'] ?? '',
+      name: RxString(json['name'] ?? ''),
+      displayName: json['displayName'] ?? '',
+      avatar: RxString(json['avatar'] ?? ''),
+      // properties: UserProperties.fromJson(json['properties'] ?? {}),
+      createdTime: json['createdTime'] ?? '',
+      updatedTime: json['updatedTime'] ?? '',
       token: json['token'] ?? '',
     );
   }
-  // 更新token属性的方法
+
   void updateToken(String newToken) {
     token = newToken;
+  }
+}
+
+class UserProperties {
+  final String project;
+  final String projectId;
+
+  UserProperties({
+    required this.project,
+    required this.projectId,
+  });
+
+  factory UserProperties.fromJson(Map<String, dynamic> json) {
+    return UserProperties(
+      project: json['project'] ?? '',
+      projectId: json['projectId'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'project': project,
+      'projectId': projectId,
+    };
   }
 }

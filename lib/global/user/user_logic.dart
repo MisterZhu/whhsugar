@@ -133,6 +133,10 @@ await saveTokenAndExecute();
           // userInfo.login(data, isLocalSave: true);
           // LoadingUtil.success(text: value['msg']);
           log('response : \n $value');
+          user = UserState.fromJson(value);
+          log('----------------------name : \n ${user.name}');
+          log('----------------------avatar : \n ${user.avatar}');
+
           /*
 {
   "id": "81172d1a-4dc4-4dac-b859-0ab07d472fb1",
