@@ -107,13 +107,19 @@ class SUChatBottom extends StatelessWidget {
                   sendMessageAction();
                 },
                 style: TextStyle(
-                  color: SUColorSingleton().inputTextColor, // 设置字体颜色
+                  color: SUColorSingleton().inputTextColor,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14.sp,
+                  // 设置字体颜色
                 ),
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.only(bottom: 10.w),
+                  // contentPadding:
+                  //                   EdgeInsets.symmetric(vertical: 10.0.w), // 调整水平内边距
                   hintText: 'Enter'.tr,
                   hintStyle: TextStyle(
                       color: SUColorSingleton().inputBgColor,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w400,
                       fontSize: 14.sp),
                   enabledBorder: InputBorder.none,
                   border: InputBorder.none,

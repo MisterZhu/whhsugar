@@ -83,6 +83,8 @@ dependencies:
 #  flutter_sticky_header: ^0.6.5
   #极光推送插件 https://pub.dev/packages/jpush_flutter/install
 #  jpush_flutter: ^2.5.0
+  #解码json Web令牌 https://pub.dev/packages/jwt_decoder/install
+  jwt_decoder: ^2.0.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

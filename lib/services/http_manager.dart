@@ -2,13 +2,11 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sugar/services/su_config.dart';
 
-import '../constants/su_default_value.dart';
-import '../utils/su_utils.dart';
-import '../widgets/loading/loading_util.dart';
+import '../global/user/user_logic.dart';
+import '../su_export_comment.dart';
 
 class HttpManager {
   factory HttpManager() => _getInstance();
@@ -40,11 +38,14 @@ class HttpManager {
 
   Future<void> _init() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    // final userLogic = Get.find<UserLogic>();
+
     _headers = {
       'Content-Type': 'application/json; charset=utf-8',
     };
-
+    // String? token = userLogic.user.token;
     String? token = sharedPreferences.getString(SUDefVal.kToken);
+
     if (token != null) {
       _headers['token'] = token;
     }
@@ -84,6 +85,8 @@ class HttpManager {
     late Response response;
     late Object exception;
     bool status = false;
+    print('------------------------------Get请求URL: $url');
+    print('------------------------------Get请求参数: $params');
     try {
       response = await _dio!.get(url,
           queryParameters: params, options: headers == null ? null : options);
@@ -153,7 +156,7 @@ class HttpManager {
         success?.call(data);
       } else {
         var data = doError(exception);
-        print('----------- post data: $data');
+        print('----------- post response: $data');
 
         var code = data['code'];
         if (code != 401) {
@@ -293,10 +296,14 @@ doError(e) {
 
   /// message
   String message = SUDefVal.errorMessage;
-  print("-------------error doError ");
+  debugPrint("-------------error 网络请求异常 ");
+  debugPrint(' --------------- e : $e');
 
   if (e is DioException) {
     DioException error = e;
+    debugPrint(' --------------- error : $error');
+    debugPrint(
+        ' --------------- statusCode : ${error.response?.statusCode ?? 500}');
 
     if (e.error is SocketException) {
       code = 500;
@@ -312,7 +319,7 @@ doError(e) {
           {
             if (error.response?.data is Map) {
               var errorData = error.response?.data;
-              message = errorData['msg'] ?? SUDefVal.errorMessage;
+              message = errorData['message'] ?? SUDefVal.errorMessage;
             } else {
               message =
                   error.response?.data.toString() ?? SUDefVal.errorMessage;
@@ -323,7 +330,10 @@ doError(e) {
           {
             if (error.response?.data is Map) {
               var errorData = error.response?.data;
-              message = errorData['msg'] ?? SUDefVal.errorMessage;
+              message = errorData['message'] ?? SUDefVal.errorMessage;
+              // final custom_code = errorData['code'] ?? 0;
+
+              debugPrint("-------------error message : $message");
             } else {
               message =
                   error.response?.data.toString() ?? SUDefVal.errorMessage;
@@ -341,7 +351,7 @@ doError(e) {
           {
             if (error.response?.data is Map) {
               var errorData = error.response?.data;
-              message = errorData['msg'] ?? SUDefVal.errorMessage;
+              message = errorData['message'] ?? SUDefVal.errorMessage;
             } else {
               message =
                   error.response?.data.toString() ?? SUDefVal.errorMessage;
@@ -352,7 +362,7 @@ doError(e) {
           {
             if (error.response?.data is Map) {
               var errorData = error.response?.data;
-              message = errorData['msg'] ?? SUDefVal.errorMessage;
+              message = errorData['message'] ?? SUDefVal.errorMessage;
             } else {
               message =
                   error.response?.data.toString() ?? SUDefVal.errorMessage;
@@ -364,7 +374,7 @@ doError(e) {
           {
             if (error.response?.data is Map) {
               var errorData = error.response?.data;
-              message = errorData['msg'] ?? SUDefVal.errorMessage;
+              message = errorData['message'] ?? SUDefVal.errorMessage;
             } else {
               message =
                   error.response?.data.toString() ?? SUDefVal.errorMessage;
@@ -376,7 +386,7 @@ doError(e) {
           {
             if (error.response?.data is Map) {
               var errorData = error.response?.data;
-              message = errorData['msg'] ?? SUDefVal.errorMessage;
+              message = errorData['message'] ?? SUDefVal.errorMessage;
             } else {
               message =
                   error.response?.data.toString() ?? SUDefVal.errorMessage;
@@ -388,7 +398,7 @@ doError(e) {
           {
             if (error.response?.data is Map) {
               var errorData = error.response?.data;
-              message = errorData['msg'] ?? SUDefVal.errorMessage;
+              message = errorData['message'] ?? SUDefVal.errorMessage;
             } else {
               message =
                   error.response?.data.toString() ?? SUDefVal.errorMessage;
@@ -399,7 +409,7 @@ doError(e) {
           {
             if (error.response?.data is Map) {
               var errorData = error.response?.data;
-              message = errorData['msg'] ?? SUDefVal.errorMessage;
+              message = errorData['message'] ?? SUDefVal.errorMessage;
             } else {
               message =
                   error.response?.data.toString() ?? SUDefVal.errorMessage;

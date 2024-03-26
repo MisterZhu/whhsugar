@@ -141,16 +141,24 @@ class SUCustomScaffold extends StatelessWidget {
     return customTitleWidget ??
         Text(
           title,
-          style: textStyle ?? TextStyle(color: state.titleColor),
+          style: textStyle ??
+              TextStyle(
+                  color: state.titleColor,
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400),
         );
   }
 
   Widget _buildCustomLeading() {
     return IconButton(
-      icon: Icon(Icons.arrow_back_ios_new,
-          color: SUColorSingleton().naviDefColor), // 设置自定义的返回箭头图标和颜色
+      icon: Image.asset(
+        Assets.commonBackIconW,
+        width: 24.w,
+        height: 24.w,
+        // color: SUColorSingleton().naviDefColor
+      ),
       onPressed: () {
-        // 返回按钮点击事件
+        // 左侧按钮点击事件
         SURouterHelper.back(null);
       },
     );

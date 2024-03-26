@@ -1,5 +1,6 @@
 import 'package:sugar/pages/search/view/su_search_item.dart';
 import 'package:sugar/pages/search/view/su_search_list.dart';
+import 'package:sugar/skin/su_search_bar.dart';
 
 import '../../su_export_comment.dart';
 import '../mine/su_mine_logic.dart';
@@ -19,9 +20,9 @@ class SUSearchPage extends StatelessWidget {
     return GetBuilder<SUMineLogic>(
         id: SUDefVal.kChatInput,
         builder: (logic) {
-          return SUCustomScaffold(
-              title: '搜索资料',
-              navBackgroundColor: SUColorSingleton().bgBotColor,
+          return Scaffold(
+              appBar: SUCustomSearchBar(context),
+              // navBackgroundColor: SUColorSingleton().bgBotColor,
               body: body(context));
         });
   }

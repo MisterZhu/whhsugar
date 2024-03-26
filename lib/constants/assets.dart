@@ -3,6 +3,7 @@ class Assets {
   Assets._();
 
   static const String commonBackIcon = 'assets/images/common/back_icon.png';
+  static const String commonBackIconW = 'assets/images/common/back_icon_w.png';
   static const String commonRightArrow = 'assets/images/common/right_arrow.png';
   static const String commonRightDown = 'assets/images/common/right_down.png';
   static const String homeMine = 'assets/images/home/mine.png';

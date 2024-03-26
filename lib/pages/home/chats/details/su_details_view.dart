@@ -25,14 +25,18 @@ class SUDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<SUDetailsLogic>(builder: (logic) {
       return SUCustomScaffold(
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios_new,
-                color: SUColorSingleton().naviDefColor),
-            onPressed: () {
-              // 左侧按钮点击事件
-              SURouterHelper.back(null);
-            },
-          ),
+          // leading: IconButton(
+          //   icon: Image.asset(
+          //     Assets.commonBackIconW,
+          //     width: 24.w,
+          //     height: 24.w,
+          //     // color: SUColorSingleton().naviDefColor
+          //   ),
+          //   onPressed: () {
+          //     // 左侧按钮点击事件
+          //     SURouterHelper.back(null);
+          //   },
+          // ),
           title: "Tony",
           centerTitle: true,
           navBackgroundColor: Colors.transparent,

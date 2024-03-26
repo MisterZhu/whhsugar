@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:get/get.dart';
 import 'package:sugar/pages/home/discover/su_discover_state.dart';
@@ -43,7 +44,7 @@ class SUDiscoverPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // initWidget();
+    initWidget();
     // state.pageController.addListener(() {
     //   int currentPage = state.pageController.page?.round() ?? 0;
     //   print('~~~~~~~~~~~~~~~~~~~Current Page: $currentPage');
@@ -76,23 +77,24 @@ class SUDiscoverPage extends StatelessWidget {
               return Stack(
                 children: [
                   Positioned.fill(
-                    child: Swiper(
-                      autoplay: false,
-                      itemCount: logic.imageUrls.length,
-                      viewportFraction: 1.0,
-                      scale: 1.0,
-                      loop: true,
-                      controller: SwiperController(),
-                      itemBuilder: (BuildContext context, int index) {
-                        return buildPage(context, 'title$index:', Colors.white,
-                            logic.imageUrls[index]);
-                      },
+                    child:
+                        // Swiper(
+                        //   autoplay: false,
+                        //   itemCount: logic.imageUrls.length,
+                        //   viewportFraction: 1.0,
+                        //   scale: 1.0,
+                        //   loop: true,
+                        //   controller: SwiperController(),
+                        //   itemBuilder: (BuildContext context, int index) {
+                        //     return buildPage(context, 'title$index:', Colors.white,
+                        //         logic.imageUrls[index]);
+                        //   },
+                        // ),
+                        PageView(
+                      controller: logic.pageController,
+                      onPageChanged: logic.onPageChanged,
+                      children: logic.childrenView,
                     ),
-                    // PageView(
-                    //   controller: logic.pageController,
-                    //   onPageChanged: logic.onPageChanged,
-                    //   children: logic.childrenView,
-                    // ),
                   ),
                 ],
               );
@@ -102,6 +104,7 @@ class SUDiscoverPage extends StatelessWidget {
 
   Widget buildPage(
       BuildContext context, String title, Color color, String imagePath) {
+    debugPrint('-------------buildPage');
     return FutureBuilder<String>(
       future: logicDet.getImageColor(imagePath), // 调用 getImageColor 方法获取图片主要颜色
       builder: (context, snapshot) {

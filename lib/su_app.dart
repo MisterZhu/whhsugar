@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:sugar/routes/su_router_pages.dart';
+import 'package:sugar/services/http_manager.dart';
 import 'package:sugar/utils/custom_material_color.dart';
 import 'package:sugar/utils/su_utils.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
@@ -22,6 +23,7 @@ void startApp() async {
   WidgetsFlutterBinding.ensureInitialized(); // 确保Flutter初始化完毕
 
   RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+  await HttpManager.init();
 
   // 异步初始化
   await SharedPreferences.getInstance();
@@ -31,25 +33,30 @@ void startApp() async {
   // 初始化
   ScreenUtil.ensureScreenSize();
 
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
+  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   // Android设备设置沉浸式
-  if (Platform.isAndroid) {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-      statusBarBrightness: Brightness.light,
-    ));
-  }
+  // if (Platform.isAndroid) {
+  //   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+  //     statusBarColor: Colors.transparent,
+  //     statusBarBrightness: Brightness.light,
+  //   ));
+  // }
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarBrightness: Brightness.light,
+  ));
   runApp(ScreenUtilInit(
     designSize: const Size(SUDefVal.screenWidth, SUDefVal.screenHeight),
     builder: (ctx, child) => GetMaterialApp(
       theme: ThemeData(
-        primarySwatch: customMaterialColor(Colors.black),
+        brightness: Brightness.light,
+        primarySwatch: customMaterialColor(Colors.white),
         highlightColor: Colors.transparent,
         splashColor: Colors.transparent,
       ),
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      // defaultTransition: Transition.rightToLeft, // 转场动画
+      defaultTransition: Transition.rightToLeft, // 转场动画
       getPages: SURouterPages.getPages,
       initialRoute: basePath,
       initialBinding: SUGlobalBinding(),

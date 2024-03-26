@@ -31,4 +31,8 @@ class UserState {
       token: json['token'] ?? '',
     );
   }
+  // 更新token属性的方法
+  void updateToken(String newToken) {
+    token = newToken;
+  }
 }

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:sugar/routes/su_router_pages.dart';
 import 'package:sugar/su_export_comment.dart';
@@ -58,10 +59,10 @@ class SUHomePage extends StatelessWidget {
               onPressed: () {
                 // 右侧按钮点击事件
                 FocusScope.of(context).requestFocus(FocusNode());
-                SURouterHelper.pathPage(SURouterPath.searchPath, null);
+                // SURouterHelper.pathPage(SURouterPath.searchPath, null);
 
-                // var params = {"title": '登录', "url": SUUrl.kLoginWebUrl};
-                // SURouterHelper.pathPage(SURouterPath.webViewPath, params);
+                var params = {"title": '登录', "url": SUUrl.kLoginWebUrl};
+                SURouterHelper.pathPage(SURouterPath.webViewPath, params);
                 // X5Sdk.openWebActivity(
                 //     "https://casdoor.tigerbot.com/login/oauth/authorize?client_id=931f8237ead11af361c3&response_type=code&redirect_uri=http://localhost:9000/callback&scope=read&state=sugar",
                 //     title: "web页面");

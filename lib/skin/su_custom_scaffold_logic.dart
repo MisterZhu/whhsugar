@@ -13,7 +13,7 @@ class SUCustomScaffoldLogic extends GetxController {
   /*返回按钮颜色*/
   Color backIconColor = SCHexColor("#FFFFFFFF");
   /*状态栏颜色,黑色或白色,默认白色*/
-  SystemUiOverlayStyle statusBarStyle = SystemUiOverlayStyle.dark;
+  SystemUiOverlayStyle statusBarStyle = SystemUiOverlayStyle.light;
 
   @override
   void onInit() {

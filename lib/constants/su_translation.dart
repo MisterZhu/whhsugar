@@ -129,6 +129,7 @@ class SUTranslations extends Translations {
           "subscribing": "Subscribing",
           "profile": "Profile",
           "edit": "Edit",
+          "search_Talker": "Search for a Talker",
           "chatImageDefaultText":
               "I drew three pictures, pick the one you like the most~"
         },
@@ -250,6 +251,7 @@ class SUTranslations extends Translations {
           "subscribing": "订阅",
           "profile": "资料",
           "edit": "编辑",
+          "search_Talker": "搜索谈话者",
           "chatImageDefaultText": "我画了三张，挑一张你最喜欢的吧~"
         },
         // 'es_ES': {

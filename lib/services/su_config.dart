@@ -13,11 +13,11 @@ class SUConfig {
   static String get BASE_URL {
     switch (env) {
       case SUEnvironment.develop:
-        return "https://sugar.tigerbot.com";
+        return "https://sugar.tigerbot.com/v1alpha1";
       case SUEnvironment.production:
-        return "https://sugar.tigerbot.com";
+        return "https://sugar.tigerbot.com/v1alpha1";
       default:
-        return "https://sugar.tigerbot.com";
+        return "https://sugar.tigerbot.com/v1alpha1";
     }
   }
 }
