@@ -40,10 +40,10 @@ class SUMinePage extends StatelessWidget {
                     // ),
                     Obx(() => ClipRRect(
                           borderRadius: BorderRadius.circular(8.w),
-                          child: CachedImage(
+                          child: SUUtils.imageWidget(
                             width: 64.w,
                             height: 64.w,
-                            imageUrl: userLogic.user.avatar.value,
+                            url: userLogic.user.avatar?.value ?? '',
                             fit: BoxFit.cover,
                           ),
                         )),
@@ -53,21 +53,21 @@ class SUMinePage extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Hi, 你好啊 ",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.bold),
-                        ),
+                        Obx(() => Text(
+                              userLogic.user.name?.value ?? '',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.bold),
+                            )),
                         SizedBox(
                           height: 8.w,
                         ),
-                        Text(
-                          "Hi, Tony👋 ",
-                          style:
-                              TextStyle(color: Colors.white, fontSize: 12.sp),
-                        ),
+                        Obx(() => Text(
+                              userLogic.user.displayName?.value ?? '',
+                              style: TextStyle(
+                                  color: Colors.white, fontSize: 12.sp),
+                            )),
                       ],
                     ),
                   ],

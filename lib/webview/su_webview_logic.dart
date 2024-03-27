@@ -8,6 +8,7 @@ class SUWebviewLogic extends GetxController {
 
   /// webView title
   String title = "";
+  bool needBack = false;
 
   /// webView url
   String url = "";
@@ -15,41 +16,20 @@ class SUWebviewLogic extends GetxController {
     controller = webViewController;
   }
 
-// HTML内容，包含隐藏滚动条的CSS样式
-  String htmlContent = '''
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <style>
-          /* 隐藏垂直滚动条 */
-          ::-webkit-scrollbar {
-            display: none;
-          }
-
-          /* 隐藏水平滚动条 */
-          ::-webkit-scrollbar-horizontal {
-            display: none;
-          }
-
-          /* 隐藏滚动条的滑块 */
-          ::-webkit-scrollbar-thumb {
-            display: none;
-          }
-        </style>
-      </head>
-      <body>
-        <!-- 这里是您要显示的内容 -->
-      </body>
-      </html>
-    ''';
   @override
   void onInit() {
     super.onInit();
     dynamic params = Get.arguments;
     debugPrint('webView接收的参数：$params');
-    title =
-        StringUtils.isNotNullOrEmpty(params?["title"]) ? params!["title"] : "";
-    url = StringUtils.isNotNullOrEmpty(params?["url"]) ? params!["url"] : "";
+    title = StringUtils.isNotNullOrEmpty(params?["title"])
+        ? params!["title"]
+        : '登录';
+    url = StringUtils.isNotNullOrEmpty(params?["url"])
+        ? params!["url"]
+        : SUUrl.kLoginWebUrl;
+    needBack = StringUtils.isNotNullOrEmpty(params?["need_back"])
+        ? params!["need_back"]
+        : false;
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(url))
@@ -89,8 +69,13 @@ class SUWebviewLogic extends GetxController {
                 "code": code,
                 "state": state,
               };
-              bus.emit(SUDefVal.kWebBlockCode, params);
-              SURouterHelper.back(null);
+              if (needBack) {
+                bus.emit(SUDefVal.kWebBlockCode, params);
+                SURouterHelper.back(null);
+              } else {
+                SURouterHelper.pathOffAllPage(SURouterPath.home, params);
+              }
+
               // 返回NavigationDecision.prevent表示拦截请求
               return NavigationDecision.prevent;
             }

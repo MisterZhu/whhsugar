@@ -29,6 +29,9 @@ class SUWebviewPage extends StatelessWidget {
 
   /// leading
   Widget _leading() {
+    if (!logic.needBack) {
+      return const SizedBox(width: 24, height: 44);
+    }
     return Container(
       padding: const EdgeInsets.only(left: 16),
       child: Row(

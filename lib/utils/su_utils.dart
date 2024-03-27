@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sugar/constants/su_default_value.dart';
 import 'package:sugar/routes/su_router_path.dart';
 import 'package:sugar/su_app.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:sugar/utils/shared_preference_util.dart';
 import '../constants/assets.dart';
 
 class SUUtils {
@@ -20,19 +24,14 @@ class SUUtils {
   ///获取启动路由
   Future<String> getLoginState() async {
     // SharedPreferences preferences = await SharedPreferences.getInstance();
-    // bool isShowPrivacy =
-    //     preferences.getBool(TBDefVal.isShowPrivacyAlert) ?? true;
-    // String basePath = TBRouterPath.chatDetPath;
-    // if (Platform.isAndroid) {
-    //   if (isShowPrivacy == true) {
-    //     basePath = TBRouterPath.basePrivacyPath;
-    //   } else {
-    //     basePath = TBRouterPath.chatDetPath;
-    //   }
-    // }
-
+    // await SharedPreferenceUtil().init();
+    String? token = SharedPreferenceUtil().getData(SUDefVal.kToken);
+    // String token = preferences.getString(SUDefVal.kToken) ?? "";
+    if (token != null) {
+      return SURouterPath.home;
+    }
     // return SURouterPath.home;
-    return SURouterPath.home;
+    return SURouterPath.webViewPath;
   }
 
   ///手机系统是否是中文
@@ -55,20 +54,48 @@ class SUUtils {
       BoxFit? fit,
       Widget? placeholder}) {
     if (url.contains('http')) {
-      return CachedNetworkImage(
-          imageUrl: url,
+      if (url.toLowerCase().endsWith('.svg')) {
+        return SvgPicture.network(
+          url,
+          width: width,
+          height: height,
+          // fit: fit,
+          placeholderBuilder: (context) =>
+              placeholder ??
+              Container(
+                  padding: const EdgeInsets.all(30.0),
+                  child: const CircularProgressIndicator()),
+          // errorWidget: (context, url, error) => const Icon(Icons.error),
+        );
+      } else {
+        return CachedNetworkImage(
+            imageUrl: url,
+            width: width,
+            height: height,
+            fit: fit,
+            placeholder: (context, url) =>
+                placeholder ??
+                Container(
+                    padding: const EdgeInsets.all(30.0),
+                    child: const CircularProgressIndicator()),
+            errorWidget: (context, url, error) => const Icon(Icons.error));
+      }
+    } else {
+      if (url.toLowerCase().endsWith('.svg')) {
+        return SvgPicture.asset(
+          url,
+          width: width,
+          height: height,
+          // fit: fit,
+        );
+      } else {
+        return Image.asset(
+          url.isEmpty ? Assets.homeMine : url,
           width: width,
           height: height,
           fit: fit,
-          placeholder: (context, url) => placeholder ?? const SizedBox(),
-          errorWidget: (context, url, error) => const Icon(Icons.error));
-    } else {
-      return Image.asset(
-        url.isEmpty ? Assets.homeMine : url,
-        width: width,
-        height: height,
-        fit: fit,
-      );
+        );
+      }
     }
   }
 

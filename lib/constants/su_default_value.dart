@@ -124,7 +124,7 @@ class SUDefVal {
   static const String kToken = "token";
 
   /// token
-  static const String kUserInfo = "userInfo";
+  static const String kUserInfo = "user_info";
 
   ///
   static const String kApplyStatus = "applyStatus";
@@ -155,4 +155,7 @@ class SUDefVal {
 
   /// 登录回调
   static const String kWebBlockCode = "WebBlockCode";
+
+  /// 重新登录
+  static const String kPushNeedLogin = "PushNeedLogin";
 }

@@ -37,17 +37,17 @@ class HttpManager {
   }
 
   Future<void> _init() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     // final userLogic = Get.find<UserLogic>();
 
     _headers = {
       'Content-Type': 'application/json; charset=utf-8',
     };
     // String? token = userLogic.user.token;
-    String? token = sharedPreferences.getString(SUDefVal.kToken);
+    String? token = SharedPreferenceUtil().getData(SUDefVal.kToken);
 
     if (token != null) {
-      _headers['token'] = token;
+      _headers['Authorization'] = 'Bearer $token';
     }
     print('----------- token: $token');
     _baseOptions = BaseOptions(
@@ -433,10 +433,13 @@ doError(e) {
 /// token失效
 accountExpired() {
   log('登陆已失效，清空用户数据，刷新本地缓存用户数据');
+
+  bus.emit(SUDefVal.kWebBlockCode);
+
   //退出登录， 弹出登录框
-  SUUtils.getCurrentContext(completionHandler: (context) async {
-    // UserInfoProvider userInfoProvider = Provider.of(context, listen: false);
-    // userInfoProvider.logout();
-    // Navigator.of(context).pushNamed(TBRouterPath.loginPath);
-  });
+  // SUUtils.getCurrentContext(completionHandler: (context) async {
+  // UserInfoProvider userInfoProvider = Provider.of(context, listen: false);
+  // userInfoProvider.logout();
+  // Navigator.of(context).pushNamed(TBRouterPath.loginPath);
+  // });
 }

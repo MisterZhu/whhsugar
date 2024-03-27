@@ -8,11 +8,14 @@ class SUMyProfilePage extends StatelessWidget {
   SUMyProfilePage({Key? key}) : super(key: key);
 
   final logic = Get.find<SUMineLogic>();
+
   final state = Get.find<SUMineLogic>().state;
   final UserLogic userLogic = Get.find<UserLogic>();
 
   @override
   Widget build(BuildContext context) {
+    state.textEditingController.text = userLogic.user.name?.value ?? '';
+
     return GetBuilder<SUMineLogic>(
         id: SUDefVal.kChatInput,
         builder: (logic) {
@@ -59,10 +62,10 @@ class SUMyProfilePage extends StatelessWidget {
                       alignment: Alignment.center,
                       child: Obx(() => ClipRRect(
                             borderRadius: BorderRadius.circular(8.w),
-                            child: CachedImage(
+                            child: SUUtils.imageWidget(
                               width: 64.w,
                               height: 64.w,
-                              imageUrl: userLogic.user.avatar.value,
+                              url: userLogic.user.avatar?.value ?? '',
                               fit: BoxFit.cover,
                             ),
                           )),
@@ -73,16 +76,16 @@ class SUMyProfilePage extends StatelessWidget {
                       bottom: 0.0, // 向下偏移50像素
                       child: GestureDetector(
                         onTap: () {
-                          if (userLogic.user.avatar.value ==
+                          if (userLogic.user.avatar?.value ==
                               'https://qiniu.aimissu.top/temporary/image39.jpg') {
                             debugPrint('-------------------image39');
 
-                            userLogic.user.avatar.value =
+                            userLogic.user.avatar?.value =
                                 'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg';
                           } else {
                             debugPrint('-------------------!= image39');
 
-                            userLogic.user.avatar.value =
+                            userLogic.user.avatar?.value =
                                 'https://qiniu.aimissu.top/temporary/image39.jpg';
                           }
                           userLogic.updateUser(userLogic.user);

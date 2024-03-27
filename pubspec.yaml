@@ -35,7 +35,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
 #  azlistview: ^2.0.0-nullsafety.0
   cupertino_icons: ^1.0.4
-  cached_network_image: ^3.2.0
+  #图片缓存 https://pub.dev/packages/cached_network_image/install
+  cached_network_image: ^3.2.1
+  #展示svg图片 https://pub.dev/packages/flutter_svg/install
+  flutter_svg: ^2.0.0+1
   dio: ^5.2.1+1
   #提示框组件 https://pub.dev/packages/fluttertoast/install
   fluttertoast: ^8.2.4

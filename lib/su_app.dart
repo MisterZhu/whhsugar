@@ -1,19 +1,11 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart';
 import 'package:sugar/routes/su_router_pages.dart';
-import 'package:sugar/services/http_manager.dart';
+import 'package:sugar/su_export_comment.dart';
 import 'package:sugar/utils/custom_material_color.dart';
-import 'package:sugar/utils/su_utils.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
-import 'constants/su_default_value.dart';
 import 'constants/su_translation.dart';
 import 'global/su_global_binding.dart';
 
@@ -22,25 +14,26 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void startApp() async {
   WidgetsFlutterBinding.ensureInitialized(); // 确保Flutter初始化完毕
 
+  // 异步初始化
+  // await SharedPreferences.getInstance();
+  await SharedPreferenceUtil().init(); // 初始化单例
+
   RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   await HttpManager.init();
-
-  // 异步初始化
-  await SharedPreferences.getInstance();
 
   /// 路由的basePath
   String basePath = await SUUtils().getLoginState();
   // 初始化
   ScreenUtil.ensureScreenSize();
 
-  // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
   // Android设备设置沉浸式
-  // if (Platform.isAndroid) {
-  //   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-  //     statusBarColor: Colors.transparent,
-  //     statusBarBrightness: Brightness.light,
-  //   ));
-  // }
+  if (Platform.isAndroid) {
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarBrightness: Brightness.light,
+    ));
+  }
   SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
     statusBarColor: Colors.transparent,
     statusBarBrightness: Brightness.light,
