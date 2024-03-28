@@ -14,6 +14,7 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
   RxBool canSlide = false.obs;
   late String threadId = '';
   late String threadName = '';
+  late SUAssistantModel assistantModel = SUAssistantModel();
 
   late String projectId = '';
   late String assistantId = '';
@@ -152,6 +153,10 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
             response['messages'].forEach((v) {
               messageData!.add(SUMessageModel.fromJson(v));
             });
+            assistantModel.metadata?.needRefresh = false;
+            assistantModel.metadata?.messages = messageData;
+            homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
+            update([SUDefVal.kChatBottom]);
           }
         },
         failure: (err) {

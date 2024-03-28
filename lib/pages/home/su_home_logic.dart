@@ -81,7 +81,7 @@ class SUHomeLogic extends GetxController {
     getUserToken(arg);
   }
 
-  ///监听登录
+  ///监听翻页
   void changePageIndex(int index) {
     pageIndex = index;
     if ((dataSource?.length ?? 0) > index) {
@@ -92,6 +92,7 @@ class SUHomeLogic extends GetxController {
           .toList();
       if ((adults?.length ?? 0) > 0) {
         logicDis.threadName = adults?.last?.name ?? '';
+        logicDis.assistantModel = dataSource![index];
         logicDis.getMessagesList();
       }
     }
@@ -194,6 +195,7 @@ class SUHomeLogic extends GetxController {
 
               if ((adults?.length ?? 0) > 0) {
                 logicDis.threadName = adults?.last?.name ?? '';
+                logicDis.assistantModel = dataSource![0];
                 logicDis.getMessagesList();
               }
             }
