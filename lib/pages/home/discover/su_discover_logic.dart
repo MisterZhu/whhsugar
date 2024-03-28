@@ -148,7 +148,7 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
         url: '/$threadName/messages',
         params: null,
         success: (response) {
-          debugPrint('--------------------发送消息response : $response');
+          debugPrint('--------------------获取消息列表 response : $response');
           if (response['messages'] != null) {
             response['messages'].forEach((v) {
               messageData!.add(SUMessageModel.fromJson(v));
@@ -158,6 +158,21 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
             homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
             update([SUDefVal.kChatBottom]);
           }
+        },
+        failure: (err) {
+          // LoadingUtil.failure(text: err['msg']);
+        });
+  }
+
+  ///获取某条消息
+  Future<void> getMessage() async {
+    debugPrint('--------------getUserToken--begin');
+
+    await HttpManager.instance.get(
+        url: '/$threadName/messages',
+        params: null,
+        success: (response) {
+          debugPrint('--------------------获取某条消息 response : $response');
         },
         failure: (err) {
           // LoadingUtil.failure(text: err['msg']);
