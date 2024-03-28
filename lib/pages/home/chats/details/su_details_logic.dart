@@ -10,6 +10,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 
+import '../../discover/su_discover_model.dart';
+
 class SUDetailsLogic extends GetxController {
   late Uint8List imageBytes;
   late PaletteGenerator paletteGenerator;
@@ -24,7 +26,10 @@ class SUDetailsLogic extends GetxController {
     super.onClose();
   }
 
-  Future<String> getImageColor(String imageUrl) async {
+  Future<String> getImageColor(String color, String imageUrl) async {
+    if (color != '') {
+      return color;
+    }
     await _loadImageBytes(imageUrl);
     await _updatePalette();
     return _getPreferredColorHex();

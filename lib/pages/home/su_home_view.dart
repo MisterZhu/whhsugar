@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:sugar/pages/home/discover/su_discover_logic.dart';
 import 'package:sugar/routes/su_router_pages.dart';
 import 'package:sugar/su_export_comment.dart';
 import '../../global/user/user_logic.dart';
@@ -16,6 +17,8 @@ class SUHomePage extends StatelessWidget {
   SUHomePage({Key? key}) : super(key: key);
 
   final logicMine = Get.put(SUMineLogic());
+  final logicDis = Get.put(SUDiscoverLogic());
+
   final logic = Get.put(SUHomeLogic());
   final state = Get.find<SUHomeLogic>().state;
   final userLogic = Get.find<UserLogic>();
@@ -61,8 +64,11 @@ class SUHomePage extends StatelessWidget {
                 FocusScope.of(context).requestFocus(FocusNode());
                 // SURouterHelper.pathPage(SURouterPath.searchPath, null);
 
-                var params = {"title": '登录', "url": SUUrl.kLoginWebUrl};
-                SURouterHelper.pathPage(SURouterPath.webViewPath, params);
+                // var params = {"title": '登录', "url": SUUrl.kLoginWebUrl};
+                // SURouterHelper.pathPage(SURouterPath.webViewPath, params);
+                LoadingUtil.info(text: '切换成功');
+                logicDis.canSlide.value = !logicDis.canSlide.value;
+
                 // X5Sdk.openWebActivity(
                 //     "https://casdoor.tigerbot.com/login/oauth/authorize?client_id=931f8237ead11af361c3&response_type=code&redirect_uri=http://localhost:9000/callback&scope=read&state=sugar",
                 //     title: "web页面");

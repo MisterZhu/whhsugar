@@ -40,7 +40,8 @@ class SUChatListBg extends StatelessWidget {
               ).createShader(bounds);
             },
             child: ListView.builder(
-                padding: EdgeInsets.zero,
+                // padding: EdgeInsets.zero,
+                padding: EdgeInsets.only(bottom: 12.w),
                 reverse: true,
                 shrinkWrap: true,
                 physics: const BouncingScrollPhysics(
@@ -77,6 +78,9 @@ class SUChatListBg extends StatelessWidget {
   }
 
   Widget gradientWidget(String bgColor) {
+    if (bgColor == '') {
+      bgColor = SUDefVal.defBgColor;
+    }
     return GetBuilder<SUDiscoverLogic>(
       id: SUDefVal.kChatBottom,
       builder: (state) {
@@ -104,6 +108,9 @@ class SUChatListBg extends StatelessWidget {
   }
 
   Widget lineWidget(String bgColor) {
+    if (bgColor == '') {
+      bgColor = SUDefVal.defBgColor;
+    }
     return GetBuilder<SUDiscoverLogic>(
       id: SUDefVal.kChatBottom,
       builder: (state) {

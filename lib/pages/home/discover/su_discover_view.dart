@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
 import 'package:get/get.dart';
+import 'package:sugar/pages/home/discover/su_discover_model.dart';
 import 'package:sugar/pages/home/discover/su_discover_state.dart';
+import 'package:sugar/pages/home/su_home_logic.dart';
 import 'package:sugar/su_export_comment.dart';
 
 import '../chats/details/su_details_logic.dart';
@@ -19,32 +21,33 @@ class SUDiscoverPage extends StatelessWidget {
 
   final logic = Get.put(SUDiscoverLogic());
   final logicDet = Get.put(SUDetailsLogic());
+  final logicHome = Get.find<SUHomeLogic>();
 
   final state = Get.find<SUDiscoverLogic>().state;
 
-  void initWidget() {
-    logic.currentIndex = logic.pageController.initialPage;
-
-    // 准备新的数据源
-    logic.childrenView = [];
-    final context = Get.context;
-    for (int i = 0; i < logic.imageUrls.length; i++) {
-      logic.childrenView.add(buildPage(
-        context!,
-        'Page ${i + 1}',
-        Colors.white,
-        logic.imageUrls[i],
-      ));
-    }
-    logic.childrenView.insert(0, logic.childrenView.last);
-    logic.childrenView.add(logic.childrenView[1]);
-    logic.update([SUDefVal.kDiscover]);
-    debugPrint('-------logic.childrenView:${logic.childrenView.length}');
-  }
+  // void initWidget() {
+  //   logic.currentIndex = logic.pageController.initialPage;
+  //
+  //   // 准备新的数据源
+  //   logic.childrenView = [];
+  //   final context = Get.context;
+  //   for (int i = 0; i < logic.imageUrls.length; i++) {
+  //     logic.childrenView.add(buildPage(
+  //       context!,
+  //       'Page ${i + 1}',
+  //       Colors.white,
+  //       logic.imageUrls[i],
+  //     ));
+  //   }
+  //   logic.childrenView.insert(0, logic.childrenView.last);
+  //   logic.childrenView.add(logic.childrenView[1]);
+  //   logic.update([SUDefVal.kDiscover]);
+  //   debugPrint('-------logic.childrenView:${logic.childrenView.length}');
+  // }
 
   @override
   Widget build(BuildContext context) {
-    initWidget();
+    // initWidget();
     // state.pageController.addListener(() {
     //   int currentPage = state.pageController.page?.round() ?? 0;
     //   print('~~~~~~~~~~~~~~~~~~~Current Page: $currentPage');
@@ -77,24 +80,32 @@ class SUDiscoverPage extends StatelessWidget {
               return Stack(
                 children: [
                   Positioned.fill(
-                    child:
-                        // Swiper(
-                        //   autoplay: false,
-                        //   itemCount: logic.imageUrls.length,
-                        //   viewportFraction: 1.0,
-                        //   scale: 1.0,
-                        //   loop: true,
-                        //   controller: SwiperController(),
-                        //   itemBuilder: (BuildContext context, int index) {
-                        //     return buildPage(context, 'title$index:', Colors.white,
-                        //         logic.imageUrls[index]);
-                        //   },
-                        // ),
-                        PageView(
-                      controller: logic.pageController,
-                      onPageChanged: logic.onPageChanged,
-                      children: logic.childrenView,
-                    ),
+                    child: Obx(() => Swiper(
+                          autoplay: false,
+                          itemCount: logicHome.dataSource?.length ?? 0,
+                          viewportFraction: 1.0,
+                          scale: 1.0,
+                          loop: true,
+                          onIndexChanged: (int index) {
+                            debugPrint('Swiper scrolled to page $index');
+                          },
+                          physics: logic.canSlide.value
+                              ? AlwaysScrollableScrollPhysics()
+                              : NeverScrollableScrollPhysics(),
+                          controller: SwiperController(),
+                          itemBuilder: (BuildContext context, int index) {
+                            return buildPage(
+                                context, index, logicHome.dataSource![index]);
+                          },
+                        )),
+                    // Obx(() => PageView(
+                    //       physics: logic.canSlide.value
+                    //           ? AlwaysScrollableScrollPhysics()
+                    //           : NeverScrollableScrollPhysics(),
+                    //       controller: logic.pageController,
+                    //       onPageChanged: logic.onPageChanged,
+                    //       children: logic.childrenView,
+                    //     )),
                   ),
                 ],
               );
@@ -102,28 +113,30 @@ class SUDiscoverPage extends StatelessWidget {
     // );
   }
 
-  Widget buildPage(
-      BuildContext context, String title, Color color, String imagePath) {
+  Widget buildPage(BuildContext context, int index, SUAssistantModel model) {
     debugPrint('-------------buildPage');
     return FutureBuilder<String>(
-      future: logicDet.getImageColor(imagePath), // 调用 getImageColor 方法获取图片主要颜色
+      future: logicDet.getImageColor(model.metadata?.backgroundColor ?? '',
+          model.metadata?.backgroundImage ?? ''), // 调用 getImageColor 方法获取图片主要颜色
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return discoverWidget(
-              context, imagePath, title, logic.state.defColor);
+              context, model, model.metadata?.backgroundColor ?? '');
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else {
           final String bgColor = snapshot.data!;
+          model.metadata?.backgroundColor = bgColor;
+          logicHome.dataSource![index] = model;
           logic.state.defColor = bgColor;
-          return discoverWidget(context, imagePath, title, bgColor);
+          return discoverWidget(context, model, bgColor);
         }
       },
     );
   }
 
   Widget discoverWidget(
-      BuildContext context, String imagePath, String title, String bgColor) {
+      BuildContext context, SUAssistantModel model, String bgColor) {
     return GestureDetector(
       onTap: () {
         // 在点击空白处时收起键盘
@@ -133,7 +146,8 @@ class SUDiscoverPage extends StatelessWidget {
         // color: Color(int.parse(bgColor.replaceAll('#', '0xFF'))),
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: NetworkImage(imagePath),
+            image: CachedNetworkImageProvider(
+                model.metadata?.backgroundImage ?? ''),
             fit: BoxFit.cover,
           ),
         ),
@@ -143,7 +157,8 @@ class SUDiscoverPage extends StatelessWidget {
             return Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(imagePath),
+                  image: CachedNetworkImageProvider(
+                      model.metadata?.backgroundImage ?? ''),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -154,21 +169,21 @@ class SUDiscoverPage extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.only(left: 57.0.w, right: 57.0.w),
-                    child: SUChattedTip(
-                        '${title}:Notice:Everything Talkie says is generated by AI!'),
+                    child: SUChattedTip('NoticeEverything'.tr),
                   ),
                   Expanded(
                     child: GetBuilder<SUDiscoverLogic>(
                       id: SUDefVal.kChatBottom,
                       builder: (logic) {
                         return SUChatListBg(
-                          bgColor: bgColor,
+                          bgColor: model.metadata?.backgroundColor ?? '',
                           logic: logic,
                         );
                       },
                     ),
                   ),
-                  bottomWidget(bgColor),
+                  bottomWidget(model.metadata?.backgroundColor ?? '',
+                      model?.displayName ?? '', model),
                 ],
               ),
             );
@@ -178,17 +193,26 @@ class SUDiscoverPage extends StatelessWidget {
     );
   }
 
-  Widget bottomWidget(String bgColor) {
+  Widget bottomWidget(String bgColor, String title, SUAssistantModel model) {
+    if (bgColor == '') {
+      bgColor = SUDefVal.defBgColor;
+    }
     return GetBuilder<SUDiscoverLogic>(
       id: SUDefVal.kChatBottom,
       builder: (state) {
         return SUChatBottom(
-          'Tony',
+          title,
           bgColor,
           state,
           sendHandle: (value) async {
             // 列表滑到底部
             // searchRequest(value);
+            var params = {
+              "assistant": model.name,
+              "displayName": value,
+              "description": value,
+            };
+            logic.createThreads(params);
           },
           // backgroundColor: Color(int.parse(backgroundColor.replaceAll('#', '0xFF'))), // 使用颜色字符串设置背景色
         );

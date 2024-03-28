@@ -18,6 +18,8 @@ class SUUrl {
   ///获取助手列表
   static const String kGetAssListUrl = '/projects/sugar-default/assistants';
 
+  ///创建会话
+  static const String kCreateThreadUrl = '/projects/';
   /************************* 用户信息 *************************/
 
   /// 用户信息url

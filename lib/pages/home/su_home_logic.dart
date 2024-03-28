@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../global/user/user_logic.dart';
 import '../../global/user/user_state.dart';
 import '../../su_export_comment.dart';
+import 'discover/su_discover_logic.dart';
 import 'discover/su_discover_model.dart';
 import 'su_home_state.dart';
 
@@ -15,8 +16,13 @@ class SUHomeLogic extends GetxController {
   late String code = '';
   late String stateStr = '';
   late String name = '';
+  late int pageIndex = 0;
+
   List<SUAssistantModel>? dataSource;
+  List<SUSessionModel>? threadData;
+
   final userLogic = Get.find<UserLogic>();
+  final logicDis = Get.put(SUDiscoverLogic());
 
   @override
   void onInit() {
@@ -24,6 +30,8 @@ class SUHomeLogic extends GetxController {
     super.onInit();
     bus.on(SUDefVal.kPushNeedLogin, onEventCallback);
     bus.on(SUDefVal.kWebBlockCode, onLoginFinishBack);
+    dataSource = <SUAssistantModel>[];
+    threadData = <SUSessionModel>[];
 
     dynamic params = Get.arguments;
     code = StringUtils.isNotNullOrEmpty(params?["code"]) ? params!["code"] : '';
@@ -73,7 +81,24 @@ class SUHomeLogic extends GetxController {
     getUserToken(arg);
   }
 
+  ///监听登录
+  void changePageIndex(int index) {
+    pageIndex = index;
+    if ((dataSource?.length ?? 0) > index) {
+      final listModel = dataSource![pageIndex];
+      logicDis.assistantId = listModel.name!;
+      List<SUSessionModel>? adults = threadData
+          ?.where((user) => user.assistant == logicDis.assistantId)
+          .toList();
+      if ((adults?.length ?? 0) > 0) {
+        logicDis.threadName = adults?.last?.name ?? '';
+        logicDis.getMessagesList();
+      }
+    }
+  }
+
   ///-------------------------------Network Request-------------------------------
+  ///获取用户token
   Future<void> getUserToken(Map<String, String> params) async {
     debugPrint('--------------getUserToken--begin');
 
@@ -103,6 +128,7 @@ class SUHomeLogic extends GetxController {
         });
   }
 
+  ///获取用户信息
   Future<void> getUserInfo() async {
     // var params = {
     //   "account_id": name,
@@ -117,7 +143,7 @@ class SUHomeLogic extends GetxController {
           userLogic.user = UserModel.fromJson(value);
           userLogic.updateUser(userLogic.user);
           LoadingUtil.info(text: '登录成功');
-          getAssistantsList();
+          getThreadsList();
         },
         failure: (err) {
           LoadingUtil.hide();
@@ -125,16 +151,58 @@ class SUHomeLogic extends GetxController {
         });
   }
 
+  ///获取所有会话列表
+  Future<void> getThreadsList() async {
+    await HttpManager.instance.get(
+        url:
+            '${SUUrl.kCreateThreadUrl}/${userLogic.user.properties?.projectId}/threads',
+        params: null,
+        success: (response) {
+          debugPrint('--------------------获取会话列表response : $response');
+          if (response['threads'] != null) {
+            response['threads'].forEach((v) {
+              threadData!.add(SUSessionModel.fromJson(v));
+            });
+          }
+          getAssistantsList();
+        },
+        failure: (err) {
+          // LoadingUtil.failure(text: err['msg']);
+          getAssistantsList();
+        });
+  }
+
+  ///获取助手列表
   Future<void> getAssistantsList() async {
     await HttpManager.instance.get(
         url: SUUrl.kGetAssListUrl,
         params: null,
         success: (response) {
           if (response['assistants'] != null) {
-            dataSource = <SUAssistantModel>[];
             response['assistants'].forEach((v) {
               dataSource!.add(SUAssistantModel.fromJson(v));
             });
+            // logicDis.update();
+            if ((dataSource?.length ?? 0) > 0) {
+              final listModel = dataSource![0];
+              logicDis.assistantId = listModel.name!;
+              // Iterable<SUSessionModel>? adults = threadData
+              //     ?.where((user) => user.assistant == logicDis.assistantId);
+              List<SUSessionModel>? adults = threadData
+                  ?.where((user) => user.assistant == logicDis.assistantId)
+                  .toList();
+
+              if ((adults?.length ?? 0) > 0) {
+                logicDis.threadName = adults?.last?.name ?? '';
+                logicDis.getMessagesList();
+              }
+            }
+            logicDis.update([SUDefVal.kDiscover]);
+            if ((dataSource?.length ?? 0) > 1) {
+              logicDis.canSlide.value = true;
+            } else {
+              logicDis.canSlide.value = false;
+            }
           }
           log('----------------------dataSource : \n ${dataSource?.length}');
         },
