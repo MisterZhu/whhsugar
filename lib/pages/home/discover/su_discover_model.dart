@@ -67,7 +67,30 @@ class Metadata {
     //     messages!.add(SUMessageModel.fromJson(v));
     //   });
     // }
-    messages = List<SUMessageModel>.from(json['messages'] ?? []);
+
+    // response['messages'].forEach((v) {
+    //   SUMessageModel messageModel = SUMessageModel.fromJson(v);
+    //
+    //   // 在这里进行单独处理，比如修改参数值
+    //
+    //   // 将空的SUMessageModel插入数组最前面
+    //   if (messageModel.name == null) {
+    //     messageData!.insert(0, messageModel);
+    //   } else {
+    //     messageData!.add(messageModel);
+    //   }
+    // });
+    messages = <SUMessageModel>[];
+    if (greetings != null && ((greetings?.length ?? 0) > 0)) {
+      SUMessageModel messageModel = SUMessageModel();
+      messageModel.name = '';
+      messageModel.type = SUChatType.intro;
+      messageModel.isFold = true;
+      messageModel.inlineSource?.data = greetings?.last;
+      messageModel.inlineSource?.contentType = 'text/plain';
+      messages!.add(messageModel);
+    }
+    // messages = List<SUMessageModel>.from(json['messages'] ?? []);
   }
 
   Map<String, dynamic> toJson() {
@@ -129,22 +152,30 @@ class SUSessionModel {
 class SUMessageModel {
   String? name;
   String? author;
-  InlineSource? inlineSource;
+  DisInlineSource? inlineSource;
   String? createTime;
   String? updateTime;
+  SUChatType? type;
+  bool? isFold;
 
   SUMessageModel(
       {this.name,
       this.author,
+      this.type,
+      this.isFold,
       this.inlineSource,
       this.createTime,
       this.updateTime});
 
   SUMessageModel.fromJson(Map<String, dynamic> json) {
+    // final userLogic = Get.find<UserLogic>(); // 在这里查找UserLogic实例
+
     name = json['name'];
     author = json['author'];
+    type = SUChatType.intro;
+    isFold = false;
     inlineSource = json['inlineSource'] != null
-        ? InlineSource.fromJson(json['inlineSource'])
+        ? DisInlineSource.fromJson(json['inlineSource'])
         : null;
     createTime = json['createTime'];
     updateTime = json['updateTime'];
@@ -163,13 +194,13 @@ class SUMessageModel {
   }
 }
 
-class InlineSource {
+class DisInlineSource {
   String? contentType;
   String? data;
 
-  InlineSource({this.contentType, this.data});
+  DisInlineSource({this.contentType, this.data});
 
-  InlineSource.fromJson(Map<String, dynamic> json) {
+  DisInlineSource.fromJson(Map<String, dynamic> json) {
     contentType = json['contentType'];
     data = json['data'];
   }
@@ -180,4 +211,10 @@ class InlineSource {
     data['data'] = this.data;
     return data;
   }
+}
+
+enum SUChatType {
+  intro,
+  mine,
+  others,
 }

@@ -1,9 +1,9 @@
 import 'package:sugar/su_export_comment.dart';
 
-import '../../../discover/su_discover_state.dart';
+import '../../../discover/su_discover_model.dart';
 
 class SUChatMineCell extends StatelessWidget {
-  final ChatDetailModel? model;
+  final SUMessageModel? model;
 
   const SUChatMineCell(this.model, {Key? key}) : super(key: key);
 
@@ -30,7 +30,7 @@ class SUChatMineCell extends StatelessWidget {
                   ),
                   color: SUColorSingleton().mineBgColor),
               child: Text(
-                model?.message ?? "",
+                model?.inlineSource?.data ?? "",
                 style: TextStyle(
                     color: SUColorSingleton().mineTextColor,
                     fontSize: SUDefVal.chatRegularFont.sp,

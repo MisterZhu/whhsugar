@@ -1,9 +1,9 @@
 import 'package:sugar/su_export_comment.dart';
 
-import '../../../discover/su_discover_state.dart';
+import '../../../discover/su_discover_model.dart';
 
 class SUChatIntroCell extends StatelessWidget {
-  final ChatDetailModel? model;
+  final SUMessageModel? model;
 
   const SUChatIntroCell(this.model, {Key? key}) : super(key: key);
 
@@ -21,7 +21,9 @@ class SUChatIntroCell extends StatelessWidget {
           //   width: TBDefVal.margin.w,
           // ),
           Container(
-              width: SUDefVal.chatBoxMaxWidth.w,
+              constraints: BoxConstraints(maxWidth: SUDefVal.chatBoxMaxWidth.w),
+
+              // width: SUDefVal.chatBoxMaxWidth.w,
               // height: 135.w,
               padding: EdgeInsets.all(10.w),
               decoration: BoxDecoration(
@@ -34,7 +36,7 @@ class SUChatIntroCell extends StatelessWidget {
                   color: SUColorSingleton().introBgColor),
               child: Column(
                 children: [
-                  Text(model?.message ?? '',
+                  Text(model?.inlineSource?.data ?? 'Hello. Nice to meet you',
                       style: TextStyle(
                           color: SUColorSingleton().introTextColor,
                           fontSize: SUDefVal.chatRegularFont.sp,

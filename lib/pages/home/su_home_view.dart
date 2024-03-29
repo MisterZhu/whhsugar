@@ -16,10 +16,10 @@ import 'su_home_logic.dart';
 class SUHomePage extends StatelessWidget {
   SUHomePage({Key? key}) : super(key: key);
 
-  final logicMine = Get.put(SUMineLogic());
-  final logicDis = Get.put(SUDiscoverLogic());
+  final logicMine = Get.find<SUMineLogic>();
+  final logicDis = Get.find<SUDiscoverLogic>();
 
-  final logic = Get.put(SUHomeLogic());
+  final logic = Get.find<SUHomeLogic>();
   final state = Get.find<SUHomeLogic>().state;
   final userLogic = Get.find<UserLogic>();
 

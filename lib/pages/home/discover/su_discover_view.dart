@@ -19,7 +19,7 @@ import 'su_discover_logic.dart';
 class SUDiscoverPage extends StatelessWidget {
   SUDiscoverPage({Key? key}) : super(key: key);
 
-  final logic = Get.put(SUDiscoverLogic());
+  final logic = Get.find<SUDiscoverLogic>();
   final logicDet = Get.put(SUDetailsLogic());
   final logicHome = Get.find<SUHomeLogic>();
 
@@ -88,6 +88,9 @@ class SUDiscoverPage extends StatelessWidget {
                           loop: true,
                           onIndexChanged: (int index) {
                             debugPrint('Swiper scrolled to page $index');
+                            final SUHomeLogic homeLogic =
+                                Get.find<SUHomeLogic>();
+                            homeLogic.changePageIndex(index);
                           },
                           physics: logic.canSlide.value
                               ? AlwaysScrollableScrollPhysics()

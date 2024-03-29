@@ -22,7 +22,6 @@ class SUHomeLogic extends GetxController {
   List<SUSessionModel>? threadData;
 
   final userLogic = Get.find<UserLogic>();
-  final logicDis = Get.put(SUDiscoverLogic());
 
   @override
   void onInit() {
@@ -83,17 +82,38 @@ class SUHomeLogic extends GetxController {
 
   ///监听翻页
   void changePageIndex(int index) {
+    if (pageIndex == index) {
+      return;
+    }
     pageIndex = index;
+
+    SUUtils.getCurrentContext(completionHandler: (context) async {
+      FocusScope.of(context).requestFocus(FocusNode());
+    });
+    final logicDis = Get.find<SUDiscoverLogic>();
+
     if ((dataSource?.length ?? 0) > index) {
       final listModel = dataSource![pageIndex];
       logicDis.assistantId = listModel.name!;
       List<SUSessionModel>? adults = threadData
           ?.where((user) => user.assistant == logicDis.assistantId)
           .toList();
+      debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>-----debug = ${adults?.length}');
+      debugPrint(
+          '>>>>>>>>>>>>>>>>>>>>>>>>>>-----logicDis.assistantId = ${logicDis.assistantId}');
+
       if ((adults?.length ?? 0) > 0) {
         logicDis.threadName = adults?.last?.name ?? '';
         logicDis.assistantModel = dataSource![index];
-        logicDis.getMessagesList();
+        if (logicDis.assistantModel.metadata?.needRefresh == true) {
+          logicDis.getMessagesList();
+        } else {
+          logicDis.update([SUDefVal.kChatBottom]);
+        }
+      } else {
+        logicDis.threadName = '';
+        logicDis.assistantModel = dataSource![index];
+        logicDis.update([SUDefVal.kChatBottom]);
       }
     }
   }
@@ -175,6 +195,8 @@ class SUHomeLogic extends GetxController {
 
   ///获取助手列表
   Future<void> getAssistantsList() async {
+    final logicDis = Get.find<SUDiscoverLogic>();
+
     await HttpManager.instance.get(
         url: SUUrl.kGetAssListUrl,
         params: null,
@@ -197,14 +219,16 @@ class SUHomeLogic extends GetxController {
                 logicDis.threadName = adults?.last?.name ?? '';
                 logicDis.assistantModel = dataSource![0];
                 logicDis.getMessagesList();
+              } else {
+                logicDis.threadName = '';
               }
             }
             logicDis.update([SUDefVal.kDiscover]);
-            if ((dataSource?.length ?? 0) > 1) {
-              logicDis.canSlide.value = true;
-            } else {
-              logicDis.canSlide.value = false;
-            }
+            // if ((dataSource?.length ?? 0) > 1) {
+            //   logicDis.canSlide.value = true;
+            // } else {
+            //   logicDis.canSlide.value = false;
+            // }
           }
           log('----------------------dataSource : \n ${dataSource?.length}');
         },

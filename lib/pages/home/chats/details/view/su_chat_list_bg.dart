@@ -5,6 +5,7 @@ import 'package:sugar/pages/home/chats/details/view/su_chat_other_cell.dart';
 
 import '../../../../../su_export_comment.dart';
 import '../../../discover/su_discover_logic.dart';
+import '../../../discover/su_discover_model.dart';
 import '../../../discover/su_discover_state.dart';
 
 class SUChatListBg extends StatelessWidget {
@@ -47,17 +48,27 @@ class SUChatListBg extends StatelessWidget {
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
                 controller: logic.state.scrollController,
-                itemCount: logic.state.dataSource.length,
+                itemCount: logic.assistantModel.metadata?.messages?.length,
                 itemBuilder: (BuildContext context, int index) {
-                  if (index >= logic.state.dataSource.length) {
+                  if (index >=
+                      (logic.assistantModel.metadata!.messages?.length ?? 0)) {
                     return SizedBox.fromSize();
                   }
-                  ChatDetailModel chatModel = logic.state.dataSource[index];
+                  SUMessageModel chatModel =
+                      logic.assistantModel.metadata!.messages![index];
+                  // debugPrint(
+                  //     '--chatModel = ${chatModel.inlineSource?.data ?? ''}');
                   if (chatModel.type == SUChatType.intro) {
+                    // debugPrint('--介绍 = ');
+
                     return SUChatIntroCell(chatModel);
                   } else if (chatModel.type == SUChatType.mine) {
+                    // debugPrint('--我的 = ');
+
                     return SUChatMineCell(chatModel);
                   } else {
+                    // debugPrint('--对方 = ');
+
                     return SUChatOtherCell(chatModel);
                   }
                 }),

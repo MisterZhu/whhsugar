@@ -16,7 +16,6 @@ import 'su_details_logic.dart';
 class SUDetailsPage extends StatelessWidget {
   SUDetailsPage({Key? key}) : super(key: key);
 
-  final logic = Get.put(SUDiscoverLogic());
   final state = Get.find<SUDiscoverLogic>().state;
 
   final logicDet = Get.put(SUDetailsLogic());
