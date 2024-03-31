@@ -104,7 +104,7 @@ class SUChatBottom extends StatelessWidget {
                 },
                 controller: logic?.state.textEditingController,
                 onSubmitted: (value) {
-                  sendMessageAction();
+                  // sendMessageAction();
                 },
                 style: TextStyle(
                   color: SUColorSingleton().inputTextColor,
