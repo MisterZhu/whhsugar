@@ -116,6 +116,7 @@ class SUSessionModel {
   String? owner;
   String? createTime;
   String? updateTime;
+  bool? isSelect;
 
   SUSessionModel(
       {this.name,
@@ -124,6 +125,7 @@ class SUSessionModel {
       this.assistant,
       this.owner,
       this.createTime,
+      this.isSelect,
       this.updateTime});
 
   SUSessionModel.fromJson(Map<String, dynamic> json) {
@@ -134,6 +136,7 @@ class SUSessionModel {
     owner = json['owner'];
     createTime = json['createTime'];
     updateTime = json['updateTime'];
+    isSelect = false;
   }
 
   Map<String, dynamic> toJson() {

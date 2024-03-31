@@ -1,8 +1,8 @@
 import '../../../../../su_export_comment.dart';
-import '../su_chatted_state.dart';
+import '../../../discover/su_discover_model.dart';
 
 class SUChattedItem extends StatelessWidget {
-  final ChatItemModel? model;
+  final SUSessionModel? model;
   final Function()? press;
 
   const SUChattedItem(this.model, {this.press, Key? key}) : super(key: key);
@@ -11,7 +11,7 @@ class SUChattedItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: model!.isSelect
+        color: model?.isSelect ?? false
             ? const Color(0xFFFFFFFF).withOpacity(0.1)
             : Colors.transparent, // 背景色为白色，透明度为10%
       ),
@@ -25,7 +25,8 @@ class SUChattedItem extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 23.0.w, // 设置头像大小
-                    backgroundImage: NetworkImage(model!.avatarUrl),
+                    // backgroundImage: NetworkImage(model!.avatarUrl),
+                    backgroundImage: NetworkImage(model?.assistant ?? ''),
                   ),
                 ],
               ),
@@ -38,7 +39,7 @@ class SUChattedItem extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            model!.name,
+                            model?.name ?? '',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: SUColorSingleton().textColor,
@@ -46,7 +47,7 @@ class SUChattedItem extends StatelessWidget {
                           ),
                           Spacer(), // 让左右两侧的 Text 分散布局
                           Text(
-                            model!.lastTime,
+                            model?.description ?? '',
                             style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 color: SUColorSingleton().textTimeColor,
@@ -60,7 +61,7 @@ class SUChattedItem extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            model!.lastMessage,
+                            model?.createTime ?? '',
                             style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 color: SUColorSingleton().textSecColor,
