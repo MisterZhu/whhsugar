@@ -230,11 +230,8 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
         url: '$threadName/messages',
         params: null,
         success: (response) {
-<<<<<<< HEAD
           debugPrint('--------------------获取消息列表 response : $response');
-=======
-          debugPrint('--------------------获取消息列表response2 : $response');
->>>>>>> main
+
           if (response['messages'] != null) {
             messageData = <SUMessageModel>[];
 
