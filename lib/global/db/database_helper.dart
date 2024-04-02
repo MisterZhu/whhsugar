@@ -6,7 +6,23 @@ class DatabaseHelper {
   // static const String _dbName = "sugar_app_db";
   static const int _dbVersion = 1;
   late Database database;
+/*
+1.初始化数据库：
+await DatabaseHelper.instance.open();
+2.获取会话列表Dao和聊天内容Dao：
+final sessionListDao = SessionListDao(DatabaseHelper.instance._database);
+final chatContentDao = ChatContentDao(DatabaseHelper.instance._database);
+3.添加数据到会话列表：
+await sessionListDao.insert({
+  'name': 'Session 1',
+  'description': 'Description for Session 1'
+});
+4.查询会话列表：
+final sessionList = await sessionListDao.getAll();
+5.关闭数据库：
+await DatabaseHelper.instance.close();
 
+* */
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
@@ -16,9 +32,6 @@ class DatabaseHelper {
     database =
         await openDatabase(path, version: _dbVersion, onCreate: _onCreate);
   }
-
-  // 公共的方法来获取数据库实例
-  // static Database get database => _database;
 
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('''
