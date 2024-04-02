@@ -4,6 +4,9 @@ import 'package:get/get.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../global/db/daos/chat_content_dao.dart';
+import '../../global/db/daos/session_list_dao.dart';
+import '../../global/db/database_helper.dart';
 import '../../global/user/user_logic.dart';
 import '../../global/user/user_state.dart';
 import '../../su_export_comment.dart';
@@ -24,9 +27,14 @@ class SUHomeLogic extends GetxController {
   final userLogic = Get.find<UserLogic>();
 
   @override
-  void onInit() {
+  Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
+
+    await DatabaseHelper.instance.open();
+    final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
+    final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
+
     bus.on(SUDefVal.kPushNeedLogin, onEventCallback);
     bus.on(SUDefVal.kWebBlockCode, onLoginFinishBack);
     dataSource = <SUAssistantModel>[];

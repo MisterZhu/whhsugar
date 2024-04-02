@@ -26,7 +26,7 @@ class SUChattedItem extends StatelessWidget {
                   CircleAvatar(
                     radius: 23.0.w, // 设置头像大小
                     // backgroundImage: NetworkImage(model!.avatarUrl),
-                    backgroundImage: NetworkImage(model?.assistant ?? ''),
+                    backgroundImage: NetworkImage(model?.avatarUrl ?? ''),
                   ),
                 ],
               ),
@@ -38,21 +38,36 @@ class SUChattedItem extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            model?.name ?? '',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: SUColorSingleton().textColor,
-                                fontSize: SUColorSingleton().textFont16),
+                          Expanded(
+                            child: Texts.large(
+                              model?.assistantName ?? '',
+                              maxLines: 1,
+                              color: SUColorSingleton().textColor,
+                            ),
+                            // Text(
+                            //   model?.name ?? '',
+                            //   style: TextStyle(
+                            //       fontWeight: FontWeight.bold,
+                            //       color: SUColorSingleton().textColor,
+                            //       fontSize: SUColorSingleton().textFont16),
+                            // ),
                           ),
                           Spacer(), // 让左右两侧的 Text 分散布局
-                          Text(
-                            model?.description ?? '',
-                            style: TextStyle(
-                                fontWeight: FontWeight.normal,
+                          Container(
+                              width: 100.w,
+                              child: Texts.smallest1(
+                                model?.lastTime ?? '',
+                                maxLines: 1,
                                 color: SUColorSingleton().textTimeColor,
-                                fontSize: SUColorSingleton().textTimeFont10),
-                          ),
+                              )
+                              // Text(
+                              //   model?.updateTime ?? '',
+                              //   style: TextStyle(
+                              //       fontWeight: FontWeight.normal,
+                              //       color: SUColorSingleton().textTimeColor,
+                              //       fontSize: SUColorSingleton().textTimeFont10),
+                              // ),
+                              ),
                         ],
                       ),
                       SizedBox(
@@ -61,7 +76,7 @@ class SUChattedItem extends StatelessWidget {
                       Row(
                         children: [
                           Text(
-                            model?.createTime ?? '',
+                            model?.lastMessage ?? '',
                             style: TextStyle(
                                 fontWeight: FontWeight.normal,
                                 color: SUColorSingleton().textSecColor,

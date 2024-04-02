@@ -21,28 +21,29 @@ class SUChatsPage extends StatelessWidget {
           return Container(
             height: screenHeight - statusBarHeight,
             margin: EdgeInsets.only(top: statusBarHeight),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start, // 设置为从左到右排布
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(left: 20.w, top: 12.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start, // 设置为从左到右排布
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      buildTabButton(state.isFollow ? 0 : 1, 'chatted'.tr, 0),
-                      SizedBox(
-                        width: 12.0.w,
-                      ),
-                      buildTabButton(state.isFollow ? 1 : 0, 'following'.tr, 1),
-                    ],
-                  ),
-                ),
-                Expanded(
-                  child: !state.isFollow ? SUChattedPage() : SUFollowingPage(),
-                ),
-              ],
-            ),
+            child: SUChattedPage(),
+            // Column(
+            //   crossAxisAlignment: CrossAxisAlignment.start, // 设置为从左到右排布
+            //   children: [
+            //     // Padding(
+            //     //   padding: EdgeInsets.only(left: 20.w, top: 12.w),
+            //     //   child: Row(
+            //     //     mainAxisAlignment: MainAxisAlignment.start, // 设置为从左到右排布
+            //     //     mainAxisSize: MainAxisSize.min,
+            //     //     children: [
+            //     //       buildTabButton(state.isFollow ? 0 : 1, 'chatted'.tr, 0),
+            //     //       SizedBox(
+            //     //         width: 12.0.w,
+            //     //       ),
+            //     //       buildTabButton(state.isFollow ? 1 : 0, 'following'.tr, 1),
+            //     //     ],
+            //     //   ),
+            //     // ),
+            //     Expanded(
+            //       child: !state.isFollow ? SUChattedPage() : SUFollowingPage(),
+            //     ),
+            //   ],
+            // ),
           );
         });
   }

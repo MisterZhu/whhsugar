@@ -88,6 +88,9 @@ dependencies:
 #  jpush_flutter: ^2.5.0
   #解码json Web令牌 https://pub.dev/packages/jwt_decoder/install
   jwt_decoder: ^2.0.1
+  #本地数据库 https://pub.dev/packages/sqflite/install
+  sqflite: ^2.3.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

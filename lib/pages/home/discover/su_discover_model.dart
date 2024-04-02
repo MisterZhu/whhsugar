@@ -117,15 +117,24 @@ class SUSessionModel {
   String? createTime;
   String? updateTime;
   bool? isSelect;
+  String? avatarUrl;
+  String? lastTime;
+  String? lastMessage;
+
+  String? assistantName;
 
   SUSessionModel(
       {this.name,
+      this.assistant,
       this.displayName,
       this.description,
-      this.assistant,
       this.owner,
       this.createTime,
+      this.assistantName,
       this.isSelect,
+      this.avatarUrl,
+      this.lastTime,
+      this.lastMessage,
       this.updateTime});
 
   SUSessionModel.fromJson(Map<String, dynamic> json) {
@@ -136,6 +145,11 @@ class SUSessionModel {
     owner = json['owner'];
     createTime = json['createTime'];
     updateTime = json['updateTime'];
+    avatarUrl = 'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg';
+    lastTime = 'yesterday 9:40 AM';
+    lastMessage = '(Luca sits down on the bed) "sigh" I am so tire...';
+    assistantName = 'Luca';
+
     isSelect = false;
   }
 
