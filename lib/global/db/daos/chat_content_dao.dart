@@ -15,11 +15,29 @@ class ChatContentDao {
   Future<void> batchInsert(List<Map<String, dynamic>> mapValues) async {
     try {
       await _db.transaction((txn) async {
-        var batch = txn.batch();
         for (var mapValue in mapValues) {
-          batch.insert(SUDefVal.kChatContent, mapValue);
+          String name = mapValue['name'];
+          List<Map<String, dynamic>> existingRows = await txn.query(
+            SUDefVal.kChatContent,
+            where: 'name = ?',
+            whereArgs: [name],
+          );
+          if (existingRows.isNotEmpty) {
+            // 如果存在相同name的记录，则更新数据
+            // await txn.update(
+            //   SUDefVal.kChatContent,
+            //   mapValue,
+            //   where: 'name = ?',
+            //   whereArgs: [name],
+            // );
+
+            ///如果不覆盖，放开continue，注释掉update代码
+            continue;
+          } else {
+            // 否则插入新记录
+            await txn.insert(SUDefVal.kChatContent, mapValue);
+          }
         }
-        await batch.commit();
       });
     } catch (e) {
       throw Exception('Batch insert failed: $e');
@@ -36,5 +54,14 @@ class ChatContentDao {
 
   Future<List<Map<String, dynamic>>> getAll() async {
     return await _db.query(SUDefVal.kChatContent);
+  }
+
+  Future<List<Map<String, dynamic>>> query(
+      String columnName, dynamic value) async {
+    return await _db.query(
+      SUDefVal.kChatContent,
+      where: '$columnName = ?',
+      whereArgs: [value],
+    );
   }
 }

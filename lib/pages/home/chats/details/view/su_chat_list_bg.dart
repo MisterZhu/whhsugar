@@ -48,14 +48,16 @@ class SUChatListBg extends StatelessWidget {
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
                 controller: logic.state.scrollController,
-                itemCount: logic.assistantModel.metadata?.messages?.length,
+                itemCount: logic.assistantModel.metadata?.chats?.length,
                 itemBuilder: (BuildContext context, int index) {
                   if (index >=
-                      (logic.assistantModel.metadata!.messages?.length ?? 0)) {
+                      (logic.assistantModel.metadata!.chats?.length ?? 0)) {
                     return SizedBox.fromSize();
                   }
-                  SUMessageModel chatModel =
-                      logic.assistantModel.metadata!.messages![index];
+                  // SUMessageModel chatModel =
+                  //     logic.assistantModel.metadata!.messages![index];
+                  SUChatContentModel chatModel =
+                      logic.assistantModel.metadata!.chats![index];
                   // debugPrint(
                   //     '--chatModel = ${chatModel.inlineSource?.data ?? ''}');
                   if (chatModel.type == SUChatType.intro) {

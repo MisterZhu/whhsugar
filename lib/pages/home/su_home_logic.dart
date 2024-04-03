@@ -30,9 +30,6 @@ class SUHomeLogic extends GetxController {
   Future<void> onInit() async {
     // TODO: implement onInit
     super.onInit();
-
-    await DatabaseHelper.instance.open();
-    final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
     final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
 
     bus.on(SUDefVal.kPushNeedLogin, onEventCallback);
@@ -182,6 +179,12 @@ class SUHomeLogic extends GetxController {
 
   ///获取所有会话列表
   Future<void> getThreadsList() async {
+    final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
+    // final data = await sessionListDao.query('sessionName', '');
+
+    final data = await sessionListDao.getAll();
+    debugPrint('------------session  item 表中的数据: $data');
+
     await HttpManager.instance.get(
         url:
             '${SUUrl.kCreateThreadUrl}/${userLogic.user.properties?.projectId}/threads',

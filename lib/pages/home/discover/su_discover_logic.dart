@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 import 'package:sugar/pages/home/discover/su_discover_model.dart';
 import 'package:sugar/su_export_comment.dart';
 
+import '../../../global/db/daos/chat_content_dao.dart';
+import '../../../global/db/database_helper.dart';
 import '../../../global/user/user_logic.dart';
 import '../chats/details/su_reply_model.dart';
 import '../su_home_logic.dart';
@@ -24,10 +26,13 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
   int currentIndex = 0;
   List<SUMessageModel>? messageData;
 
+  List<SUChatContentModel>? dataList;
+
   @override
   void onInit() {
     super.onInit();
     messageData = <SUMessageModel>[];
+    dataList = <SUChatContentModel>[];
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -234,9 +239,22 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
 
           if (response['messages'] != null) {
             messageData = <SUMessageModel>[];
+            List<Map<String, dynamic>> mapValues = [];
 
             response['messages'].forEach((v) {
               SUMessageModel messageModel = SUMessageModel.fromJson(v);
+
+              List<String>? substrings = messageModel.name?.split("/messages/");
+
+              mapValues.add({
+                'sessionName': substrings?.first ?? '',
+                'name': messageModel.name,
+                'contentType': messageModel.inlineSource?.contentType,
+                'content': messageModel.inlineSource?.data,
+                'author': messageModel.author,
+                'createTime': messageModel.createTime,
+                'updateTime': messageModel.updateTime
+              });
               messageModel.type =
                   (messageModel.author == userLogic.user.name?.value)
                       ? SUChatType.mine
@@ -244,13 +262,15 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
               messageData!.add(messageModel);
               // messageData!.add(SUMessageModel.fromJson(v));
             });
+            final chatContentDao =
+                ChatContentDao(DatabaseHelper.instance.database);
+            chatContentDao.batchInsert(mapValues);
+
             messageData = messageData!.reversed.toList();
 
             assistantModel.metadata?.needRefresh = false;
             assistantModel.metadata?.messages = messageData;
-            final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
-            homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
-            update([SUDefVal.kChatBottom]);
+            _fetchTableData();
           }
         },
         failure: (err) {
@@ -258,12 +278,43 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
         });
   }
 
+  // 查询表数据
+  void _fetchTableData() async {
+    try {
+      final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
+      // final data = await chatContentDao.getAll();
+
+      final data = await chatContentDao.query('sessionName', threadName);
+      //List<SUChatContentModel> chatContentList = data.map((json) => SUChatContentModel.fromJson(json)).toList();
+      dataList = <SUChatContentModel>[];
+
+      debugPrint('item 表中的数据: $data');
+      data.forEach((json) {
+        SUChatContentModel chatContent = SUChatContentModel.fromJson(json);
+        chatContent.type = (chatContent.author == userLogic.user.name?.value)
+            ? SUChatType.mine
+            : SUChatType.others;
+
+        dataList?.add(chatContent);
+      });
+      dataList = dataList!.reversed.toList();
+
+      assistantModel.metadata?.chats = dataList;
+      final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
+      homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
+      update([SUDefVal.kChatBottom]);
+      debugPrint('---------------chatContent: 刷新');
+    } catch (error) {
+      debugPrint('find error: $error');
+    }
+  }
+
   ///获取某条消息
-  Future<void> getMessage() async {
+  Future<void> getMessage(String name) async {
     debugPrint('--------------getUserToken--begin');
 
     await HttpManager.instance.get(
-        url: '/$threadName/messages',
+        url: name,
         params: null,
         success: (response) {
           debugPrint('--------------------获取某条消息 response : $response');

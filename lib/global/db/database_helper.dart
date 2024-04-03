@@ -2,6 +2,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:sugar/constants/su_default_value.dart';
 
+import '../../su_export_comment.dart';
+
 class DatabaseHelper {
   // static const String _dbName = "sugar_app_db";
   static const int _dbVersion = 1;
@@ -29,6 +31,8 @@ await DatabaseHelper.instance.close();
   Future<void> open() async {
     final databasesPath = await getDatabasesPath();
     final path = join(databasesPath, SUDefVal.kdbName);
+    debugPrint('----------------db path : $path');
+
     database =
         await openDatabase(path, version: _dbVersion, onCreate: _onCreate);
   }
@@ -43,6 +47,11 @@ await DatabaseHelper.instance.close();
       assistant TEXT,
       owner TEXT,
       createTime TEXT,
+      avatarUrl TEXT,
+      backgroundImage TEXT,
+      lastTime TEXT,
+      lastMessage TEXT,
+      assistantName TEXT,
       updateTime TEXT
     )
     ''');

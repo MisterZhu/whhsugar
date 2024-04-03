@@ -46,12 +46,14 @@ class Metadata {
 
   List<String>? greetings;
   List<SUMessageModel>? messages;
+  List<SUChatContentModel>? chats;
 
   Metadata(
       {this.avatar,
       this.backgroundImage,
       this.greetings,
       this.messages,
+      this.chats,
       this.backgroundColor,
       this.needRefresh});
 
@@ -81,6 +83,8 @@ class Metadata {
     //   }
     // });
     messages = <SUMessageModel>[];
+    chats = <SUChatContentModel>[];
+
     if (greetings != null && ((greetings?.length ?? 0) > 0)) {
       SUMessageModel messageModel = SUMessageModel();
       messageModel.name = '';
@@ -118,6 +122,8 @@ class SUSessionModel {
   String? updateTime;
   bool? isSelect;
   String? avatarUrl;
+  String? backgroundImage;
+
   String? lastTime;
   String? lastMessage;
 
@@ -133,6 +139,7 @@ class SUSessionModel {
       this.assistantName,
       this.isSelect,
       this.avatarUrl,
+      this.backgroundImage,
       this.lastTime,
       this.lastMessage,
       this.updateTime});
@@ -146,6 +153,7 @@ class SUSessionModel {
     createTime = json['createTime'];
     updateTime = json['updateTime'];
     avatarUrl = 'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg';
+    backgroundImage = 'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg';
     lastTime = 'yesterday 9:40 AM';
     lastMessage = '(Luca sits down on the bed) "sigh" I am so tire...';
     assistantName = 'Luca';
@@ -226,6 +234,53 @@ class DisInlineSource {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['contentType'] = contentType;
     data['data'] = this.data;
+    return data;
+  }
+}
+
+class SUChatContentModel {
+  String? name;
+  String? content;
+  String? contentType;
+  String? sessionName;
+  String? author;
+  String? createTime;
+  String? updateTime;
+  SUChatType? type;
+  bool? isFold;
+
+  SUChatContentModel(
+      {this.name,
+      this.content,
+      this.contentType,
+      this.sessionName,
+      this.author,
+      this.type,
+      this.isFold,
+      this.createTime,
+      this.updateTime});
+
+  SUChatContentModel.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    content = json['content'];
+    contentType = json['contentType'];
+    sessionName = json['sessionName'];
+    author = json['author'];
+    createTime = json['createTime'];
+    updateTime = json['updateTime'];
+    type = SUChatType.intro;
+    isFold = false;
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['content'] = this.content;
+    data['contentType'] = this.contentType;
+    data['sessionName'] = this.sessionName;
+    data['author'] = this.author;
+    data['createTime'] = this.createTime;
+    data['updateTime'] = this.updateTime;
     return data;
   }
 }

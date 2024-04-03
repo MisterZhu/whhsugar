@@ -38,4 +38,13 @@ class SessionListDao {
   Future<List<Map<String, dynamic>>> getAll() async {
     return await _db.query(SUDefVal.kSessionList);
   }
+
+  Future<List<Map<String, dynamic>>> query(
+      String columnName, dynamic value) async {
+    return await _db.query(
+      SUDefVal.kChatContent,
+      where: '$columnName = ?',
+      whereArgs: [value],
+    );
+  }
 }

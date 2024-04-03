@@ -7,6 +7,7 @@ import 'package:sugar/utils/custom_material_color.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'constants/su_translation.dart';
+import 'global/db/database_helper.dart';
 import 'global/su_global_binding.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -20,6 +21,7 @@ void startApp() async {
 
   RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   await HttpManager.init();
+  await DatabaseHelper.instance.open();
 
   /// 路由的basePath
   String basePath = await SUUtils().getLoginState();
