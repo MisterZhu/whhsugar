@@ -3,6 +3,7 @@ import 'package:sugar/pages/home/discover/su_discover_model.dart';
 import 'package:sugar/su_export_comment.dart';
 
 import '../../../global/db/daos/chat_content_dao.dart';
+import '../../../global/db/daos/session_list_dao.dart';
 import '../../../global/db/database_helper.dart';
 import '../../../global/user/user_logic.dart';
 import '../chats/details/su_reply_model.dart';
@@ -115,6 +116,77 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  // 添加会话数据
+  void insertThreadDB(SUSessionModel session) async {
+    try {
+      final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
+      await sessionListDao.insertOrUpdate({
+        'assistant': session.assistant,
+        'name': session.name,
+        'displayName': session.displayName,
+        'description': session.description,
+        'owner': session.owner,
+        'createTime': session.createTime,
+        'updateTime': session.updateTime
+      });
+    } catch (error) {
+      debugPrint('find error: $error');
+    }
+  }
+
+// 添加聊天数据
+  void insertChatDB(SUMessageModel messageModel) async {
+    try {
+      final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
+      await chatContentDao.insertOrUpdate({
+        'sessionName': threadName,
+        'name': messageModel.name,
+        'contentType': messageModel.inlineSource?.contentType,
+        'content': messageModel.inlineSource?.data,
+        'author': messageModel.author,
+        'createTime': messageModel.createTime,
+        'updateTime': messageModel.updateTime
+      });
+      final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
+      // final sessionList = await sessionListDao.getAll();
+      final data = await sessionListDao.query('name', threadName);
+      debugPrint('查询到的  session数据: $data');
+    } catch (error) {
+      debugPrint('find error: $error');
+    }
+  }
+
+  // 条件sessionName查询聊天表数据
+  void _fetchTableData() async {
+    try {
+      final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
+      // final data = await chatContentDao.getAll();
+
+      final data = await chatContentDao.query('sessionName', threadName);
+      //List<SUChatContentModel> chatContentList = data.map((json) => SUChatContentModel.fromJson(json)).toList();
+      dataList = <SUChatContentModel>[];
+
+      debugPrint('item 表中的数据: $data');
+      data.forEach((json) {
+        SUChatContentModel chatContent = SUChatContentModel.fromJson(json);
+        chatContent.type = (chatContent.author == userLogic.user.name?.value)
+            ? SUChatType.mine
+            : SUChatType.others;
+
+        dataList?.add(chatContent);
+      });
+      dataList = dataList!.reversed.toList();
+
+      assistantModel.metadata?.chats = dataList;
+      final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
+      homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
+      update([SUDefVal.kChatBottom]);
+      debugPrint('---------------chatContent: 刷新');
+    } catch (error) {
+      debugPrint('find error: $error');
+    }
+  }
+
   ///-------------------------------Network Request-------------------------------
   ///创建会话
   Future<void> createThreads(Map<String, dynamic> params) async {
@@ -139,6 +211,8 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
           params: params,
           success: (response) {
             final session = SUSessionModel.fromJson(response);
+            insertThreadDB(session);
+
             threadName = session.name ?? '';
             sendMessages(params1, content);
           },
@@ -156,8 +230,9 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
         url: '$threadName/messages',
         params: params,
         success: (response) {
+          getMessage(response['name']);
           debugPrint('--------------------发送消息response1 : $response');
-          aiReplyMessages(response['name']);
+          // aiReplyMessages(response['name']);
         },
         failure: (err) {
           // LoadingUtil.failure(text: err['msg']);
@@ -213,6 +288,8 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
               canSlide.value = true;
             } else {
               isStreamLoading.value = true;
+              getMessage(replayModel.response?.messages?.last ?? '');
+
               Future.delayed(const Duration(seconds: 1), () {
                 getReplyMessages(name);
               });
@@ -265,7 +342,6 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
             final chatContentDao =
                 ChatContentDao(DatabaseHelper.instance.database);
             chatContentDao.batchInsert(mapValues);
-
             messageData = messageData!.reversed.toList();
 
             assistantModel.metadata?.needRefresh = false;
@@ -278,37 +354,6 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
         });
   }
 
-  // 查询表数据
-  void _fetchTableData() async {
-    try {
-      final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
-      // final data = await chatContentDao.getAll();
-
-      final data = await chatContentDao.query('sessionName', threadName);
-      //List<SUChatContentModel> chatContentList = data.map((json) => SUChatContentModel.fromJson(json)).toList();
-      dataList = <SUChatContentModel>[];
-
-      debugPrint('item 表中的数据: $data');
-      data.forEach((json) {
-        SUChatContentModel chatContent = SUChatContentModel.fromJson(json);
-        chatContent.type = (chatContent.author == userLogic.user.name?.value)
-            ? SUChatType.mine
-            : SUChatType.others;
-
-        dataList?.add(chatContent);
-      });
-      dataList = dataList!.reversed.toList();
-
-      assistantModel.metadata?.chats = dataList;
-      final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
-      homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
-      update([SUDefVal.kChatBottom]);
-      debugPrint('---------------chatContent: 刷新');
-    } catch (error) {
-      debugPrint('find error: $error');
-    }
-  }
-
   ///获取某条消息
   Future<void> getMessage(String name) async {
     debugPrint('--------------getUserToken--begin');
@@ -318,6 +363,8 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
         params: null,
         success: (response) {
           debugPrint('--------------------获取某条消息 response : $response');
+          SUMessageModel messageModel = SUMessageModel.fromJson(response);
+          insertChatDB(messageModel);
         },
         failure: (err) {
           // LoadingUtil.failure(text: err['msg']);

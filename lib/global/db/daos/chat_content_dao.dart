@@ -1,14 +1,37 @@
 import 'package:sqflite/sqflite.dart';
 
 import '../../../constants/su_default_value.dart';
+import '../../../su_export_comment.dart';
 
 class ChatContentDao {
   final Database _db;
 
   ChatContentDao(this._db);
 
-  Future<void> insert(Map<String, dynamic> row) async {
-    await _db.insert(SUDefVal.kChatContent, row);
+  Future<void> insertOrUpdate(Map<String, dynamic> row) async {
+    try {
+      String name = row['name'];
+      List<Map<String, dynamic>> existingRows = await _db.query(
+        SUDefVal.kChatContent,
+        where: 'name = ?',
+        whereArgs: [name],
+      );
+      if (existingRows.isNotEmpty) {
+        //如果存在相同name的记录，则更新数据
+        await _db.update(
+          SUDefVal.kChatContent,
+          row,
+          where: 'name = ?',
+          whereArgs: [name],
+        );
+      } else {
+        // 否则插入新记录
+        await _db.insert(SUDefVal.kChatContent, row);
+      }
+    } catch (e) {
+      debugPrint('Insert or update failed: $e');
+    }
+    // await _db.insert(SUDefVal.kChatContent, row);
   }
 
   ///批量插入

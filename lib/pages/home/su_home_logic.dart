@@ -23,6 +23,7 @@ class SUHomeLogic extends GetxController {
 
   List<SUAssistantModel>? dataSource;
   List<SUSessionModel>? threadData;
+  // List<SUSessionModel>? dataList;
 
   final userLogic = Get.find<UserLogic>();
 
@@ -192,16 +193,54 @@ class SUHomeLogic extends GetxController {
         success: (response) {
           debugPrint('--------------------获取会话列表response : $response');
           if (response['threads'] != null) {
+            List<Map<String, dynamic>> mapValues = [];
+
             response['threads'].forEach((v) {
-              threadData!.add(SUSessionModel.fromJson(v));
+              SUSessionModel messageModel = SUSessionModel.fromJson(v);
+              mapValues.add({
+                'assistant': messageModel.assistant,
+                'name': messageModel.name,
+                'displayName': messageModel.displayName,
+                'description': messageModel.description,
+                'owner': messageModel.owner,
+                'createTime': messageModel.createTime,
+                'updateTime': messageModel.updateTime
+              });
+              // threadData!.add(SUSessionModel.fromJson(v));
+              // threadData!.add(messageModel);
             });
+            sessionListDao.batchInsert(mapValues);
+            _fetchTableData();
           }
-          getAssistantsList();
         },
         failure: (err) {
           // LoadingUtil.failure(text: err['msg']);
           getAssistantsList();
         });
+  }
+
+  // 查询表数据
+  void _fetchTableData() async {
+    try {
+      final sessionDao = SessionListDao(DatabaseHelper.instance.database);
+      // final data = await chatContentDao.getAll();
+
+      final data = await sessionDao.getAll();
+      //List<SUChatContentModel> chatContentList = data.map((json) => SUChatContentModel.fromJson(json)).toList();
+      threadData = <SUSessionModel>[];
+
+      debugPrint('sessionDao 表中的数据: $data');
+      data.forEach((json) {
+        SUSessionModel chatContent = SUSessionModel.fromJson(json);
+        threadData?.add(chatContent);
+      });
+      // dataList = dataList!.reversed.toList();
+      getAssistantsList();
+
+      debugPrint('---------------sessionDao: 刷新');
+    } catch (error) {
+      debugPrint('find error: $error');
+    }
   }
 
   ///获取助手列表
@@ -217,6 +256,24 @@ class SUHomeLogic extends GetxController {
               dataSource!.add(SUAssistantModel.fromJson(v));
             });
             // logicDis.update();
+// 构建 dataSource 的 name 到对象的映射
+            Map<String, SUAssistantModel> aMap = {};
+            for (var aObj in dataSource!) {
+              aMap[aObj?.name ?? 'a'] = aObj;
+            }
+
+// 遍历 threadData，直接查找并更新
+            for (var bObj in threadData!) {
+              String? assistantName = bObj.assistant;
+              if (aMap.containsKey(assistantName)) {
+                // 找到匹配的对象，更新属性
+                bObj.avatarUrl = aMap[assistantName]?.metadata?.avatar;
+                bObj.backgroundImage =
+                    aMap[assistantName]?.metadata?.backgroundImage;
+                bObj.displayName = aMap[assistantName]?.displayName;
+                bObj.assistantName = aMap[assistantName]?.name;
+              }
+            }
             if ((dataSource?.length ?? 0) > 0) {
               final listModel = dataSource![0];
               logicDis.assistantId = listModel.name!;
@@ -225,6 +282,10 @@ class SUHomeLogic extends GetxController {
               List<SUSessionModel>? adults = threadData
                   ?.where((user) => user.assistant == logicDis.assistantId)
                   .toList();
+              debugPrint(
+                  '---------------backgroundImage: ${adults?.last.backgroundImage}');
+              debugPrint(
+                  '---------------assistantName: ${adults?.last.assistantName}');
 
               if ((adults?.length ?? 0) > 0) {
                 logicDis.threadName = adults?.last?.name ?? '';
