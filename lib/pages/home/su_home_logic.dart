@@ -210,7 +210,7 @@ class SUHomeLogic extends GetxController {
               // threadData!.add(messageModel);
             });
             sessionListDao.batchInsert(mapValues);
-            _fetchTableData();
+            fetchTableData();
           }
         },
         failure: (err) {
@@ -220,7 +220,7 @@ class SUHomeLogic extends GetxController {
   }
 
   // 查询表数据
-  void _fetchTableData() async {
+  Future<void> fetchTableData() async {
     try {
       final sessionDao = SessionListDao(DatabaseHelper.instance.database);
       // final data = await chatContentDao.getAll();
@@ -230,14 +230,26 @@ class SUHomeLogic extends GetxController {
       threadData = <SUSessionModel>[];
 
       debugPrint('sessionDao 表中的数据: $data');
-      data.forEach((json) {
+      for (var json in data) {
         SUSessionModel chatContent = SUSessionModel.fromJson(json);
         threadData?.add(chatContent);
-      });
+      }
       // dataList = dataList!.reversed.toList();
       getAssistantsList();
+    } catch (error) {
+      debugPrint('find error: $error');
+    }
+  }
 
-      debugPrint('---------------sessionDao: 刷新');
+  // 仅查询表数据
+  Future<void> fetchTableDataOnly() async {
+    try {
+      final sessionDao = SessionListDao(DatabaseHelper.instance.database);
+      // final data = await chatContentDao.getAll();
+
+      final data = await sessionDao.getAll();
+      //List<SUChatContentModel> chatContentList = data.map((json) => SUChatContentModel.fromJson(json)).toList();
+      debugPrint('-----------------------sessionDao 表中的数据: $data');
     } catch (error) {
       debugPrint('find error: $error');
     }
@@ -250,7 +262,7 @@ class SUHomeLogic extends GetxController {
     await HttpManager.instance.get(
         url: SUUrl.kGetAssListUrl,
         params: null,
-        success: (response) {
+        success: (response) async {
           if (response['assistants'] != null) {
             response['assistants'].forEach((v) {
               dataSource!.add(SUAssistantModel.fromJson(v));
@@ -263,6 +275,11 @@ class SUHomeLogic extends GetxController {
             }
 
 // 遍历 threadData，直接查找并更新
+            final sessionListDao =
+                SessionListDao(DatabaseHelper.instance.database);
+
+            List<Map<String, dynamic>> mapValues = [];
+
             for (var bObj in threadData!) {
               String? assistantName = bObj.assistant;
               if (aMap.containsKey(assistantName)) {
@@ -271,9 +288,33 @@ class SUHomeLogic extends GetxController {
                 bObj.backgroundImage =
                     aMap[assistantName]?.metadata?.backgroundImage;
                 bObj.displayName = aMap[assistantName]?.displayName;
-                bObj.assistantName = aMap[assistantName]?.name;
+                bObj.description = aMap[assistantName]?.description;
+                bObj.lastMessage =
+                    aMap[assistantName]?.metadata?.greetings?.last ?? '';
+                bObj.lastTime = aMap[assistantName]?.createTime;
+                bObj.assistantName = aMap[assistantName]?.displayName;
+
+                mapValues.add({
+                  'assistant': bObj.assistant,
+                  'name': bObj.name,
+                  'displayName': bObj.displayName,
+                  'description': bObj.description,
+                  'owner': bObj.owner,
+                  'createTime': bObj.createTime,
+                  'avatarUrl': bObj.avatarUrl,
+                  'backgroundImage': bObj.backgroundImage,
+                  'displayName': bObj.displayName,
+                  'assistantName': bObj.displayName,
+                  'assistantName': bObj.assistantName,
+                  'lastMessage': bObj.lastMessage,
+                  'lastTime': bObj.lastTime,
+                  'updateTime': bObj.updateTime
+                });
               }
             }
+            await sessionListDao.batchInsert(mapValues);
+            // fetchTableDataOnly();
+
             if ((dataSource?.length ?? 0) > 0) {
               final listModel = dataSource![0];
               logicDis.assistantId = listModel.name!;

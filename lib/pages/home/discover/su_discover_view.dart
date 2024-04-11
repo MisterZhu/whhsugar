@@ -77,6 +77,15 @@ class SUDiscoverPage extends StatelessWidget {
         GetBuilder<SUDiscoverLogic>(
             id: SUDefVal.kDiscover,
             builder: (logic) {
+              final dataSourceLength = logicHome.dataSource?.length ?? 0;
+              if (dataSourceLength <= 0) {
+                return Container(
+                  color: Colors.grey[200], // Placeholder color
+                  child: const Center(
+                    child: CircularProgressIndicator(), // Loading indicator
+                  ),
+                );
+              }
               return Stack(
                 children: [
                   Positioned.fill(
@@ -117,7 +126,7 @@ class SUDiscoverPage extends StatelessWidget {
   }
 
   Widget buildPage(BuildContext context, int index, SUAssistantModel model) {
-    debugPrint('-------------buildPage');
+    // debugPrint('-------------buildPage');
     return FutureBuilder<String>(
       future: logicDet.getImageColor(model.metadata?.backgroundColor ?? '',
           model.metadata?.backgroundImage ?? ''), // 调用 getImageColor 方法获取图片主要颜色
@@ -181,6 +190,7 @@ class SUDiscoverPage extends StatelessWidget {
                         return SUChatListBg(
                           bgColor: model.metadata?.backgroundColor ?? '',
                           logic: logic,
+                          dataList: logic.assistantModel.metadata!.chats!,
                         );
                       },
                     ),

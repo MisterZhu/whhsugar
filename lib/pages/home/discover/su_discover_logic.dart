@@ -66,18 +66,13 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
 
   ///添加我的消息
   void addMineMessage(String content) {
-    SUMessageModel messageModel = SUMessageModel();
+    SUChatContentModel messageModel = SUChatContentModel();
     messageModel.name = '';
     messageModel.type = SUChatType.mine;
     messageModel.isFold = false;
-    messageModel.inlineSource = DisInlineSource(
-      data: content,
-      contentType: 'text/plain',
-    );
-    messageData!.insert(0, messageModel);
-    assistantModel.metadata?.messages = messageData;
-    debugPrint(
-        '----------------------------------------------messageModel：${messageModel.inlineSource?.data}');
+    messageModel.content = content;
+    dataList!.insert(0, messageModel);
+    assistantModel.metadata?.chats = dataList;
 
     final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
     homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
@@ -86,17 +81,14 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
 
   ///添加回复消息
   void addReplyMessage(String content) {
-    SUMessageModel messageModel = SUMessageModel();
+    SUChatContentModel messageModel = SUChatContentModel();
     messageModel.name = '';
     messageModel.type = SUChatType.others;
     messageModel.isFold = false;
-    messageModel.inlineSource = DisInlineSource(
-      data: content,
-      contentType: 'text/plain',
-    );
+    messageModel.content = content;
     // messageData!.add(messageModel);
-    messageData!.insert(0, messageModel);
-    assistantModel.metadata?.messages = messageData;
+    dataList!.insert(0, messageModel);
+    assistantModel.metadata?.chats = dataList;
 
     final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
     homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
@@ -105,11 +97,11 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
 
   ///替换消息
   void replaceMessage(String content) {
-    if ((messageData?.length ?? 0) > 0) {
-      final model = messageData![0];
-      model.inlineSource?.data = content;
-      messageData![0] = model;
-      assistantModel.metadata?.messages = messageData;
+    if ((dataList?.length ?? 0) > 0) {
+      final model = dataList![0];
+      model.content = content;
+      dataList![0] = model;
+      assistantModel.metadata?.chats = dataList;
       final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
       homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
       update([SUDefVal.kChatBottom]);
@@ -117,7 +109,7 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
   }
 
   // 添加会话数据
-  void insertThreadDB(SUSessionModel session) async {
+  Future<void> insertThreadDB(SUSessionModel session) async {
     try {
       final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
       await sessionListDao.insertOrUpdate({
@@ -150,6 +142,11 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
       final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
       // final sessionList = await sessionListDao.getAll();
       final data = await sessionListDao.query('name', threadName);
+      final lastModel = data.last;
+      lastModel['lastTime'] = messageModel.createTime;
+      lastModel['lastMessage'] = messageModel.inlineSource?.data;
+      sessionListDao.insertOrUpdate(lastModel);
+
       debugPrint('查询到的  session数据: $data');
     } catch (error) {
       debugPrint('find error: $error');
@@ -209,9 +206,9 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
           url:
               '${SUUrl.kCreateThreadUrl}${userLogic.user.properties?.projectId}/threads',
           params: params,
-          success: (response) {
+          success: (response) async {
             final session = SUSessionModel.fromJson(response);
-            insertThreadDB(session);
+            await insertThreadDB(session);
 
             threadName = session.name ?? '';
             sendMessages(params1, content);
@@ -232,7 +229,7 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
         success: (response) {
           getMessage(response['name']);
           debugPrint('--------------------发送消息response1 : $response');
-          // aiReplyMessages(response['name']);
+          aiReplyMessages(response['name']);
         },
         failure: (err) {
           // LoadingUtil.failure(text: err['msg']);
@@ -286,10 +283,9 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
             if ((replayModel?.done ?? false)) {
               isStreamLoading.value = false;
               canSlide.value = true;
+              getMessage(replayModel.response?.messages?.last ?? '');
             } else {
               isStreamLoading.value = true;
-              getMessage(replayModel.response?.messages?.last ?? '');
-
               Future.delayed(const Duration(seconds: 1), () {
                 getReplyMessages(name);
               });

@@ -98,10 +98,11 @@ class SUHomePage extends StatelessWidget {
               ),
               const SizedBox(width: 10), // 可以根据需要调整间距
               TextButton(
-                onPressed: () {
+                onPressed: () async {
                   // 中间右侧按钮点击事件
                   print('Chats Button Clicked');
                   state.isDiscover = false;
+                  await logic.fetchTableData();
                   logic.update();
                 },
                 child: Text(

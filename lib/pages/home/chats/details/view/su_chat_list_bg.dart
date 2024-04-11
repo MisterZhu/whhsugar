@@ -11,11 +11,13 @@ import '../../../discover/su_discover_state.dart';
 class SUChatListBg extends StatelessWidget {
   final String bgColor;
   final SUDiscoverLogic logic; // 替换 YourStateType 为实际的状态类
+  final List<SUChatContentModel> dataList;
 
   const SUChatListBg({
     Key? key,
     required this.bgColor,
     required this.logic,
+    required this.dataList,
   }) : super(key: key);
 
   @override
@@ -48,16 +50,14 @@ class SUChatListBg extends StatelessWidget {
                 physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics()),
                 controller: logic.state.scrollController,
-                itemCount: logic.assistantModel.metadata?.chats?.length,
+                itemCount: dataList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  if (index >=
-                      (logic.assistantModel.metadata!.chats?.length ?? 0)) {
+                  if (index >= (dataList.length ?? 0)) {
                     return SizedBox.fromSize();
                   }
                   // SUMessageModel chatModel =
                   //     logic.assistantModel.metadata!.messages![index];
-                  SUChatContentModel chatModel =
-                      logic.assistantModel.metadata!.chats![index];
+                  SUChatContentModel chatModel = dataList[index];
                   // debugPrint(
                   //     '--chatModel = ${chatModel.inlineSource?.data ?? ''}');
                   if (chatModel.type == SUChatType.intro) {

@@ -3,25 +3,25 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sugar/pages/home/chats/details/view/su_chat_bottom.dart';
-import 'package:sugar/pages/home/chats/details/view/su_chat_intro_cell.dart';
 import 'package:sugar/pages/home/chats/details/view/su_chat_list_bg.dart';
-import 'package:sugar/pages/home/chats/details/view/su_chat_mine_cell.dart';
-import 'package:sugar/pages/home/chats/details/view/su_chat_other_cell.dart';
 import 'package:sugar/pages/home/chats/details/view/su_chat_tip.dart';
 import '../../../../su_export_comment.dart';
 import '../../discover/su_discover_logic.dart';
-import '../../discover/su_discover_state.dart';
 import 'su_details_logic.dart';
 
 class SUDetailsPage extends StatelessWidget {
   SUDetailsPage({Key? key}) : super(key: key);
 
-  final state = Get.find<SUDiscoverLogic>().state;
-
   final logicDet = Get.put(SUDetailsLogic());
 
   @override
   Widget build(BuildContext context) {
+    // 通过 Get.arguments 获取传递的参数
+    var received = Get.arguments;
+    logicDet.title = received['title'];
+    logicDet.name = received['name'];
+    logicDet.bgUrl = received['backgroundImage'];
+    logicDet.fetchTableData();
     return GetBuilder<SUDetailsLogic>(builder: (logic) {
       return SUCustomScaffold(
           // leading: IconButton(
@@ -36,7 +36,7 @@ class SUDetailsPage extends StatelessWidget {
           //     SURouterHelper.back(null);
           //   },
           // ),
-          title: "Tony",
+          title: logicDet.title,
           centerTitle: true,
           navBackgroundColor: Colors.transparent,
           elevation: 0,
@@ -48,15 +48,14 @@ class SUDetailsPage extends StatelessWidget {
   /// body
   Widget body() {
     return FutureBuilder<String>(
-      future: logicDet.getImageColor('',
-          'https://qiniu.aimissu.top/temporary/image39.jpg'), // 调用 getImageColor 方法获取图片主要颜色
+      future: logicDet.getImageColor(
+          '', logicDet.bgUrl), // 调用 getImageColor 方法获取图片主要颜色
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(
-            decoration: const BoxDecoration(
+            decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(
-                    'https://qiniu.aimissu.top/temporary/image39.jpg'),
+                image: NetworkImage(logicDet.bgUrl),
                 fit: BoxFit.cover,
               ),
             ),
@@ -72,10 +71,9 @@ class SUDetailsPage extends StatelessWidget {
               FocusScope.of(context).unfocus();
             },
             child: Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: NetworkImage(
-                      'https://qiniu.aimissu.top/temporary/image39.jpg'),
+                  image: NetworkImage(logicDet.bgUrl),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -90,11 +88,12 @@ class SUDetailsPage extends StatelessWidget {
                   ),
                   Expanded(
                     child: GetBuilder<SUDiscoverLogic>(
-                      id: SUDefVal.kChatBottom,
+                      id: SUDefVal.kChatDetList,
                       builder: (logic) {
                         return SUChatListBg(
                           bgColor: bgColor,
                           logic: logic,
+                          dataList: logicDet.dataList!,
                         );
                       },
                     ),
@@ -114,12 +113,14 @@ class SUDetailsPage extends StatelessWidget {
       id: SUDefVal.kChatBottom,
       builder: (state) {
         return SUChatBottom(
-          'Tony',
+          logicDet.title,
           bgColor,
           state,
           sendHandle: (value) async {
-            // 列表滑到底部
-            // searchRequest(value);
+            var params1 = {
+              "inlineSource": {"data": value, "contentType": "text/plain"},
+            };
+            logicDet.sendMessages(params1, value);
           },
           // backgroundColor: Color(int.parse(backgroundColor.replaceAll('#', '0xFF'))), // 使用颜色字符串设置背景色
         );

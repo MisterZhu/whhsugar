@@ -22,23 +22,17 @@ class SUChattedPage extends StatelessWidget {
               padding: EdgeInsets.zero, // 设置顶部间距为零
               itemCount: logic.threadData?.length ?? 0, // 你的聊天列表项数量
               itemBuilder: (context, index) {
-                // 替换成你的聊天数据模型
-                // ChatItemModel chatItem = ChatItemModel(
-                //   avatarUrl:
-                //       'https://qiniu.aimissu.top/common_img/mine_def_head0.jpeg', // 你的头像链接
-                //   name: 'Luca $index', // 你的用户名称
-                //   lastMessage:
-                //       '(Luca sits down on the bed) "sigh" I am so tire...',
-                //   lastTime: 'Yesterday 9:40 AM',
-                //   isSelect: (index % 2) == 0 ? true : false, // 你的最后一条消息
-                // );
-
-                // return SUChattedItem(chatItem);
+                final model = logic.threadData![index];
                 return Align(
                   alignment: Alignment.topCenter,
-                  child: SUChattedItem(logic.threadData![index], press: () {
+                  child: SUChattedItem(model, press: () {
                     debugPrint('点击消息列表');
-                    SURouterHelper.pathPage(SURouterPath.chatDetPath, null);
+                    var params = {
+                      "title": model.assistantName,
+                      "name": model.name,
+                      "backgroundImage": model.backgroundImage
+                    };
+                    SURouterHelper.pathPage(SURouterPath.chatDetPath, params);
                   }),
                 );
               },

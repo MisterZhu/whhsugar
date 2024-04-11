@@ -152,11 +152,11 @@ class SUSessionModel {
     owner = json['owner'];
     createTime = json['createTime'];
     updateTime = json['updateTime'];
-    avatarUrl = 'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg';
-    backgroundImage = 'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg';
-    lastTime = 'yesterday 9:40 AM';
-    lastMessage = '(Luca sits down on the bed) "sigh" I am so tire...';
-    assistantName = 'Luca';
+    avatarUrl = json['avatarUrl'];
+    backgroundImage = json['backgroundImage'];
+    lastTime = json['lastTime'];
+    lastMessage = json['lastMessage'];
+    assistantName = json['assistantName'];
 
     isSelect = false;
   }

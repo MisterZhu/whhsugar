@@ -25,7 +25,6 @@ class SUChattedItem extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 23.0.w, // 设置头像大小
-                    // backgroundImage: NetworkImage(model!.avatarUrl),
                     backgroundImage: NetworkImage(model?.avatarUrl ?? ''),
                   ),
                 ],
@@ -59,15 +58,7 @@ class SUChattedItem extends StatelessWidget {
                                 model?.lastTime ?? '',
                                 maxLines: 1,
                                 color: SUColorSingleton().textTimeColor,
-                              )
-                              // Text(
-                              //   model?.updateTime ?? '',
-                              //   style: TextStyle(
-                              //       fontWeight: FontWeight.normal,
-                              //       color: SUColorSingleton().textTimeColor,
-                              //       fontSize: SUColorSingleton().textTimeFont10),
-                              // ),
-                              ),
+                              )),
                         ],
                       ),
                       SizedBox(

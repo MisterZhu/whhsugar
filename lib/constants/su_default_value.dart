@@ -149,6 +149,7 @@ class SUDefVal {
   static const String kChatBottom = "ChatBottom";
   static const String kDiscover = "Discover";
   static const String kChatted = "Chatted";
+  static const String kChatDetList = "ChatDetList";
 
   static const String kChatSession = "ChatSession";
   static const String kChatMsgList = "ChatMsgList";
