@@ -26,6 +26,7 @@ class SUDetailsLogic extends GetxController {
   late String name = '';
   late String bgUrl = '';
   RxBool isStreamLoadingDet = false.obs;
+  RxBool isStopGenerationDet = false.obs;
 
   List<SUChatContentModel>? dataList;
   final UserLogic userLogic = Get.find<UserLogic>();
@@ -100,7 +101,8 @@ class SUDetailsLogic extends GetxController {
               final ReMessages firstMessage = messages[0];
               debugPrint(
                   '--------------------replayModel : ${firstMessage?.conte?.inlineSource?.data ?? ""}');
-              replaceMessage(firstMessage?.conte?.inlineSource?.data ?? "");
+              replaceMessage(firstMessage?.conte?.inlineSource?.data ?? "",
+                  replayModel?.done ?? false);
             }
             if ((replayModel?.done ?? false)) {
               isStreamLoadingDet.value = false;
@@ -141,6 +143,7 @@ class SUDetailsLogic extends GetxController {
     messageModel.name = '';
     messageModel.type = SUChatType.others;
     messageModel.isFold = false;
+    messageModel.isFinish = false;
     messageModel.content = content;
     // messageData!.add(messageModel);
     dataList!.insert(0, messageModel);
@@ -149,10 +152,11 @@ class SUDetailsLogic extends GetxController {
   }
 
   ///替换消息
-  void replaceMessage(String content) {
+  void replaceMessage(String content, bool isFinish) {
     if ((dataList?.length ?? 0) > 0) {
       final model = dataList![0];
       model.content = content;
+      model.isFinish = isFinish;
       dataList![0] = model;
       final SUDiscoverLogic disLogic = Get.find<SUDiscoverLogic>();
       disLogic.update([SUDefVal.kChatDetList]);
@@ -219,7 +223,7 @@ class SUDetailsLogic extends GetxController {
         chatContent.type = (chatContent.author == userLogic.user.name?.value)
             ? SUChatType.mine
             : SUChatType.others;
-
+        chatContent.isFinish = true;
         dataList?.add(chatContent);
       });
       dataList = dataList!.reversed.toList();

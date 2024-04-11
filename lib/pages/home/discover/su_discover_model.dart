@@ -248,6 +248,7 @@ class SUChatContentModel {
   String? updateTime;
   SUChatType? type;
   bool? isFold;
+  bool? isFinish;
 
   SUChatContentModel(
       {this.name,
@@ -257,6 +258,7 @@ class SUChatContentModel {
       this.author,
       this.type,
       this.isFold,
+      this.isFinish,
       this.createTime,
       this.updateTime});
 
@@ -270,6 +272,7 @@ class SUChatContentModel {
     updateTime = json['updateTime'];
     type = SUChatType.intro;
     isFold = false;
+    isFinish = true;
   }
 
   Map<String, dynamic> toJson() {
@@ -289,4 +292,5 @@ enum SUChatType {
   intro,
   mine,
   others,
+  loading,
 }

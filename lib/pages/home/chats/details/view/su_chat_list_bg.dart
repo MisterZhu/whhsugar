@@ -70,7 +70,6 @@ class SUChatListBg extends StatelessWidget {
                     return SUChatMineCell(chatModel);
                   } else {
                     // debugPrint('--对方 = ');
-
                     return SUChatOtherCell(chatModel);
                   }
                 }),

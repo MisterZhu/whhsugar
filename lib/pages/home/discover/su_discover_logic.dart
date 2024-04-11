@@ -17,6 +17,7 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
   final UserLogic userLogic = Get.find<UserLogic>();
   RxBool canSlide = true.obs;
   RxBool isStreamLoading = false.obs;
+  RxBool isStopGeneration = false.obs;
 
   late String threadId = '';
   late String threadName = '';
@@ -85,6 +86,8 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
     messageModel.name = '';
     messageModel.type = SUChatType.others;
     messageModel.isFold = false;
+    messageModel.isFinish = false;
+
     messageModel.content = content;
     // messageData!.add(messageModel);
     dataList!.insert(0, messageModel);
@@ -96,10 +99,12 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
   }
 
   ///替换消息
-  void replaceMessage(String content) {
+  void replaceMessage(String content, bool isFinish) {
     if ((dataList?.length ?? 0) > 0) {
       final model = dataList![0];
       model.content = content;
+      model.isFinish = isFinish;
+
       dataList![0] = model;
       assistantModel.metadata?.chats = dataList;
       final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
@@ -169,6 +174,7 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
         chatContent.type = (chatContent.author == userLogic.user.name?.value)
             ? SUChatType.mine
             : SUChatType.others;
+        chatContent.isFinish = true;
 
         dataList?.add(chatContent);
       });
@@ -278,7 +284,8 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
               final ReMessages firstMessage = messages[0];
               debugPrint(
                   '--------------------replayModel : ${firstMessage?.conte?.inlineSource?.data ?? ""}');
-              replaceMessage(firstMessage?.conte?.inlineSource?.data ?? "");
+              replaceMessage(firstMessage?.conte?.inlineSource?.data ?? "",
+                  replayModel?.done ?? false);
             }
             if ((replayModel?.done ?? false)) {
               isStreamLoading.value = false;

@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sugar/pages/home/chats/details/view/stop_generation.dart';
 import 'package:sugar/pages/home/chats/details/view/su_chat_bottom.dart';
 import 'package:sugar/pages/home/chats/details/view/su_chat_list_bg.dart';
 import 'package:sugar/pages/home/chats/details/view/su_chat_tip.dart';
@@ -98,6 +99,10 @@ class SUDetailsPage extends StatelessWidget {
                       },
                     ),
                   ),
+                  logicDet.isStreamLoadingDet.value &&
+                          !logicDet.isStopGenerationDet.value
+                      ? const StopGeneration()
+                      : const SizedBox(),
                   bottomWidget(bgColor),
                 ],
               ),
