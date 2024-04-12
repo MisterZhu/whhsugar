@@ -95,14 +95,11 @@ class SUDetailsPage extends StatelessWidget {
                           bgColor: bgColor,
                           logic: logic,
                           dataList: logicDet.dataList!,
+                          fromDet: true,
                         );
                       },
                     ),
                   ),
-                  logicDet.isStreamLoadingDet.value &&
-                          !logicDet.isStopGenerationDet.value
-                      ? const StopGeneration()
-                      : const SizedBox(),
                   bottomWidget(bgColor),
                 ],
               ),

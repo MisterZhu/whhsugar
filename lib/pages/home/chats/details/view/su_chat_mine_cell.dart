@@ -20,7 +20,7 @@ class SUChatMineCell extends StatelessWidget {
             Container(
               constraints: BoxConstraints(maxWidth: SUDefVal.chatBoxMaxWidth.w),
               padding: EdgeInsets.only(
-                  left: 12.r, top: 8.r, bottom: 12.r, right: 12.r),
+                  left: 10.r, top: 10.r, bottom: 10.r, right: 10.r),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                     topLeft: Radius.circular(10.r),

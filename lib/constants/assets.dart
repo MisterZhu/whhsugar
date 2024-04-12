@@ -2,6 +2,8 @@
 class Assets {
   Assets._();
 
+  static const String chatChatDetailStop =
+      'assets/images/chat/chat_detail_stop.png';
   static const String commonBackIcon = 'assets/images/common/back_icon.png';
   static const String commonBackIconW = 'assets/images/common/back_icon_w.png';
   static const String commonRightArrow = 'assets/images/common/right_arrow.png';

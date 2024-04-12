@@ -250,6 +250,8 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
     if (substrings.isNotEmpty) {
       paraUrl = substrings[0];
     }
+    isStopGeneration.value = false;
+
     await HttpManager.instance.post(
         url: '$paraUrl:reply',
         params: null,
@@ -286,6 +288,11 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
                   '--------------------replayModel : ${firstMessage?.conte?.inlineSource?.data ?? ""}');
               replaceMessage(firstMessage?.conte?.inlineSource?.data ?? "",
                   replayModel?.done ?? false);
+            }
+            if (isStopGeneration.value) {
+              isStreamLoading.value = false;
+              canSlide.value = true;
+              return;
             }
             if ((replayModel?.done ?? false)) {
               isStreamLoading.value = false;

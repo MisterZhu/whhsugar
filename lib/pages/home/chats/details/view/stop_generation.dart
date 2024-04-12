@@ -32,7 +32,7 @@ class StopGeneration extends StatelessWidget {
               width: 12.w,
             ),
             Image.asset(
-              "assets/images/chat/chat_detail_stop.png",
+              Assets.chatChatDetailStop,
               width: 12.w,
             ),
             SizedBox(
@@ -40,7 +40,7 @@ class StopGeneration extends StatelessWidget {
             ),
             Text(
               'Stop generation…'.tr,
-              style: TextStyle(fontSize: 12.sp, color: Color(0xff6B6B6B)),
+              style: TextStyle(fontSize: 12.sp, color: SCColors.color_6B6B6B),
             )
           ],
         ),

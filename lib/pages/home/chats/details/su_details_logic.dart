@@ -68,6 +68,8 @@ class SUDetailsLogic extends GetxController {
     if (substrings.isNotEmpty) {
       paraUrl = substrings[0];
     }
+    isStopGenerationDet.value = false;
+
     await HttpManager.instance.post(
         url: '$paraUrl:reply',
         params: null,
@@ -103,6 +105,10 @@ class SUDetailsLogic extends GetxController {
                   '--------------------replayModel : ${firstMessage?.conte?.inlineSource?.data ?? ""}');
               replaceMessage(firstMessage?.conte?.inlineSource?.data ?? "",
                   replayModel?.done ?? false);
+            }
+            if (isStopGenerationDet.value) {
+              isStreamLoadingDet.value = false;
+              return;
             }
             if ((replayModel?.done ?? false)) {
               isStreamLoadingDet.value = false;

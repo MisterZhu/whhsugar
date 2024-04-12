@@ -6,7 +6,8 @@ import '../../su_export_comment.dart';
 
 class DatabaseHelper {
   // static const String _dbName = "sugar_app_db";
-  static const int _dbVersion = 1;
+  static const int _newVersion = 1;
+
   late Database database;
 /*
 1.初始化数据库：
@@ -33,8 +34,18 @@ await DatabaseHelper.instance.close();
     final path = join(databasesPath, SUDefVal.kdbName);
     debugPrint('----------------db path : $path');
 
-    database =
-        await openDatabase(path, version: _dbVersion, onCreate: _onCreate);
+    database = await openDatabase(
+      path, version: _newVersion,
+      // onUpgrade: (db, old, newV) {
+      //   _oldVersion = old;
+      // },
+      // 数据库降级时触发的回调
+      // onDowngrade: (db, old, newV) {
+      //   _oldVersion = old;
+      // },
+      onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
+    );
   }
 
   Future<void> _onCreate(Database db, int version) async {
@@ -67,6 +78,19 @@ await DatabaseHelper.instance.close();
       updateTime TEXT
     )
     ''');
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    debugPrint('Upgrading database from version $oldVersion to $newVersion');
+
+    ///如果新的版本数据表结构发生变化，请在此处判断对于版本，并进行数据表结构修改，具体修改命令请自行百度
+    ///https://www.jb51.net/article/279814.htm
+    // // Perform migration based on oldVersion
+    // if (oldVersion == 1 && newVersion == 2) {
+    //   // Version 2 migration: Add avatarUrl and backgroundImage to kSessionList
+    //   await db.execute(
+    //       'ALTER TABLE ${SUDefVal.kChatContent} ADD COLUMN avatarUrl TEXT');
+    // }
   }
 
   Future<void> close() async {

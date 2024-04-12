@@ -191,6 +191,7 @@ class SUDiscoverPage extends StatelessWidget {
                           bgColor: model.metadata?.backgroundColor ?? '',
                           logic: logic,
                           dataList: logic.assistantModel.metadata!.chats!,
+                          fromDet: false,
                         );
                       },
                     ),
