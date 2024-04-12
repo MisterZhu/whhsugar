@@ -1,7 +1,9 @@
 import 'package:sugar/su_export_comment.dart';
 
+import '../../home/discover/su_discover_model.dart';
+
 class SUSearchItem extends StatelessWidget {
-  final dynamic? model;
+  final SUAssistantModel? model;
 
   const SUSearchItem(this.model, {Key? key}) : super(key: key);
 
@@ -31,7 +33,7 @@ class SUSearchItem extends StatelessWidget {
                 // 使用ClipRRect裁剪图片以显示圆角
                 borderRadius: BorderRadius.circular(8.0),
                 child: Image.network(
-                  model['avatar'],
+                  model?.metadata?.avatar ?? '',
                   fit: BoxFit.cover,
                 ),
               ),
@@ -62,7 +64,7 @@ class SUSearchItem extends StatelessWidget {
                   children: [
                     Center(
                       child: Text(
-                        model['name'],
+                        model?.displayName ?? '',
                         style: TextStyle(
                           color: SUColorSingleton().textColor,
                           fontWeight: FontWeight.bold,
@@ -74,7 +76,7 @@ class SUSearchItem extends StatelessWidget {
                       height: 7.h,
                     ),
                     Text(
-                      model['info'],
+                      model?.description ?? '',
                       style: TextStyle(
                         color: SUColorSingleton().textDEColor,
                         fontSize: 10.0.sp,

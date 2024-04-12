@@ -73,7 +73,7 @@ class SUSearchList extends StatelessWidget {
         height: 200, // 卡片高度
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: logic.yourData[index].length, // 每组中卡片数量
+          itemCount: logic.dataSource?.length, // 每组中卡片数量
           itemBuilder: (context, cardIndex) {
             return _rowListItem();
           },

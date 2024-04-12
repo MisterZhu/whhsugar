@@ -337,11 +337,6 @@ class SUHomeLogic extends GetxController {
               }
             }
             logicDis.update([SUDefVal.kDiscover]);
-            // if ((dataSource?.length ?? 0) > 1) {
-            //   logicDis.canSlide.value = true;
-            // } else {
-            //   logicDis.canSlide.value = false;
-            // }
           }
           log('----------------------dataSource : \n ${dataSource?.length}');
         },

@@ -62,12 +62,13 @@ class SUHomePage extends StatelessWidget {
               onPressed: () {
                 // 右侧按钮点击事件
                 FocusScope.of(context).requestFocus(FocusNode());
-                // SURouterHelper.pathPage(SURouterPath.searchPath, null);
+                SURouterHelper.pathPage(SURouterPath.searchPath, null);
 
                 // var params = {"title": '登录', "url": SUUrl.kLoginWebUrl};
                 // SURouterHelper.pathPage(SURouterPath.webViewPath, params);
-                LoadingUtil.info(text: '切换成功');
-                logicDis.canSlide.value = !logicDis.canSlide.value;
+
+                // LoadingUtil.info(text: '切换成功');
+                // logicDis.canSlide.value = !logicDis.canSlide.value;
 
                 // X5Sdk.openWebActivity(
                 //     "https://casdoor.tigerbot.com/login/oauth/authorize?client_id=931f8237ead11af361c3&response_type=code&redirect_uri=http://localhost:9000/callback&scope=read&state=sugar",

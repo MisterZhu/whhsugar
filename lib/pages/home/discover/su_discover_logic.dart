@@ -251,6 +251,7 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
       paraUrl = substrings[0];
     }
     isStopGeneration.value = false;
+    canSlide.value = false;
 
     await HttpManager.instance.post(
         url: '$paraUrl:reply',
@@ -261,7 +262,6 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
             if (response['name'] != null) {
               addReplyMessage('');
               getReplyMessages(response['name']);
-              canSlide.value = false;
             }
           });
         },
