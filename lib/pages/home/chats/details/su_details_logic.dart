@@ -24,6 +24,7 @@ class SUDetailsLogic extends GetxController {
   late Size imageSize;
   late String title = '';
   late String name = '';
+  late String assistantName = '';
   late String bgUrl = '';
   RxBool isStreamLoadingDet = false.obs;
   RxBool isStopGenerationDet = false.obs;
@@ -43,6 +44,35 @@ class SUDetailsLogic extends GetxController {
   }
 
   ///-------------------------------网络请求操作-------------------------------
+  ///创建会话
+  Future<void> createThreads(Map<String, dynamic> params) async {
+    debugPrint('--------------getUserToken--begin');
+    final content = params['description'];
+    var params1 = {
+      "inlineSource": {
+        "data": params['description'],
+        "contentType": "text/plain"
+      },
+    };
+    if (name != '') {
+      sendMessages(params1, content);
+    } else {
+      await HttpManager.instance.post(
+          url:
+              '${SUUrl.kCreateThreadUrl}${userLogic.user.properties?.projectId}/threads',
+          params: params,
+          success: (response) async {
+            final session = SUSessionModel.fromJson(response);
+            await insertThreadDB(session);
+            name = session.name ?? '';
+            sendMessages(params1, content);
+          },
+          failure: (err) {
+            // LoadingUtil.failure(text: err['msg']);
+          });
+    }
+  }
+
   ///发送消息
   Future<void> sendMessages(Map<String, dynamic> params, String content) async {
     debugPrint('--------------getUserToken--begin');
@@ -129,6 +159,23 @@ class SUDetailsLogic extends GetxController {
   }
 
   ///-------------------------------数据操作-------------------------------
+  // 添加会话数据
+  Future<void> insertThreadDB(SUSessionModel session) async {
+    try {
+      final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
+      await sessionListDao.insertOrUpdate({
+        'assistant': session.assistant,
+        'name': session.name,
+        'displayName': session.displayName,
+        'description': session.description,
+        'owner': session.owner,
+        'createTime': session.createTime,
+        'updateTime': session.updateTime
+      });
+    } catch (error) {
+      debugPrint('find error: $error');
+    }
+  }
 
   ///添加我的消息
   void addMineMessage(String content) {
@@ -215,6 +262,10 @@ class SUDetailsLogic extends GetxController {
   ///-------------------------------数据库查询 条件sessionName查询聊天表数据-------------------------------
 
   Future<void> fetchTableData() async {
+    if (name == '') {
+      dataList = <SUChatContentModel>[];
+      return;
+    }
     try {
       final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
       // final data = await chatContentDao.getAll();

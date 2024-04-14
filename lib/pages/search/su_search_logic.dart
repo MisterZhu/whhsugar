@@ -5,8 +5,10 @@ import 'package:get/get.dart';
 
 import '../../services/http_manager.dart';
 import '../../services/su_url.dart';
+import '../../su_export_comment.dart';
 import '../../widgets/loading/loading_util.dart';
 import '../home/discover/su_discover_model.dart';
+import '../home/su_home_logic.dart';
 import 'su_search_state.dart';
 
 class SUSearchLogic extends GetxController {
@@ -22,6 +24,40 @@ class SUSearchLogic extends GetxController {
     dataSource = <SUAssistantModel>[];
     searchData = <SUAssistantModel>[];
     getAssistantsList();
+  }
+
+  void clickItemAction(int index) {
+    final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
+
+    final listModel = dataSource![index];
+    final assistantId = listModel.name!;
+    // Iterable<SUSessionModel>? adults = threadData
+    //     ?.where((user) => user.assistant == logicDis.assistantId);
+    List<SUSessionModel>? adults = homeLogic.threadData
+        ?.where((user) => user.assistant == assistantId)
+        .toList();
+    debugPrint(
+        '---------------backgroundImage: ${adults?.last.backgroundImage}');
+    debugPrint('---------------assistantName: ${adults?.last.assistantName}');
+
+    if ((adults?.length ?? 0) > 0) {
+      final sessionModel = adults?.last;
+      var params = {
+        "title": sessionModel?.assistantName,
+        "name": sessionModel?.name,
+        "backgroundImage": sessionModel?.backgroundImage
+      };
+      SURouterHelper.pathPage(SURouterPath.chatDetPath, params);
+    } else {
+      var params = {"title": '', "name": '', "backgroundImage": ''};
+      SURouterHelper.pathPage(SURouterPath.chatDetPath, params);
+    }
+    debugPrint('点击消息列表');
+    // var params = {
+    //   "title": model.assistantName,
+    //   "name": model.name,
+    //   "backgroundImage": model.backgroundImage
+    // };
   }
 
   ///获取助手列表

@@ -90,6 +90,7 @@ class SUSearchPage extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 // Handle item tap
+                searchLogic.clickItemAction(index);
               },
               child: SUSearchItem(items[index]),
             );

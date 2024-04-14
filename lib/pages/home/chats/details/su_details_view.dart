@@ -22,6 +22,7 @@ class SUDetailsPage extends StatelessWidget {
     logicDet.title = received['title'];
     logicDet.name = received['name'];
     logicDet.bgUrl = received['backgroundImage'];
+    logicDet.assistantName = received['assistantName'];
     logicDet.fetchTableData();
     return GetBuilder<SUDetailsLogic>(builder: (logic) {
       return SUCustomScaffold(
@@ -119,10 +120,17 @@ class SUDetailsPage extends StatelessWidget {
           bgColor,
           state,
           sendHandle: (value) async {
-            var params1 = {
-              "inlineSource": {"data": value, "contentType": "text/plain"},
+            // var params1 = {
+            //   "inlineSource": {"data": value, "contentType": "text/plain"},
+            // };
+            // logicDet.sendMessages(params1, value);
+
+            var params = {
+              "assistant": logicDet.assistantName,
+              "displayName": value,
+              "description": value,
             };
-            logicDet.sendMessages(params1, value);
+            logicDet.createThreads(params);
           },
           // backgroundColor: Color(int.parse(backgroundColor.replaceAll('#', '0xFF'))), // 使用颜色字符串设置背景色
         );
