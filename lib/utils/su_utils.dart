@@ -122,4 +122,22 @@ class SUUtils {
   changeStatusBarStyle({required SystemUiOverlayStyle style}) {
     SystemChrome.setSystemUIOverlayStyle(style);
   }
+
+  String dateTimeFormat(String timeStr) {
+    DateTime dateTime = DateTime.parse(timeStr);
+    DateTime today = DateTime.now();
+    Duration difference = today.difference(dateTime);
+
+    if (difference.inDays == 0) {
+      return '今天';
+    } else if (difference.inDays == 1) {
+      return '昨天';
+    } else if (difference.inDays < 10) {
+      return '${difference.inDays}天前';
+    } else {
+      String formattedDate =
+          "${dateTime.year}/${dateTime.month}/${dateTime.day}";
+      return formattedDate;
+    }
+  }
 }

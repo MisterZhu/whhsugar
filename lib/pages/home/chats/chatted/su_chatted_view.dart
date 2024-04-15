@@ -30,7 +30,8 @@ class SUChattedPage extends StatelessWidget {
                     var params = {
                       "title": model.assistantName,
                       "name": model.name,
-                      "backgroundImage": model.backgroundImage
+                      "backgroundImage": model.backgroundImage,
+                      "assistantName": ''
                     };
                     SURouterHelper.pathPage(SURouterPath.chatDetPath, params);
                   }),

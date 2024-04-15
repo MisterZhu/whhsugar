@@ -17,7 +17,7 @@ class SUMyProfilePage extends StatelessWidget {
     state.textEditingController.text = userLogic.user.name?.value ?? '';
 
     return GetBuilder<SUMineLogic>(
-        id: SUDefVal.kChatInput,
+        id: SUDefVal.kMineFilePage,
         builder: (logic) {
           return SUCustomScaffold(
               title: '我的资料',
@@ -76,19 +76,20 @@ class SUMyProfilePage extends StatelessWidget {
                       bottom: 0.0, // 向下偏移50像素
                       child: GestureDetector(
                         onTap: () {
-                          if (userLogic.user.avatar?.value ==
-                              'https://qiniu.aimissu.top/temporary/image39.jpg') {
-                            debugPrint('-------------------image39');
-
-                            userLogic.user.avatar?.value =
-                                'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg';
-                          } else {
-                            debugPrint('-------------------!= image39');
-
-                            userLogic.user.avatar?.value =
-                                'https://qiniu.aimissu.top/temporary/image39.jpg';
-                          }
-                          userLogic.updateUser(userLogic.user);
+                          // if (userLogic.user.avatar?.value ==
+                          //     'https://qiniu.aimissu.top/temporary/image39.jpg') {
+                          //   debugPrint('-------------------image39');
+                          //
+                          //   userLogic.user.avatar?.value =
+                          //       'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg';
+                          // } else {
+                          //   debugPrint('-------------------!= image39');
+                          //
+                          //   userLogic.user.avatar?.value =
+                          //       'https://qiniu.aimissu.top/temporary/image39.jpg';
+                          // }
+                          // userLogic.updateUser(userLogic.user);
+                          logic.showSelectImage(context);
                         },
                         child: Container(
                           height: 48.0.w,
@@ -207,7 +208,7 @@ class SUMyProfilePage extends StatelessWidget {
                                   SizedBox(
                                     width: 219.w,
                                     child: Text(
-                                      '男',
+                                      (logic.selectSex == 0) ? '男' : '女',
                                       style: TextStyle(
                                           color: SUColorSingleton().textColor,
                                           fontSize: 16.sp),

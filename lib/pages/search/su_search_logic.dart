@@ -45,11 +45,17 @@ class SUSearchLogic extends GetxController {
       var params = {
         "title": sessionModel?.assistantName,
         "name": sessionModel?.name,
-        "backgroundImage": sessionModel?.backgroundImage
+        "backgroundImage": sessionModel?.backgroundImage,
+        "assistantName": sessionModel?.name
       };
       SURouterHelper.pathPage(SURouterPath.chatDetPath, params);
     } else {
-      var params = {"title": '', "name": '', "backgroundImage": ''};
+      var params = {
+        "title": '',
+        "name": '',
+        "backgroundImage": '',
+        "assistantName": ''
+      };
       SURouterHelper.pathPage(SURouterPath.chatDetPath, params);
     }
     debugPrint('点击消息列表');

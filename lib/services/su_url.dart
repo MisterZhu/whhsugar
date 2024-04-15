@@ -25,5 +25,6 @@ class SUUrl {
   /// 用户信息url
   static const String kUserInfoUrl = 'web/uc/get_user_info';
 
-  /************************* 新改版 *************************/
+  /// 上传头像url
+  static const String kUserHeadUrl = '/common/upload';
 }

@@ -55,8 +55,9 @@ class SUChattedItem extends StatelessWidget {
                           Container(
                               width: 100.w,
                               child: Texts.smallest1(
-                                model?.lastTime ?? '',
+                                SUUtils().dateTimeFormat(model?.lastTime ?? ''),
                                 maxLines: 1,
+                                textAlign: TextAlign.right,
                                 color: SUColorSingleton().textTimeColor,
                               )),
                         ],

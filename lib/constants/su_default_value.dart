@@ -144,7 +144,7 @@ class SUDefVal {
 
 /************************* get_builder KEY *************************/
 
-  /// 刷新聊天页面
+  /// 刷新页面
   static const String kChatInput = "ChatInput";
   static const String kChatBottom = "ChatBottom";
   static const String kDiscover = "Discover";
@@ -156,6 +156,8 @@ class SUDefVal {
   static const String kChatLikeTool = "ChatLikeTool";
   static const String kChatInputFile = "ChatInputFile";
   static const String kChatLoading = "ChatLoading";
+
+  static const String kMineFilePage = "MineFilePage";
 
   /************************* event_bus KEY *************************/
 

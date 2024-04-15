@@ -4,9 +4,10 @@ import '../su_mine_logic.dart';
 
 class SUSexSelectView extends StatelessWidget {
   final SUMineLogic? logic;
-  final Function(String)? sendHandle;
+  final int? selectI;
+  final Function(int)? sendHandle;
 
-  const SUSexSelectView(this.logic, {this.sendHandle, Key? key})
+  const SUSexSelectView(this.logic, this.selectI, {this.sendHandle, Key? key})
       : super(key: key);
 
   @override
@@ -21,17 +22,27 @@ class SUSexSelectView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              child: Container(
-                color: SCColors.color_252525, // 第一个Text的背景色
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(
-                      '男',
-                      style: TextStyle(
-                        color: SUColorSingleton().textColor,
-                        fontSize: 16.sp,
+              child: InkWell(
+                onTap: () {
+                  if (sendHandle != null) {
+                    sendHandle!(0);
+                    SURouterHelper.back(null);
+                  }
+                },
+                child: Container(
+                  color: (selectI == 0)
+                      ? SCColors.color_454545
+                      : SCColors.color_252525, // 第一个Text的背景色
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        '男',
+                        style: TextStyle(
+                          color: SUColorSingleton().textColor,
+                          fontSize: 16.sp,
+                        ),
                       ),
                     ),
                   ),
@@ -39,17 +50,27 @@ class SUSexSelectView extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: Container(
-                color: SCColors.color_454545, // 第二个Text的背景色
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(
-                      '女',
-                      style: TextStyle(
-                        color: SUColorSingleton().textColor,
-                        fontSize: 16.sp,
+              child: InkWell(
+                onTap: () {
+                  if (sendHandle != null) {
+                    sendHandle!(1);
+                    SURouterHelper.back(null);
+                  }
+                },
+                child: Container(
+                  color: (selectI == 0)
+                      ? SCColors.color_252525
+                      : SCColors.color_454545, // 第二个Text的背景色
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(
+                        '女',
+                        style: TextStyle(
+                          color: SUColorSingleton().textColor,
+                          fontSize: 16.sp,
+                        ),
                       ),
                     ),
                   ),

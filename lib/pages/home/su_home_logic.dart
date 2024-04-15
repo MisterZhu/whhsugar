@@ -152,6 +152,7 @@ class SUHomeLogic extends GetxController {
         },
         failure: (err) {
           // LoadingUtil.failure(text: err['msg']);
+          getLocalToken();
         });
   }
 
@@ -169,12 +170,12 @@ class SUHomeLogic extends GetxController {
           log('response : \n $value');
           userLogic.user = UserModel.fromJson(value);
           userLogic.updateUser(userLogic.user);
-          LoadingUtil.info(text: '登录成功');
+          // LoadingUtil.info(text: '登录成功');
           getThreadsList();
         },
         failure: (err) {
           LoadingUtil.hide();
-          LoadingUtil.info(text: '登录失败');
+          // LoadingUtil.info(text: '登录失败');
         });
   }
 
