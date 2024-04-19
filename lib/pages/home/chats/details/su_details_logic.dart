@@ -158,6 +158,44 @@ class SUDetailsLogic extends GetxController {
         });
   }
 
+  ///获取消息列表
+  Future<void> getMessagesList() async {
+    debugPrint('--------------getUserToken--begin');
+    // messageData = assistantModel.metadata?.messages;
+    LoadingUtil.show();
+    await HttpManager.instance.get(
+        url: '$name/messages',
+        params: null,
+        success: (response) {
+          LoadingUtil.hide();
+          debugPrint('--------------------获取消息列表 response : $response');
+
+          if (response['messages'] != null) {
+            List<SUChatContentModel> mapValues = [];
+
+            response['messages'].forEach((v) {
+              SUMessageModel messageModel = SUMessageModel.fromJson(v);
+              SUChatContentModel contModel = SUChatContentModel.fromJson(v);
+              List<String>? substrings = messageModel.name?.split("/messages/");
+              contModel.type = (contModel.author == userLogic.user.name?.value)
+                  ? SUChatType.mine
+                  : SUChatType.others;
+              contModel.content = messageModel.inlineSource?.data;
+              contModel.contentType = messageModel.inlineSource?.contentType;
+              contModel.sessionName = substrings?.first ?? '';
+              mapValues.add(contModel);
+            });
+            dataList = mapValues.reversed.toList();
+          }
+          update();
+        },
+        failure: (err) {
+          LoadingUtil.hide();
+
+          // LoadingUtil.failure(text: err['msg']);
+        });
+  }
+
   ///-------------------------------数据操作-------------------------------
   // 添加会话数据
   Future<void> insertThreadDB(SUSessionModel session) async {
@@ -266,29 +304,30 @@ class SUDetailsLogic extends GetxController {
       dataList = <SUChatContentModel>[];
       return;
     }
-    try {
-      final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
-      // final data = await chatContentDao.getAll();
-
-      final data = await chatContentDao.query('sessionName', name);
-      //List<SUChatContentModel> chatContentList = data.map((json) => SUChatContentModel.fromJson(json)).toList();
-      dataList = <SUChatContentModel>[];
-
-      debugPrint('item 表中的数据: $data');
-      data.forEach((json) {
-        SUChatContentModel chatContent = SUChatContentModel.fromJson(json);
-        chatContent.type = (chatContent.author == userLogic.user.name?.value)
-            ? SUChatType.mine
-            : SUChatType.others;
-        chatContent.isFinish = true;
-        dataList?.add(chatContent);
-      });
-      dataList = dataList!.reversed.toList();
-      update();
-      debugPrint('---------------chatContent: 刷新');
-    } catch (error) {
-      debugPrint('find error: $error');
-    }
+    // try {
+    //   final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
+    //   // final data = await chatContentDao.getAll();
+    //
+    //   final data = await chatContentDao.query('sessionName', name);
+    //   //List<SUChatContentModel> chatContentList = data.map((json) => SUChatContentModel.fromJson(json)).toList();
+    //   dataList = <SUChatContentModel>[];
+    //
+    //   debugPrint('item 表中的数据: $data');
+    //   data.forEach((json) {
+    //     SUChatContentModel chatContent = SUChatContentModel.fromJson(json);
+    //     chatContent.type = (chatContent.author == userLogic.user.name?.value)
+    //         ? SUChatType.mine
+    //         : SUChatType.others;
+    //     chatContent.isFinish = true;
+    //     dataList?.add(chatContent);
+    //   });
+    //   dataList = dataList!.reversed.toList();
+    //   update();
+    //   debugPrint('---------------chatContent: 刷新');
+    // } catch (error) {
+    //   debugPrint('find error: $error');
+    // }
+    getMessagesList();
   }
 
   ///-------------------------------颜色处理-------------------------------
