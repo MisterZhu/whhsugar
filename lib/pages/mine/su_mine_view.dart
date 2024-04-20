@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sugar/pages/mine/view/mine_item.dart';
 import 'package:sugar/su_export_comment.dart';
 
 import '../../global/user/user_logic.dart';
@@ -74,116 +75,252 @@ class SUMinePage extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 12.w),
-              // 调整这里的值来设置左右边距
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // 按钮1点击事件
-                        if (doSelect != null) {
-                          doSelect!(SUMineTypeEnum.profile); // 调用回调函数，并传递参数data
-                        }
+            SizedBox(
+              height: 35.w,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    MineItem(
+                      imagePath: Assets.homeSearchHead,
+                      text: 'Info'.tr,
+                      onTap: () {
+                        SURouterHelper.pathPage(SURouterPath.minePath, null);
+
+                        // SURouterHelper.pathPage(
+                        //     SURouterPath.mineResourcePath, null);
                       },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: SUColorSingleton().textColor,
-                        backgroundColor:
-                            SUColorSingleton().btnBgColor, // 文本颜色为白色
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0.w), // 设置圆角
+                    ),
+                    MineItem(
+                      imagePath: Assets.homeSearchHead,
+                      text: 'Account'.tr,
+                      onTap: () {
+                        SURouterHelper.pathPage(SURouterPath.accountPath, null);
+                      },
+                    ),
+                    MineItem(
+                      imagePath: Assets.homeSearchHead,
+                      text: 'user_agreement'.tr,
+                      onTap: () {
+                        // Get.toNamed("/account");
+                        // NavigatorUtil.push(
+                        //   context,
+                        //   Webview(
+                        //     initialUrl: "https://tigerbot.com/user-agreement.html",
+                        //     title: "用户协议",
+                        //   ),
+                        // );
+                        var params = {
+                          "title": "用户协议",
+                          "url": "https://tigerbot.com/user-agreement.html",
+                          "need_back": true
+                        };
+                        SURouterHelper.pathPage(
+                            SURouterPath.webViewPath, params);
+                      },
+                    ),
+                    MineItem(
+                      imagePath: Assets.homeSearchHead,
+                      text: 'private_agreement'.tr,
+                      onTap: () {
+                        // NavigatorUtil.push(
+                        //   context,
+                        //   Webview(
+                        //     initialUrl: "https://tigerbot.com/private-agreement.html",
+                        //     title: "隐私协议",
+                        //   ),
+                        // );
+                        var params = {
+                          "title": "隐私协议",
+                          "url": "https://tigerbot.com/private-agreement.html",
+                          "need_back": true
+                        };
+                        SURouterHelper.pathPage(
+                            SURouterPath.webViewPath, params);
+                      },
+                    ),
+                    MineItem(
+                      imagePath: Assets.homeSearchHead,
+                      text: 'Feedback'.tr,
+                      onTap: () {
+                        // TBRouterHelper.pathPage(
+                        //     TBRouterPath.userFeedback, null);
+                      },
+                    ),
+                    SizedBox(
+                      height: 35.h,
+                    ),
+                    GestureDetector(
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: 56.w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                        ),
+                        child: Text(
+                          'Logout'.tr,
+                          style: TextStyle(fontSize: 16.sp, color: Colors.red),
                         ),
                       ),
-                      child: Text(
-                        'profile'.tr,
-                        style: TextStyle(
-                            fontSize: 12.sp,
-                            color: SUColorSingleton().textColor,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 8.w), // 间距
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // 按钮2点击事件
-                        if (doSelect != null) {
-                          doSelect!(SUMineTypeEnum.edit); // 调用回调函数，并传递参数data
-                        }
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: Text('Logout?'.tr),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      SURouterHelper.back(null);
+                                    },
+                                    child: Texts.large(
+                                      'Cancel'.tr,
+                                      maxLines: 1,
+                                      color: SUColorSingleton().buttonColor,
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      SURouterHelper.back(null);
+
+                                      Fluttertoast.showToast(
+                                          msg: 'Log out successfully'.tr);
+                                      var params = {
+                                        "title": '登录',
+                                        "url": SUUrl.kLoginWebUrl,
+                                        "need_back": false
+                                      };
+                                      // SURouterHelper.pathPage(SURouterPath.webViewPath, params);
+                                      SURouterHelper.pathOffAllPage(
+                                          SURouterPath.webViewPath, params);
+                                    },
+                                    child: Texts.large(
+                                      'Confirm'.tr,
+                                      maxLines: 1,
+                                      color: SUColorSingleton().buttonColor,
+                                    ),
+                                  )
+                                ],
+                              );
+                            });
                       },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: SUColorSingleton().textColor,
-                        backgroundColor:
-                            SUColorSingleton().btnBgColor, // 文本颜色为白色
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0), // 设置圆角
-                        ),
-                      ),
-                      child: Text(
-                        'edit'.tr,
-                        style: TextStyle(
-                            fontSize: 12.sp,
-                            color: SUColorSingleton().textColor,
-                            fontWeight: FontWeight.w400),
-                      ),
-                    ),
-                  ),
-                  // + icon
-                ],
+                    )
+                    // Add more items here
+                  ],
+                ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 0.w),
-              // 调整这里的值来设置左右边距
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: Buttons.doubleText(
-                      topText: '9',
-                      bottomText: 'chatted'.tr,
-                      onPressed: () {
-                        // 按钮点击事件
-                        if (doSelect != null) {
-                          doSelect!(SUMineTypeEnum.chatted); // 调用回调函数，并传递参数data
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 20.w), // 间距
-                  Expanded(
-                    child: Buttons.doubleText(
-                      topText: '2',
-                      bottomText: 'following'.tr,
-                      onPressed: () {
-                        // 按钮点击事件
-                        if (doSelect != null) {
-                          doSelect!(
-                              SUMineTypeEnum.following); // 调用回调函数，并传递参数data
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(width: 20.w), // 间距
-                  Expanded(
-                    child: Buttons.doubleText(
-                      topText: '1',
-                      bottomText: 'subscribing'.tr,
-                      onPressed: () {
-                        // 按钮点击事件
-                        if (doSelect != null) {
-                          doSelect!(
-                              SUMineTypeEnum.subscribing); // 调用回调函数，并传递参数data
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 12.w),
+            //   // 调整这里的值来设置左右边距
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Expanded(
+            //         child: ElevatedButton(
+            //           onPressed: () {
+            //             // 按钮1点击事件
+            //             if (doSelect != null) {
+            //               doSelect!(SUMineTypeEnum.profile); // 调用回调函数，并传递参数data
+            //             }
+            //           },
+            //           style: ElevatedButton.styleFrom(
+            //             foregroundColor: SUColorSingleton().textColor,
+            //             backgroundColor:
+            //                 SUColorSingleton().btnBgColor, // 文本颜色为白色
+            //             shape: RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(10.0.w), // 设置圆角
+            //             ),
+            //           ),
+            //           child: Text(
+            //             'profile'.tr,
+            //             style: TextStyle(
+            //                 fontSize: 12.sp,
+            //                 color: SUColorSingleton().textColor,
+            //                 fontWeight: FontWeight.w400),
+            //           ),
+            //         ),
+            //       ),
+            //       SizedBox(width: 8.w), // 间距
+            //       Expanded(
+            //         child: ElevatedButton(
+            //           onPressed: () {
+            //             // 按钮2点击事件
+            //             if (doSelect != null) {
+            //               doSelect!(SUMineTypeEnum.edit); // 调用回调函数，并传递参数data
+            //             }
+            //           },
+            //           style: ElevatedButton.styleFrom(
+            //             foregroundColor: SUColorSingleton().textColor,
+            //             backgroundColor:
+            //                 SUColorSingleton().btnBgColor, // 文本颜色为白色
+            //             shape: RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(10.0), // 设置圆角
+            //             ),
+            //           ),
+            //           child: Text(
+            //             'edit'.tr,
+            //             style: TextStyle(
+            //                 fontSize: 12.sp,
+            //                 color: SUColorSingleton().textColor,
+            //                 fontWeight: FontWeight.w400),
+            //           ),
+            //         ),
+            //       ),
+            //       // + icon
+            //     ],
+            //   ),
+            // ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(horizontal: 20.0.w, vertical: 0.w),
+            //   // 调整这里的值来设置左右边距
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Expanded(
+            //         child: Buttons.doubleText(
+            //           topText: '9',
+            //           bottomText: 'chatted'.tr,
+            //           onPressed: () {
+            //             // 按钮点击事件
+            //             if (doSelect != null) {
+            //               doSelect!(SUMineTypeEnum.chatted); // 调用回调函数，并传递参数data
+            //             }
+            //           },
+            //         ),
+            //       ),
+            //       SizedBox(width: 20.w), // 间距
+            //       Expanded(
+            //         child: Buttons.doubleText(
+            //           topText: '2',
+            //           bottomText: 'following'.tr,
+            //           onPressed: () {
+            //             // 按钮点击事件
+            //             if (doSelect != null) {
+            //               doSelect!(
+            //                   SUMineTypeEnum.following); // 调用回调函数，并传递参数data
+            //             }
+            //           },
+            //         ),
+            //       ),
+            //       SizedBox(width: 20.w), // 间距
+            //       Expanded(
+            //         child: Buttons.doubleText(
+            //           topText: '1',
+            //           bottomText: 'subscribing'.tr,
+            //           onPressed: () {
+            //             // 按钮点击事件
+            //             if (doSelect != null) {
+            //               doSelect!(
+            //                   SUMineTypeEnum.subscribing); // 调用回调函数，并传递参数data
+            //             }
+            //           },
+            //         ),
+            //       ),
+            //     ],
+            //   ),
+            // ),
           ],
         ),
       ),

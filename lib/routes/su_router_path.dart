@@ -32,4 +32,7 @@ class SURouterPath {
   ///用户协议和隐私政策弹窗
   static String basePrivacyPath =
       "/lib/pages/login/privacy/sc_privacy_alert_page";
+
+  /// 我的账户
+  static String accountPath = "/lib/pages/mine/account_page";
 }

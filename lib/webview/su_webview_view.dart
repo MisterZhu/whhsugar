@@ -15,6 +15,10 @@ class SUWebviewPage extends StatelessWidget {
   final logic = Get.put(SUWebviewLogic());
   @override
   Widget build(BuildContext context) {
+    dynamic params = Get.arguments;
+    logic.needBack = params?["need_back"] ?? false;
+    logic.title = params?["title"] ?? '';
+    debugPrint('-------------title:${logic.title}');
     return SUCustomScaffold(
       leading: _leading(),
       leadingWidth: 100,
@@ -22,7 +26,8 @@ class SUWebviewPage extends StatelessWidget {
       centerTitle: true,
       showBackIcon: true,
       showBackgroundImage: false,
-      title: '',
+      title: logic.title,
+      textStyle: TextStyle(fontSize: 16.sp, color: SCColors.color_000000),
       navBackgroundColor: Colors.white,
     );
   }

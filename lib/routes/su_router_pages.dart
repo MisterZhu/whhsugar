@@ -8,6 +8,7 @@ import 'package:get/get_navigation/src/routes/get_route.dart';
 
 import '../pages/brntabbar/brntabbar_view.dart';
 import '../pages/home/chats/details/su_details_view.dart';
+import '../pages/mine/account_page.dart';
 import '../pages/mine/su_my_profile_view.dart';
 import '../webview/su_webview_view.dart';
 
@@ -38,6 +39,9 @@ class SURouterPages {
 
     ///webView
     GetPage(name: SURouterPath.webViewPath, page: () => SUWebviewPage()),
+
+    /// 我的账户
+    GetPage(name: SURouterPath.accountPath, page: () => AccountPage()),
     // /*首次的用户协议和隐私政策弹窗*/
     // GetPage(
     //     name: SURouterPath.basePrivacyPath, page: () => SCPrivacyAlertPage()),

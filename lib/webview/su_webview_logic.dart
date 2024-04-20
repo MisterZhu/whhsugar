@@ -21,15 +21,11 @@ class SUWebviewLogic extends GetxController {
     super.onInit();
     dynamic params = Get.arguments;
     debugPrint('webView接收的参数：$params');
-    title = StringUtils.isNotNullOrEmpty(params?["title"])
-        ? params!["title"]
-        : '登录';
     url = StringUtils.isNotNullOrEmpty(params?["url"])
         ? params!["url"]
         : SUUrl.kLoginWebUrl;
-    needBack = StringUtils.isNotNullOrEmpty(params?["need_back"])
-        ? params!["need_back"]
-        : false;
+    needBack = params?["need_back"] ?? false;
+    title = params?["title"] ?? '';
     controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..loadRequest(Uri.parse(url))

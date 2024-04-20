@@ -22,20 +22,20 @@ class SUMyProfilePage extends StatelessWidget {
           return SUCustomScaffold(
               title: '我的资料',
               navBackgroundColor: SUColorSingleton().bgBotColor,
-              actions: [
-                TextButton(
-                  child: Text(
-                    'Save',
-                    style: TextStyle(
-                      fontSize: 16.0.sp,
-                      color: SUColorSingleton().saveBtnBgColor,
-                    ),
-                  ),
-                  onPressed: () {
-                    SURouterHelper.back(null);
-                  },
-                ),
-              ],
+              // actions: [
+              //   TextButton(
+              //     child: Text(
+              //       'Save',
+              //       style: TextStyle(
+              //         fontSize: 16.0.sp,
+              //         color: SUColorSingleton().saveBtnBgColor,
+              //       ),
+              //     ),
+              //     onPressed: () {
+              //       SURouterHelper.back(null);
+              //     },
+              //   ),
+              // ],
               body: body(context));
         });
   }
@@ -71,49 +71,30 @@ class SUMyProfilePage extends StatelessWidget {
                           )),
                     ),
                     // 子组件2：在中心偏右下角各50像素
-                    Positioned(
-                      right: 0.0, // 向右偏移50像素
-                      bottom: 0.0, // 向下偏移50像素
-                      child: GestureDetector(
-                        onTap: () {
-                          // if (userLogic.user.avatar?.value ==
-                          //     'https://qiniu.aimissu.top/temporary/image39.jpg') {
-                          //   debugPrint('-------------------image39');
-                          //
-                          //   userLogic.user.avatar?.value =
-                          //       'https://qiniu.aimissu.top/temporary/WechatIMG535.jpg';
-                          // } else {
-                          //   debugPrint('-------------------!= image39');
-                          //
-                          //   userLogic.user.avatar?.value =
-                          //       'https://qiniu.aimissu.top/temporary/image39.jpg';
-                          // }
-                          // userLogic.updateUser(userLogic.user);
-                          logic.showSelectImage(context);
-                        },
-                        child: Container(
-                          height: 48.0.w,
-                          width: 48.0.w,
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.15), // 白色透明度15%
-                            borderRadius: BorderRadius.circular(24.0.w), // 切圆角
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.camera_alt_rounded,
-                              color: SUColorSingleton().naviDefColor,
-                              size: 30.w,
-                            ),
-                            // Image.asset(
-                            //   'assets/images/your_image.png', // 图片路径
-                            //   width: 30.0,
-                            //   height: 30.0,
-                            //   fit: BoxFit.contain,
-                            // ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // Positioned(
+                    //   right: 0.0, // 向右偏移50像素
+                    //   bottom: 0.0, // 向下偏移50像素
+                    //   child: GestureDetector(
+                    //     onTap: () {
+                    //       logic.showSelectImage(context);
+                    //     },
+                    //     child: Container(
+                    //       height: 48.0.w,
+                    //       width: 48.0.w,
+                    //       decoration: BoxDecoration(
+                    //         color: Colors.white.withOpacity(0.15), // 白色透明度15%
+                    //         borderRadius: BorderRadius.circular(24.0.w), // 切圆角
+                    //       ),
+                    //       child: Center(
+                    //         child: Icon(
+                    //           Icons.camera_alt_rounded,
+                    //           color: SUColorSingleton().naviDefColor,
+                    //           size: 30.w,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -162,6 +143,7 @@ class SUMyProfilePage extends StatelessWidget {
                             Container(
                               width: 229.w,
                               child: TextField(
+                                enabled: false, // 将 enabled 属性设置为 false
                                 controller:
                                     state.textEditingController, // 设置默认文本
                                 style: const TextStyle(color: Colors.white),
@@ -198,7 +180,7 @@ class SUMyProfilePage extends StatelessWidget {
                             Expanded(
                                 child: GestureDetector(
                               onTap: () {
-                                logic.showPopup();
+                                // logic.showPopup();
                               },
                               child: Row(
                                 mainAxisAlignment:
@@ -214,11 +196,11 @@ class SUMyProfilePage extends StatelessWidget {
                                           fontSize: 16.sp),
                                     ),
                                   ),
-                                  Icon(
-                                    Icons.unfold_more_sharp,
-                                    color: SUDefVal.chatBGColor,
-                                    size: 24.w,
-                                  ),
+                                  // Icon(
+                                  //   Icons.unfold_more_sharp,
+                                  //   color: SUDefVal.chatBGColor,
+                                  //   size: 24.w,
+                                  // ),
                                   SizedBox(
                                     width: 12.w,
                                   ),

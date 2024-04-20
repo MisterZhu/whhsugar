@@ -158,25 +158,34 @@ class SUHomeLogic extends GetxController {
 
   ///获取用户信息
   Future<void> getUserInfo() async {
-    // var params = {
-    //   "account_id": name,
-    // };
-    LoadingUtil.show();
-    await HttpManager.instance.get(
-        url: '${SUUrl.kGetUserInfoUrl}$name/userInfo',
-        params: null,
-        success: (value) {
-          LoadingUtil.hide();
-          log('response : \n $value');
-          userLogic.user = UserModel.fromJson(value);
-          userLogic.updateUser(userLogic.user);
-          // LoadingUtil.info(text: '登录成功');
-          getThreadsList();
-        },
-        failure: (err) {
-          LoadingUtil.hide();
-          // LoadingUtil.info(text: '登录失败');
-        });
+    Map<String, dynamic> value = {
+      'id': '1',
+      'name': 'John Doe',
+      'displayName': 'John',
+      'avatar': 'https://qiniu.aimissu.top/temporary/sugara_logo1.png',
+      'properties': {'project': 'Test Project', 'projectId': '123456789'},
+      'createdTime': '2022-04-01',
+      'updatedTime': '2022-04-02',
+    };
+
+    userLogic.user = UserModel.fromJson(value);
+
+    // LoadingUtil.show();
+    // await HttpManager.instance.get(
+    //     url: '${SUUrl.kGetUserInfoUrl}$name/userInfo',
+    //     params: null,
+    //     success: (value) {
+    //       LoadingUtil.hide();
+    //       log('response : \n $value');
+    //       userLogic.user = UserModel.fromJson(value);
+    //       userLogic.updateUser(userLogic.user);
+    //       // LoadingUtil.info(text: '登录成功');
+    //       getThreadsList();
+    //     },
+    //     failure: (err) {
+    //       LoadingUtil.hide();
+    //       // LoadingUtil.info(text: '登录失败');
+    //     });
   }
 
   ///获取所有会话列表
