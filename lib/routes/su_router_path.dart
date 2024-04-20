@@ -35,4 +35,7 @@ class SURouterPath {
 
   /// 我的账户
   static String accountPath = "/lib/pages/mine/account_page";
+
+  ///用户反馈
+  static String userFeedback = "/lib/pages/mine/feedback/feedback_page";
 }

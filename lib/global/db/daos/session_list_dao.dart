@@ -76,6 +76,10 @@ class SessionListDao {
     await _db.delete(SUDefVal.kSessionList, where: 'id = ?', whereArgs: [id]);
   }
 
+  Future<void> deleteAll() async {
+    await _db.delete(SUDefVal.kSessionList);
+  }
+
   Future<List<Map<String, dynamic>>> getAll() async {
     return await _db.query(SUDefVal.kSessionList);
   }

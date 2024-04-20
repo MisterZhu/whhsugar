@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 import 'package:sugar/pages/mine/view/mine_item.dart';
 import 'package:sugar/su_export_comment.dart';
 
+import '../../global/db/daos/chat_content_dao.dart';
+import '../../global/db/daos/session_list_dao.dart';
+import '../../global/db/database_helper.dart';
 import '../../global/user/user_logic.dart';
 import '../../utils/cached_image.dart';
 import 'su_mine_logic.dart';
@@ -83,7 +86,7 @@ class SUMinePage extends StatelessWidget {
                 child: Column(
                   children: [
                     MineItem(
-                      imagePath: Assets.homeSearchHead,
+                      imagePath: Assets.mineInfoIcon,
                       text: 'Info'.tr,
                       onTap: () {
                         SURouterHelper.pathPage(SURouterPath.minePath, null);
@@ -93,14 +96,14 @@ class SUMinePage extends StatelessWidget {
                       },
                     ),
                     MineItem(
-                      imagePath: Assets.homeSearchHead,
+                      imagePath: Assets.mineAccountIcon,
                       text: 'Account'.tr,
                       onTap: () {
                         SURouterHelper.pathPage(SURouterPath.accountPath, null);
                       },
                     ),
                     MineItem(
-                      imagePath: Assets.homeSearchHead,
+                      imagePath: Assets.mineAgreement,
                       text: 'user_agreement'.tr,
                       onTap: () {
                         // Get.toNamed("/account");
@@ -121,7 +124,7 @@ class SUMinePage extends StatelessWidget {
                       },
                     ),
                     MineItem(
-                      imagePath: Assets.homeSearchHead,
+                      imagePath: Assets.minePrivacy,
                       text: 'private_agreement'.tr,
                       onTap: () {
                         // NavigatorUtil.push(
@@ -141,11 +144,11 @@ class SUMinePage extends StatelessWidget {
                       },
                     ),
                     MineItem(
-                      imagePath: Assets.homeSearchHead,
+                      imagePath: Assets.mineFeedbackIcon,
                       text: 'Feedback'.tr,
                       onTap: () {
-                        // TBRouterHelper.pathPage(
-                        //     TBRouterPath.userFeedback, null);
+                        SURouterHelper.pathPage(
+                            SURouterPath.userFeedback, null);
                       },
                     ),
                     SizedBox(
@@ -181,8 +184,15 @@ class SUMinePage extends StatelessWidget {
                                     ),
                                   ),
                                   TextButton(
-                                    onPressed: () {
-                                      SURouterHelper.back(null);
+                                    onPressed: () async {
+                                      await SharedPreferenceUtil()
+                                          .removeData(SUDefVal.kToken);
+                                      final sessionListDao = SessionListDao(
+                                          DatabaseHelper.instance.database);
+                                      await sessionListDao.deleteAll();
+                                      final chatContentDao = ChatContentDao(
+                                          DatabaseHelper.instance.database);
+                                      await chatContentDao.deleteAll();
 
                                       Fluttertoast.showToast(
                                           msg: 'Log out successfully'.tr);

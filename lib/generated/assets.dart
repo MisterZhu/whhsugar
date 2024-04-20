@@ -8,14 +8,14 @@ class Assets {
   static const String commonBackIconW = 'assets/images/common/back_icon_w.png';
   static const String commonRightArrow = 'assets/images/common/right_arrow.png';
   static const String commonRightDown = 'assets/images/common/right_down.png';
-  static const String homeAccountIcon = 'assets/images/home/account_icon.png';
-  static const String homeAgreement = 'assets/images/home/agreement.png';
-  static const String homeFeedbackIcon = 'assets/images/home/feedback_icon.png';
-  static const String homeFeedbackIcon1 =
-      'assets/images/home/feedback_icon1.png';
-  static const String homeInfoIcon = 'assets/images/home/info_icon.png';
   static const String homeMine = 'assets/images/home/mine.png';
-  static const String homePrivacy = 'assets/images/home/privacy.png';
   static const String homeSearchHead = 'assets/images/home/search_head.png';
   static const String homeSearchIcon = 'assets/images/home/search_icon.png';
+  static const String mineAccountIcon = 'assets/images/mine/account_icon.png';
+  static const String mineAgreement = 'assets/images/mine/agreement.png';
+  static const String mineFeedbackIcon = 'assets/images/mine/feedback_icon.png';
+  static const String mineFeedbackIcon1 =
+      'assets/images/mine/feedback_icon1.png';
+  static const String mineInfoIcon = 'assets/images/mine/info_icon.png';
+  static const String minePrivacy = 'assets/images/mine/privacy.png';
 }

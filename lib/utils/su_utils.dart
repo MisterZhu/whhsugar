@@ -9,7 +9,7 @@ import 'package:sugar/su_app.dart';
 import 'package:get/get.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:sugar/utils/shared_preference_util.dart';
-import '../constants/assets.dart';
+import '../generated/assets.dart';
 
 class SUUtils {
   ///获取当前context

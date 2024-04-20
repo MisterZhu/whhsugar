@@ -2,11 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:sugar/constants/assets.dart';
 
 import '../../constants/su_default_value.dart';
+import '../../global/db/daos/chat_content_dao.dart';
+import '../../global/db/daos/session_list_dao.dart';
+import '../../global/db/database_helper.dart';
+import '../../routes/su_router_helper.dart';
+import '../../routes/su_router_path.dart';
+import '../../services/su_url.dart';
 import '../../skin/su_custom_scaffold.dart';
 import '../../utils/colors/su_color_singleton.dart';
+import '../../utils/shared_preference_util.dart';
 import '../../widgets/loading/loading_util.dart';
 
 class AccountPage extends StatelessWidget {
@@ -19,11 +25,24 @@ class AccountPage extends StatelessWidget {
       return;
     }
     LoadingUtil.show();
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds: 1), () async {
       LoadingUtil.hide();
-      Get.back();
+
+      await SharedPreferenceUtil().removeData(SUDefVal.kToken);
+      final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
+      await sessionListDao.deleteAll();
+      final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
+      await chatContentDao.deleteAll();
       Fluttertoast.showToast(
           msg: 'Cancellation successful'.tr, gravity: ToastGravity.CENTER);
+
+      var params = {
+        "title": '登录',
+        "url": SUUrl.kLoginWebUrl,
+        "need_back": false
+      };
+      // SURouterHelper.pathPage(SURouterPath.webViewPath, params);
+      SURouterHelper.pathOffAllPage(SURouterPath.webViewPath, params);
     });
   }
 
@@ -52,8 +71,7 @@ class AccountPage extends StatelessWidget {
   Center buildCenterWidget(BuildContext context) {
     return Center(
       child: Container(
-        color: SUColorSingleton().bgBotColor, // 设置背景色为黑色
-
+        color: SUColorSingleton().textColor,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -66,7 +84,7 @@ class AccountPage extends StatelessWidget {
                 'Logout warning prompt'.tr,
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
-                    color: SUColorSingleton().textColor),
+                    color: SUColorSingleton().bgTopColor),
               ),
             ),
             SizedBox(
@@ -147,7 +165,7 @@ class AccountPage extends StatelessWidget {
                   padding: EdgeInsets.symmetric(horizontal: 20.w),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(10.r)),
-                      color: SUDefVal.chatThemePinkColor),
+                      color: SUColorSingleton().saveBtnBgColor),
                   child: Row(
                     children: [
                       Spacer(),
@@ -156,7 +174,7 @@ class AccountPage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16.sp,
                             fontWeight: FontWeight.w600,
-                            backgroundColor: SUDefVal.chatThemePinkColor,
+                            backgroundColor: SUColorSingleton().saveBtnBgColor,
                             color: Colors.white),
                       ),
                       Spacer(),

@@ -75,6 +75,10 @@ class ChatContentDao {
     await _db.delete(SUDefVal.kChatContent, where: 'id = ?', whereArgs: [id]);
   }
 
+  Future<void> deleteAll() async {
+    await _db.delete(SUDefVal.kChatContent);
+  }
+
   Future<List<Map<String, dynamic>>> getAll() async {
     return await _db.query(SUDefVal.kChatContent);
   }

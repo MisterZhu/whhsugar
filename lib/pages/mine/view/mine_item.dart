@@ -30,9 +30,10 @@ class MineItem extends StatelessWidget {
               Image.asset(
                 imagePath ?? '',
                 width: 24.w,
+                height: 24.w,
               ),
               SizedBox(
-                width: 8.w,
+                width: 12.w,
               ),
               Text(
                 text ?? '',
