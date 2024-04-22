@@ -45,6 +45,7 @@ await DatabaseHelper.instance.close();
       // },
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
+      readOnly: false, // 确保设置为可写模式
     );
   }
 

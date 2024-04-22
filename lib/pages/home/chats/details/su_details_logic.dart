@@ -66,6 +66,8 @@ class SUDetailsLogic extends GetxController {
             await insertThreadDB(session);
             name = session.name ?? '';
             sendMessages(params1, content);
+
+            bus.emit(SUDefVal.kChattedUpdate, params);
           },
           failure: (err) {
             // LoadingUtil.failure(text: err['msg']);
@@ -268,13 +270,33 @@ class SUDetailsLogic extends GetxController {
         'updateTime': messageModel.updateTime
       });
       final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
-      // final sessionList = await sessionListDao.getAll();
+
+      final chatList = await chatContentDao.getAll();
+      chatList.forEach((json) {
+        debugPrint('----------------------------chatList: $json');
+      });
+
       final data = await sessionListDao.query('name', name);
+      debugPrint('----------------------------data: ${data.length}');
+
       final lastModel = data.last;
-      lastModel['lastTime'] = messageModel.createTime;
-      lastModel['lastMessage'] = messageModel.inlineSource?.data;
-      sessionListDao.insertOrUpdate(lastModel);
-      debugPrint('查询到的  session数据: $data');
+      debugPrint('----------------------------lastModel: $lastModel');
+
+      // lastModel['lastTime'] = messageModel.createTime;
+      // lastModel['lastMessage'] = messageModel.inlineSource?.data;
+
+      sessionListDao.insertOrUpdate({
+        'assistant': lastModel['assistant'],
+        'name': lastModel['name'],
+        'displayName': lastModel['displayName'],
+        'description': lastModel['description'],
+        'owner': lastModel['owner'],
+        'createTime': lastModel['createTime'],
+        'lastTime': messageModel.createTime,
+        'lastMessage': messageModel.inlineSource?.data,
+        'updateTime': lastModel['updateTime']
+      });
+      debugPrint('----------------------------更新数据: $lastModel');
     } catch (error) {
       debugPrint('find error: $error');
     }
@@ -297,13 +319,38 @@ class SUDetailsLogic extends GetxController {
         });
   }
 
+  ///添加打招呼
+  Future<void> addMessageIntro(String name) async {
+    dataList = <SUChatContentModel>[];
+    SUChatContentModel messageModel = SUChatContentModel();
+    messageModel.name = '';
+    messageModel.type = SUChatType.intro;
+    messageModel.isFold = false;
+    messageModel.content = name;
+    dataList?.add(messageModel);
+    update();
+  }
+
   ///-------------------------------数据库查询 条件sessionName查询聊天表数据-------------------------------
 
   Future<void> fetchTableData() async {
     if (name == '') {
       dataList = <SUChatContentModel>[];
+      update();
       return;
     }
+
+    // final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
+    // final sessionList = await sessionListDao.getAll();
+    // sessionList.forEach((json) {
+    //   debugPrint('----------------------------jsonmodel: $json');
+    // });
+    //
+    // debugPrint('----------------------------name: $name');
+    //
+    // final data = await sessionListDao.query('name', name);
+    // debugPrint('----------------------------data: ${data.length}');
+
     // try {
     //   final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
     //   // final data = await chatContentDao.getAll();

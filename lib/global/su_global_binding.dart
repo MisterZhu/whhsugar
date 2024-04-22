@@ -12,5 +12,8 @@ class SUGlobalBinding extends Bindings {
     Get.lazyPut<SUHomeLogic>(() => SUHomeLogic());
     Get.lazyPut<SUDiscoverLogic>(() => SUDiscoverLogic());
     Get.lazyPut<SUMineLogic>(() => SUMineLogic());
+    Get.lazyPut(() => SUDiscoverLogic());
+    Get.lazyPut(() => UserLogic());
+    Get.lazyPut(() => SUHomeLogic());
   }
 }

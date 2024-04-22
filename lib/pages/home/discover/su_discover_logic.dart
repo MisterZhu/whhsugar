@@ -65,6 +65,21 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
     });
   }
 
+  // ///添加打招呼的消息
+  // void addCallMessage(String content) {
+  //   SUChatContentModel messageModel = SUChatContentModel();
+  //   messageModel.name = '';
+  //   messageModel.type = SUChatType.intro;
+  //   messageModel.isFold = false;
+  //   messageModel.content = content;
+  //   dataList!.insert(0, messageModel);
+  //   assistantModel.metadata?.chats = dataList;
+  //
+  //   final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
+  //   homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
+  //   update([SUDefVal.kChatBottom]);
+  // }
+
   ///添加我的消息
   void addMineMessage(String content) {
     SUChatContentModel messageModel = SUChatContentModel();
@@ -148,10 +163,18 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
       // final sessionList = await sessionListDao.getAll();
       final data = await sessionListDao.query('name', threadName);
       final lastModel = data.last;
-      lastModel['lastTime'] = messageModel.createTime;
-      lastModel['lastMessage'] = messageModel.inlineSource?.data;
-      sessionListDao.insertOrUpdate(lastModel);
 
+      sessionListDao.insertOrUpdate({
+        'assistant': lastModel['assistant'],
+        'name': lastModel['name'],
+        'displayName': lastModel['displayName'],
+        'description': lastModel['description'],
+        'owner': lastModel['owner'],
+        'createTime': lastModel['createTime'],
+        'lastTime': messageModel.createTime,
+        'lastMessage': messageModel.inlineSource?.data,
+        'updateTime': lastModel['updateTime']
+      });
       debugPrint('查询到的  session数据: $data');
     } catch (error) {
       debugPrint('find error: $error');
@@ -218,6 +241,7 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
 
             threadName = session.name ?? '';
             sendMessages(params1, content);
+            bus.emit(SUDefVal.kChattedUpdate, params);
           },
           failure: (err) {
             // LoadingUtil.failure(text: err['msg']);

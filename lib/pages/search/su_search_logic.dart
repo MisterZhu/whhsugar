@@ -36,11 +36,10 @@ class SUSearchLogic extends GetxController {
     List<SUSessionModel>? adults = homeLogic.threadData
         ?.where((user) => user.assistant == assistantId)
         .toList();
-    debugPrint(
-        '---------------backgroundImage: ${adults?.last.backgroundImage}');
-    debugPrint('---------------assistantName: ${adults?.last.assistantName}');
 
     if ((adults?.length ?? 0) > 0) {
+      debugPrint('点击消息列表--有会话');
+
       final sessionModel = adults?.last;
       var params = {
         "title": sessionModel?.assistantName,
@@ -50,20 +49,17 @@ class SUSearchLogic extends GetxController {
       };
       SURouterHelper.pathPage(SURouterPath.chatDetPath, params);
     } else {
+      debugPrint('点击消息列表--无会话');
+
       var params = {
-        "title": '',
+        "title": listModel.displayName,
         "name": '',
-        "backgroundImage": '',
-        "assistantName": ''
+        "intro": listModel.metadata?.greetings?.last ?? '',
+        "backgroundImage": listModel.metadata?.backgroundImage,
+        "assistantName": listModel.name
       };
       SURouterHelper.pathPage(SURouterPath.chatDetPath, params);
     }
-    debugPrint('点击消息列表');
-    // var params = {
-    //   "title": model.assistantName,
-    //   "name": model.name,
-    //   "backgroundImage": model.backgroundImage
-    // };
   }
 
   ///获取助手列表

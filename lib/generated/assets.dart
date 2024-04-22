@@ -9,8 +9,10 @@ class Assets {
   static const String commonRightArrow = 'assets/images/common/right_arrow.png';
   static const String commonRightDown = 'assets/images/common/right_down.png';
   static const String homeMine = 'assets/images/home/mine.png';
+  static const String homeMineW = 'assets/images/home/mine_w.png';
   static const String homeSearchHead = 'assets/images/home/search_head.png';
   static const String homeSearchIcon = 'assets/images/home/search_icon.png';
+  static const String homeSearchIconW = 'assets/images/home/search_icon_w.png';
   static const String mineAccountIcon = 'assets/images/mine/account_icon.png';
   static const String mineAgreement = 'assets/images/mine/agreement.png';
   static const String mineFeedbackIcon = 'assets/images/mine/feedback_icon.png';

@@ -63,25 +63,7 @@ class Metadata {
     backgroundColor = '';
     needRefresh = true;
     greetings = List<String>.from(json['greetings'] ?? []);
-    // messages = <SUMessageModel>[];
-    // if (json['messages'] != null) {
-    //   json['messages'].forEach((v) {
-    //     messages!.add(SUMessageModel.fromJson(v));
-    //   });
-    // }
 
-    // response['messages'].forEach((v) {
-    //   SUMessageModel messageModel = SUMessageModel.fromJson(v);
-    //
-    //   // 在这里进行单独处理，比如修改参数值
-    //
-    //   // 将空的SUMessageModel插入数组最前面
-    //   if (messageModel.name == null) {
-    //     messageData!.insert(0, messageModel);
-    //   } else {
-    //     messageData!.add(messageModel);
-    //   }
-    // });
     messages = <SUMessageModel>[];
     chats = <SUChatContentModel>[];
 
@@ -93,6 +75,13 @@ class Metadata {
       messageModel.inlineSource?.data = greetings?.last;
       messageModel.inlineSource?.contentType = 'text/plain';
       messages!.add(messageModel);
+      SUChatContentModel chatModel = SUChatContentModel();
+      chatModel.name = '';
+      chatModel.type = SUChatType.intro;
+      chatModel.isFold = true;
+      chatModel.content = greetings?.last;
+      chatModel.contentType = 'text/plain';
+      chats!.add(chatModel);
     }
     // messages = List<SUMessageModel>.from(json['messages'] ?? []);
   }

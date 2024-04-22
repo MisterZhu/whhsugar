@@ -16,13 +16,13 @@ class SURouterPath {
 
   /// *************************** chat *****************************
   /// chat页面
-  static String chatDetPath = "/lib/pages/home/chats/details/su_details_view";
+  static String chatDetPath = "/chats/details/su_details_view";
 
   /// *************************** 搜索页面 *****************************
   /// 搜索页面
   static String searchPath = "/lib/pages/search/su_search_view";
 
-  /// 搜索页面
+  /// 页面
   static String tabbarPath = "/lib/pages/tabbar/su_search_view";
   /***************************** 通用页 ******************************/
   /// webView

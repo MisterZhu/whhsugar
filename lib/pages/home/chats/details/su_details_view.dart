@@ -19,11 +19,18 @@ class SUDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // 通过 Get.arguments 获取传递的参数
     var received = Get.arguments;
+    debugPrint('received----------------:$received');
     logicDet.title = received['title'];
     logicDet.name = received['name'];
     logicDet.bgUrl = received['backgroundImage'];
     logicDet.assistantName = received['assistantName'];
-    logicDet.fetchTableData();
+    final msg = received['intro'] ?? '你好';
+
+    if (logicDet.name != '' && received.isNotEmpty) {
+      logicDet.fetchTableData();
+    } else {
+      logicDet.addMessageIntro(msg);
+    }
     return GetBuilder<SUDetailsLogic>(builder: (logic) {
       return SUCustomScaffold(
           // leading: IconButton(

@@ -48,43 +48,53 @@ class SUChatListBg extends StatelessWidget {
               ).createShader(bounds);
             },
             child: Obx(
-              () => ListView.builder(
-                  // padding: EdgeInsets.zero,
-                  padding: EdgeInsets.only(
-                    bottom: ((logic.isStreamLoading.value &&
-                                !logic.isStopGeneration.value) ||
-                            (detLogic.isStreamLoadingDet.value &&
-                                !detLogic.isStopGenerationDet.value))
-                        ? 52.0
-                        : 12.0,
-                  ),
-                  reverse: true,
-                  shrinkWrap: true,
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
-                  controller: logic.state.scrollController,
-                  itemCount: dataList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    if (index >= (dataList.length ?? 0)) {
-                      return SizedBox.fromSize();
-                    }
-                    // SUMessageModel chatModel =
-                    //     logic.assistantModel.metadata!.messages![index];
-                    SUChatContentModel chatModel = dataList[index];
-                    // debugPrint(
-                    //     '--chatModel = ${chatModel.inlineSource?.data ?? ''}');
-                    if (chatModel.type == SUChatType.intro) {
-                      // debugPrint('--介绍 = ');
-                      return SUChatIntroCell(chatModel);
-                    } else if (chatModel.type == SUChatType.mine) {
-                      // debugPrint('--我的 = ');
+              () => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: ListView.builder(
+                          // padding: EdgeInsets.zero,
+                          padding: EdgeInsets.only(
+                            bottom: ((logic.isStreamLoading.value &&
+                                        !logic.isStopGeneration.value) ||
+                                    (detLogic.isStreamLoadingDet.value &&
+                                        !detLogic.isStopGenerationDet.value))
+                                ? 52.0
+                                : 12.0,
+                          ),
+                          reverse: true,
+                          shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(
+                              parent: AlwaysScrollableScrollPhysics()),
+                          controller: logic.state.scrollController,
+                          itemCount: dataList.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            if (index >= (dataList.length ?? 0)) {
+                              return SizedBox.fromSize();
+                            }
+                            // SUMessageModel chatModel =
+                            //     logic.assistantModel.metadata!.messages![index];
+                            SUChatContentModel chatModel = dataList[index];
+                            // debugPrint(
+                            //     '--chatModel = ${chatModel.inlineSource?.data ?? ''}');
+                            if (chatModel.type == SUChatType.intro) {
+                              // debugPrint('--介绍 = ');
+                              return SUChatIntroCell(chatModel);
+                            } else if (chatModel.type == SUChatType.mine) {
+                              // debugPrint('--我的 = ');
 
-                      return SUChatMineCell(chatModel);
-                    } else {
-                      // debugPrint('--对方 = ');
-                      return SUChatOtherCell(chatModel);
-                    }
-                  }),
+                              return SUChatMineCell(chatModel);
+                            } else {
+                              // debugPrint('--对方 = ');
+                              return SUChatOtherCell(chatModel);
+                            }
+                          }),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

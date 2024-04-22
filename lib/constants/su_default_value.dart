@@ -167,6 +167,8 @@ class SUDefVal {
   /// 重新登录
   static const String kPushNeedLogin = "PushNeedLogin";
 
+  /// 会话列表
+  static const String kChattedUpdate = "ChattedUpdate";
   /************************* data_base KEY *************************/
 
   static const String kdbName = "sugar_app_db";

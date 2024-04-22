@@ -16,7 +16,7 @@ import 'su_home_logic.dart';
 class SUHomePage extends StatelessWidget {
   SUHomePage({Key? key}) : super(key: key);
 
-  final logicMine = Get.find<SUMineLogic>();
+  final logicMine = Get.put(SUMineLogic());
   final logicDis = Get.find<SUDiscoverLogic>();
 
   final logic = Get.find<SUHomeLogic>();
@@ -33,9 +33,9 @@ class SUHomePage extends StatelessWidget {
           leading: Builder(builder: (context) {
             return IconButton(
               icon: Image.asset(
-                Assets.homeMine,
-                width: 28.w,
-                height: 28.w,
+                state.isDiscover ? Assets.homeMine : Assets.homeMineW,
+                width: 24.w,
+                height: 24.w,
               ),
               // const CircleAvatar(
               //   radius: 20.0,
@@ -55,10 +55,13 @@ class SUHomePage extends StatelessWidget {
           }),
           actions: [
             IconButton(
-              icon: Icon(Icons.search,
-                  color: state.isDiscover
-                      ? SUColorSingleton().naviDisDefColor
-                      : SUColorSingleton().naviDefColor),
+              icon: Image.asset(
+                state.isDiscover
+                    ? Assets.homeSearchIcon
+                    : Assets.homeSearchIconW,
+                width: 24.w,
+                height: 24.w,
+              ),
               onPressed: () {
                 // 右侧按钮点击事件
                 FocusScope.of(context).requestFocus(FocusNode());

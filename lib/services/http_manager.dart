@@ -5,6 +5,9 @@ import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sugar/services/su_config.dart';
 
+import '../global/db/daos/chat_content_dao.dart';
+import '../global/db/daos/session_list_dao.dart';
+import '../global/db/database_helper.dart';
 import '../global/user/user_logic.dart';
 import '../su_export_comment.dart';
 
@@ -431,10 +434,19 @@ doError(e) {
 }
 
 /// token失效
-accountExpired() {
+accountExpired() async {
   log('登陆已失效，清空用户数据，刷新本地缓存用户数据');
+  await SharedPreferenceUtil().removeData(SUDefVal.kToken);
+  final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
+  await sessionListDao.deleteAll();
+  final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
+  await chatContentDao.deleteAll();
 
-  bus.emit(SUDefVal.kWebBlockCode);
+  var params = {"title": '登录', "url": SUUrl.kLoginWebUrl, "need_back": false};
+  // SURouterHelper.pathPage(SURouterPath.webViewPath, params);
+  SURouterHelper.pathOffAllPage(SURouterPath.webViewPath, params);
+
+  // bus.emit(SUDefVal.kWebBlockCode);
 
   //退出登录， 弹出登录框
   // SUUtils.getCurrentContext(completionHandler: (context) async {

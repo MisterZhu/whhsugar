@@ -19,6 +19,7 @@ class SessionListDao {
       );
       if (existingRows.isNotEmpty) {
         //如果存在相同name的记录，则更新数据
+        debugPrint('---------------如果存在相同name的记录，则更新数据');
         await _db.update(
           SUDefVal.kSessionList,
           row,
@@ -26,6 +27,8 @@ class SessionListDao {
           whereArgs: [name],
         );
       } else {
+        debugPrint('--------------否则插入新记录');
+
         // 否则插入新记录
         await _db.insert(SUDefVal.kSessionList, row);
       }
@@ -87,7 +90,7 @@ class SessionListDao {
   Future<List<Map<String, dynamic>>> query(
       String columnName, dynamic value) async {
     return await _db.query(
-      SUDefVal.kChatContent,
+      SUDefVal.kSessionList,
       where: '$columnName = ?',
       whereArgs: [value],
     );

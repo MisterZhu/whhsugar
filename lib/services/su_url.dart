@@ -4,8 +4,10 @@ class SUUrl {
   /************************* 登录 *************************/
 
   /// 登录webUrl
+  // static const String kLoginWebUrl =
+  //     'https://casdoor.tigerbot.com/login/oauth/authorize?client_id=931f8237ead11af361c3&response_type=code&redirect_uri=http://localhost:9000/callback&scope=read&state=casdoor';
   static const String kLoginWebUrl =
-      'https://casdoor.tigerbot.com/login/oauth/authorize?client_id=931f8237ead11af361c3&response_type=code&redirect_uri=http://localhost:9000/callback&scope=read&state=casdoor';
+      'https://casdoor.tigerbot.com/login/oauth/authorize?client_id=c41c9ba1bc347bbfff47&response_type=code&redirect_uri=http://localhost:9000/callback&scope=read&state=casdoor';
   //https://casdoor.tigerbot.com/login/oauth/authorize?client_id=931f8237ead11af361c3&response_type=code&redirect_uri=http://localhost:9000/callback&scope=read&state=sugar
   //https://casdoor.tigerbot.com/login/oauth/authorize?client_id=931f8237ead11af361c3&response_type=code&redirect_uri=http://localhost:9000/callback&scope=read&state=casdoor
   ///获取token

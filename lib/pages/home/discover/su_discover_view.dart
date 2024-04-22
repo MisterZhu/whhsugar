@@ -187,12 +187,20 @@ class SUDiscoverPage extends StatelessWidget {
                     child: GetBuilder<SUDiscoverLogic>(
                       id: SUDefVal.kChatBottom,
                       builder: (logic) {
-                        return SUChatListBg(
-                          bgColor: model.metadata?.backgroundColor ?? '',
-                          logic: logic,
-                          dataList: logic.assistantModel.metadata!.chats!,
-                          fromDet: false,
-                        );
+                        if (logic.assistantModel.metadata?.chats != null &&
+                            (logic.assistantModel.metadata?.chats?.isNotEmpty ??
+                                true)) {
+                          // 若 chats 数组不为空且有数据，则显示 SUChatListBg
+                          return SUChatListBg(
+                            bgColor: model.metadata?.backgroundColor ?? '',
+                            logic: logic,
+                            dataList: logic.assistantModel.metadata!.chats!,
+                            fromDet: false,
+                          );
+                        } else {
+                          // 若 chats 数组为空或没有数据，则显示占位内容或其他组件
+                          return Container();
+                        }
                       },
                     ),
                   ),

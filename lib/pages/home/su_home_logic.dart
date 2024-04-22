@@ -35,6 +35,8 @@ class SUHomeLogic extends GetxController {
 
     bus.on(SUDefVal.kPushNeedLogin, onEventCallback);
     bus.on(SUDefVal.kWebBlockCode, onLoginFinishBack);
+    bus.on(SUDefVal.kChattedUpdate, onChattedListBack);
+
     dataSource = <SUAssistantModel>[];
     threadData = <SUSessionModel>[];
 
@@ -86,6 +88,66 @@ class SUHomeLogic extends GetxController {
     getUserToken(arg);
   }
 
+  ///监听刷新会话列表
+  Future<void> onChattedListBack(dynamic arg) async {
+    threadData = <SUSessionModel>[];
+
+    final sessionListDao = SessionListDao(DatabaseHelper.instance.database);
+    final data = await sessionListDao.getAll();
+
+    debugPrint('sessionDao 表中的数据: $data');
+    for (var json in data) {
+      SUSessionModel chatContent = SUSessionModel.fromJson(json);
+      threadData?.add(chatContent);
+    }
+
+    List<Map<String, dynamic>> mapValues = [];
+    Map<String, SUAssistantModel> aMap = {};
+    for (var aObj in dataSource!) {
+      aMap[aObj?.name ?? 'a'] = aObj;
+    }
+
+    for (var bObj in threadData!) {
+      String? assistantName = bObj.assistant;
+      if (aMap.containsKey(assistantName)) {
+        // 找到匹配的对象，更新属性
+        bObj.avatarUrl = aMap[assistantName]?.metadata?.avatar;
+        bObj.backgroundImage = aMap[assistantName]?.metadata?.backgroundImage;
+        bObj.displayName = aMap[assistantName]?.displayName;
+        bObj.description = aMap[assistantName]?.description;
+        bObj.lastMessage = aMap[assistantName]?.metadata?.greetings?.last ?? '';
+        bObj.lastTime = aMap[assistantName]?.createTime;
+        bObj.assistantName = aMap[assistantName]?.displayName;
+
+        mapValues.add({
+          'assistant': bObj.assistant,
+          'name': bObj.name,
+          'displayName': bObj.displayName,
+          'description': bObj.description,
+          'owner': bObj.owner,
+          'createTime': bObj.createTime,
+          'avatarUrl': bObj.avatarUrl,
+          'backgroundImage': bObj.backgroundImage,
+          'displayName': bObj.displayName,
+          'assistantName': bObj.displayName,
+          'assistantName': bObj.assistantName,
+          'lastMessage': bObj.lastMessage,
+          'lastTime': bObj.lastTime,
+          'updateTime': bObj.updateTime
+        });
+      }
+    }
+    await sessionListDao.batchInsert(mapValues);
+    final data1 = await sessionListDao.getAll();
+
+    threadData = <SUSessionModel>[];
+    for (var json in data1) {
+      SUSessionModel chatContent = SUSessionModel.fromJson(json);
+      threadData?.add(chatContent);
+    }
+    update([SUDefVal.kChatted]);
+  }
+
   ///监听翻页
   void changePageIndex(int index) {
     if (pageIndex == index) {
@@ -127,7 +189,7 @@ class SUHomeLogic extends GetxController {
   ///-------------------------------Network Request-------------------------------
   ///获取用户token
   Future<void> getUserToken(Map<String, String> params) async {
-    debugPrint('--------------getUserToken--begin');
+    debugPrint('--------------getUserToken--begin: $params');
 
     await HttpManager.instance.post(
         url: SUUrl.kGetTokenUrl,
@@ -158,34 +220,33 @@ class SUHomeLogic extends GetxController {
 
   ///获取用户信息
   Future<void> getUserInfo() async {
-    Map<String, dynamic> value = {
-      'id': '1',
-      'name': 'John Doe',
-      'displayName': 'John',
-      'avatar': 'https://qiniu.aimissu.top/temporary/sugara_logo1.png',
-      'properties': {'project': 'Test Project', 'projectId': '123456789'},
-      'createdTime': '2022-04-01',
-      'updatedTime': '2022-04-02',
-    };
+    // Map<String, dynamic> value = {
+    //   'id': '1',
+    //   'name': 'John Doe',
+    //   'displayName': 'John',
+    //   'avatar': 'https://qiniu.aimissu.top/temporary/sugara_logo1.png',
+    //   'properties': {'project': 'Test Project', 'projectId': '123456789'},
+    //   'createdTime': '2022-04-01',
+    //   'updatedTime': '2022-04-02',
+    // };
+    // userLogic.user = UserModel.fromJson(value);
 
-    userLogic.user = UserModel.fromJson(value);
-
-    // LoadingUtil.show();
-    // await HttpManager.instance.get(
-    //     url: '${SUUrl.kGetUserInfoUrl}$name/userInfo',
-    //     params: null,
-    //     success: (value) {
-    //       LoadingUtil.hide();
-    //       log('response : \n $value');
-    //       userLogic.user = UserModel.fromJson(value);
-    //       userLogic.updateUser(userLogic.user);
-    //       // LoadingUtil.info(text: '登录成功');
-    //       getThreadsList();
-    //     },
-    //     failure: (err) {
-    //       LoadingUtil.hide();
-    //       // LoadingUtil.info(text: '登录失败');
-    //     });
+    LoadingUtil.show();
+    await HttpManager.instance.get(
+        url: '${SUUrl.kGetUserInfoUrl}$name/userInfo',
+        params: null,
+        success: (value) {
+          LoadingUtil.hide();
+          log('response : \n $value');
+          userLogic.user = UserModel.fromJson(value);
+          userLogic.updateUser(userLogic.user);
+          // LoadingUtil.info(text: '登录成功');
+          getThreadsList();
+        },
+        failure: (err) {
+          LoadingUtil.hide();
+          // LoadingUtil.info(text: '登录失败');
+        });
   }
 
   ///获取所有会话列表
@@ -221,6 +282,8 @@ class SUHomeLogic extends GetxController {
             });
             sessionListDao.batchInsert(mapValues);
             fetchTableData();
+          } else {
+            getAssistantsList();
           }
         },
         failure: (err) {
@@ -268,6 +331,7 @@ class SUHomeLogic extends GetxController {
   ///获取助手列表
   Future<void> getAssistantsList() async {
     final logicDis = Get.find<SUDiscoverLogic>();
+    dataSource = <SUAssistantModel>[];
 
     await HttpManager.instance.get(
         url: SUUrl.kGetAssListUrl,
@@ -333,10 +397,6 @@ class SUHomeLogic extends GetxController {
               List<SUSessionModel>? adults = threadData
                   ?.where((user) => user.assistant == logicDis.assistantId)
                   .toList();
-              debugPrint(
-                  '---------------backgroundImage: ${adults?.last.backgroundImage}');
-              debugPrint(
-                  '---------------assistantName: ${adults?.last.assistantName}');
 
               if ((adults?.length ?? 0) > 0) {
                 logicDis.threadName = adults?.last?.name ?? '';
@@ -344,6 +404,7 @@ class SUHomeLogic extends GetxController {
                 logicDis.getMessagesList();
               } else {
                 logicDis.threadName = '';
+                logicDis.assistantModel = dataSource![0];
               }
             }
             logicDis.update([SUDefVal.kDiscover]);
