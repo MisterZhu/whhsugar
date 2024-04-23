@@ -76,7 +76,8 @@ class SUSearchPage extends StatelessWidget {
     return Container(
       color: SUColorSingleton().bgBotColor,
       child: Padding(
-        padding: EdgeInsets.only(left: 20.0.w, right: 20.0.w, bottom: 20.0.w),
+        padding: EdgeInsets.only(
+            left: 20.0.w, right: 20.0.w, bottom: 20.0.w, top: 10.w),
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, // 3 items per row
@@ -90,7 +91,7 @@ class SUSearchPage extends StatelessWidget {
             return GestureDetector(
               onTap: () {
                 // Handle item tap
-                searchLogic.clickItemAction(index);
+                searchLogic.clickItemAction(items[index]);
               },
               child: SUSearchItem(items[index]),
             );

@@ -17,11 +17,11 @@ class SUHomePage extends StatelessWidget {
   SUHomePage({Key? key}) : super(key: key);
 
   final logicMine = Get.put(SUMineLogic());
-  final logicDis = Get.find<SUDiscoverLogic>();
+  final logicDis = Get.put(SUDiscoverLogic());
 
-  final logic = Get.find<SUHomeLogic>();
+  final logic = Get.put(SUHomeLogic());
   final state = Get.find<SUHomeLogic>().state;
-  final userLogic = Get.find<UserLogic>();
+  final userLogic = Get.put(UserLogic());
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -92,11 +92,16 @@ class SUHomePage extends StatelessWidget {
                 child: Text(
                   'discover'.tr,
                   style: TextStyle(
-                    // fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18.sp,
                     color: state.isDiscover
                         ? SUColorSingleton().naviDisDefColor
                         : SUColorSingleton().naviSecColor,
-                    shadows: const [Shadow(color: Colors.white, blurRadius: 1)],
+                    shadows: [
+                      Shadow(
+                          color: SUColorSingleton().saveBtnBgColor,
+                          blurRadius: 0.5)
+                    ],
                   ),
                 ),
               ),
@@ -106,17 +111,22 @@ class SUHomePage extends StatelessWidget {
                   // 中间右侧按钮点击事件
                   print('Chats Button Clicked');
                   state.isDiscover = false;
-                  await logic.fetchTableData();
+                  await logic.onlyFetchTableData();
                   logic.update();
                 },
                 child: Text(
                   'chats'.tr,
                   style: TextStyle(
-                    // fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18.sp,
                     color: state.isDiscover
                         ? SUColorSingleton().naviDisSecColor
                         : SUColorSingleton().naviDefColor,
-                    shadows: const [Shadow(color: Colors.white, blurRadius: 1)],
+                    shadows: [
+                      Shadow(
+                          color: SUColorSingleton().saveBtnBgColor,
+                          blurRadius: 0.5)
+                    ],
                   ),
                 ),
               ),

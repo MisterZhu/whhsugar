@@ -92,8 +92,6 @@ class SUTranslations extends Translations {
           "Tell you everything i know": '“Tell you everything I know"',
           "Instant download experience": "Long press to recognize QR code.",
           "Example：": "Example：",
-          "Hello~ I am TigerBot":
-              "Hello~ I am TigerBot, the large model, and I'm delighted to assist you! ",
           "I possess capabilities in general Q&A":
               "I possess capabilities in general Q&A, text generation, table creation, code generation, role-playing, multi-turn conversations, real-time searching, and more. Let's communicate and collaborate seamlessly!",
           "Change": "Change",
@@ -131,7 +129,8 @@ class SUTranslations extends Translations {
           "search_Talker": "Search for a Talker",
           "No data available": "No data available",
           "Feedback": "Feedback",
-          "Go to Search": "去搜索",
+          "Go to Search": "Go to Search",
+          "nickname": "nickname：",
           "No chat Tips": "No chat history yet! Go search for a talker!",
           "No search results found": "No search results found",
           "NoticeEverything":
@@ -203,7 +202,7 @@ class SUTranslations extends Translations {
           "Write your message": "请填写您申请注销的原因，我们将会作为宝贵意见进行参考",
           "Account cancellation": "注销账户",
           "Logout warning prompt":
-              "您向TigerBot提出注销账号申请后，经Sugar审核同意，由Sugar注销您的账号，该账号即解除与Sugar的服务协议关系。请谨慎操作！",
+              "您向Sugar提出注销账号申请后，经Sugar审核同意，由Sugar注销您的账号，该账号即解除与Sugar的服务协议关系。请谨慎操作！",
           "Info": "基本信息",
           "Account": "账户",
           "Logout": "退出登录",
@@ -222,7 +221,6 @@ class SUTranslations extends Translations {
           "Tell you everything i know": '“知无不答，言无不尽"',
           "Instant download experience": "长按识别二维码 \n即刻下载体验",
           "Example：": "您可以试试以下例子：",
-          "Hello~ I am TigerBot": "您好~我是TigerBot大模型，很高兴为您服务！",
           "I possess capabilities in general Q&A":
               "我具备通用问答、文本生成、表格生成、代码生成、角色扮演、多轮对话、实时搜索等能力。让我们一起愉快地交流吧！",
           "Change": "换一换",
@@ -260,6 +258,7 @@ class SUTranslations extends Translations {
           "No data available": "暂无数据",
           "Feedback": "反馈",
           "Go to Search": "去搜索",
+          "nickname": "昵称：",
           "No chat Tips": "还没有聊天记录哦！快去搜索一个谈话者吧！",
           "No search results found": "没有搜到任何结果",
           "NoticeEverything": "注意:Talkie所说的一切都是由AI生成的!",

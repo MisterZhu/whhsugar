@@ -42,6 +42,8 @@ class SUMyProfilePage extends StatelessWidget {
 
   /// body
   Widget body(BuildContext context) {
+    final userid = userLogic.user.id ?? '';
+    String endSubstring = SUUtils().extractSubstring(userid, 8, isFront: false);
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus(); // 点击屏幕收起键盘
@@ -132,7 +134,7 @@ class SUMyProfilePage extends StatelessWidget {
                               width: 20.w,
                             ),
                             Text(
-                              '昵称',
+                              'nickname'.tr,
                               style: TextStyle(
                                   color: SUColorSingleton().textColor,
                                   fontSize: 16.sp),
@@ -157,9 +159,9 @@ class SUMyProfilePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    // SizedBox(
-                    //   height: 16.w,
-                    // ),
+                    SizedBox(
+                      height: 16.w,
+                    ),
                     SizedBox(
                       height: 56.w,
                       child: Center(
@@ -169,7 +171,7 @@ class SUMyProfilePage extends StatelessWidget {
                               width: 20.w,
                             ),
                             Text(
-                              '性别',
+                              'UID：',
                               style: TextStyle(
                                   color: SUColorSingleton().textColor,
                                   fontSize: 16.sp),
@@ -177,40 +179,69 @@ class SUMyProfilePage extends StatelessWidget {
                             SizedBox(
                               width: 50.w,
                             ),
-                            Expanded(
-                                child: GestureDetector(
-                              onTap: () {
-                                // logic.showPopup();
-                              },
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                key: state.itemKey,
-                                children: [
-                                  SizedBox(
-                                    width: 219.w,
-                                    child: Text(
-                                      (logic.selectSex == 0) ? '男' : '女',
-                                      style: TextStyle(
-                                          color: SUColorSingleton().textColor,
-                                          fontSize: 16.sp),
-                                    ),
-                                  ),
-                                  // Icon(
-                                  //   Icons.unfold_more_sharp,
-                                  //   color: SUDefVal.chatBGColor,
-                                  //   size: 24.w,
-                                  // ),
-                                  SizedBox(
-                                    width: 12.w,
-                                  ),
-                                ],
+                            Container(
+                              width: 229.w,
+                              child: Texts.normal(
+                                endSubstring,
+                                maxLines: 1,
+                                color: SUColorSingleton().textColor,
                               ),
-                            )),
+                            )
                           ],
                         ),
                       ),
-                    )
+                    ),
+                    // SizedBox(
+                    //   height: 56.w,
+                    //   child: Center(
+                    //     child: Row(
+                    //       children: [
+                    //         SizedBox(
+                    //           width: 20.w,
+                    //         ),
+                    //         Text(
+                    //           '性别',
+                    //           style: TextStyle(
+                    //               color: SUColorSingleton().textColor,
+                    //               fontSize: 16.sp),
+                    //         ),
+                    //         SizedBox(
+                    //           width: 50.w,
+                    //         ),
+                    //         Expanded(
+                    //             child: GestureDetector(
+                    //           onTap: () {
+                    //             // logic.showPopup();
+                    //           },
+                    //           child: Row(
+                    //             mainAxisAlignment:
+                    //                 MainAxisAlignment.spaceBetween,
+                    //             key: state.itemKey,
+                    //             children: [
+                    //               SizedBox(
+                    //                 width: 219.w,
+                    //                 child: Text(
+                    //                   (logic.selectSex == 0) ? '男' : '女',
+                    //                   style: TextStyle(
+                    //                       color: SUColorSingleton().textColor,
+                    //                       fontSize: 16.sp),
+                    //                 ),
+                    //               ),
+                    //               // Icon(
+                    //               //   Icons.unfold_more_sharp,
+                    //               //   color: SUDefVal.chatBGColor,
+                    //               //   size: 24.w,
+                    //               // ),
+                    //               SizedBox(
+                    //                 width: 12.w,
+                    //               ),
+                    //             ],
+                    //           ),
+                    //         )),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // )
                   ],
                 ),
               ),

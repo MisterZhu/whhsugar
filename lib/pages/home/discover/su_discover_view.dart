@@ -94,6 +94,7 @@ class SUDiscoverPage extends StatelessWidget {
                           itemCount: logicHome.dataSource?.length ?? 0,
                           viewportFraction: 1.0,
                           scale: 1.0,
+                          index: logicHome.pageIndex,
                           loop: true,
                           onIndexChanged: (int index) {
                             debugPrint('Swiper scrolled to page $index');

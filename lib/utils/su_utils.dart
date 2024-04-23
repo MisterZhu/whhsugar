@@ -123,6 +123,7 @@ class SUUtils {
     SystemChrome.setSystemUIOverlayStyle(style);
   }
 
+  ///时间字符串处理
   String dateTimeFormat(String timeStr) {
     DateTime dateTime = DateTime.parse(timeStr);
     DateTime today = DateTime.now();
@@ -138,6 +139,21 @@ class SUUtils {
       String formattedDate =
           "${dateTime.year}/${dateTime.month}/${dateTime.day}";
       return formattedDate;
+    }
+  }
+
+  ///字符串截取
+  String extractSubstring(String input, int length, {bool isFront = true}) {
+    if (input.length <= length) {
+      return input; // 如果字符串长度小于等于指定长度，则直接返回原字符串
+    }
+
+    if (isFront) {
+      // 截取前指定长度
+      return input.substring(0, length);
+    } else {
+      // 截取后指定长度
+      return input.substring(input.length - length);
     }
   }
 }

@@ -42,7 +42,11 @@ class SUWebviewLogic extends GetxController {
           // hideScrollBars();
         },
         onWebResourceError: (WebResourceError error) {
+          ///网络请求权限未开启时，延时重复加载
           debugPrint('--------------------WebResourceError: ');
+          Future.delayed(const Duration(seconds: 2), () {
+            controller.loadRequest(Uri.parse(url));
+          });
         },
         onNavigationRequest: (request) {
           debugPrint(

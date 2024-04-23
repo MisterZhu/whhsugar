@@ -22,8 +22,11 @@ class SUMinePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final UserLogic userLogic = Get.find<UserLogic>();
+    final userid = userLogic.user.id ?? '';
+    String endSubstring = SUUtils().extractSubstring(userid, 8, isFront: false);
 
     return Drawer(
+      width: 250.w,
       child: Container(
         color: SCColors.color_1C1D1F,
         child: Column(
@@ -67,11 +70,11 @@ class SUMinePage extends StatelessWidget {
                         SizedBox(
                           height: 8.w,
                         ),
-                        Obx(() => Text(
-                              userLogic.user.displayName?.value ?? '',
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 12.sp),
-                            )),
+                        Text(
+                          'UID:$endSubstring',
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 12.sp),
+                        )
                       ],
                     ),
                   ],

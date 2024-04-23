@@ -33,18 +33,19 @@ class SUDetailsPage extends StatelessWidget {
     }
     return GetBuilder<SUDetailsLogic>(builder: (logic) {
       return SUCustomScaffold(
-          // leading: IconButton(
-          //   icon: Image.asset(
-          //     Assets.commonBackIconW,
-          //     width: 24.w,
-          //     height: 24.w,
-          //     // color: SUColorSingleton().naviDefColor
-          //   ),
-          //   onPressed: () {
-          //     // 左侧按钮点击事件
-          //     SURouterHelper.back(null);
-          //   },
-          // ),
+          leading: IconButton(
+            icon: Image.asset(
+              Assets.commonBackIconW,
+              width: 24.w,
+              height: 24.w,
+              // color: SUColorSingleton().naviDefColor
+            ),
+            onPressed: () {
+              bus.emit(SUDefVal.kChattedUpdate, null);
+              // 左侧按钮点击事件
+              SURouterHelper.back(null);
+            },
+          ),
           title: logicDet.title,
           centerTitle: true,
           navBackgroundColor: Colors.transparent,

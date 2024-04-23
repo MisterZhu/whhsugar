@@ -6,7 +6,7 @@ class SUDefVal {
   const SUDefVal._();
 
   /// APP名称
-  static const String appName = 'TigerBot';
+  static const String appName = 'Sugar';
 
   /// 用户协议
   static const String userAgreementUrl =

@@ -23,7 +23,7 @@ class SUHomeLogic extends GetxController {
 
   List<SUAssistantModel>? dataSource;
   List<SUSessionModel>? threadData;
-  // List<SUSessionModel>? dataList;
+  List<SUSessionModel>? dataList;
 
   final userLogic = Get.find<UserLogic>();
 
@@ -55,15 +55,26 @@ class SUHomeLogic extends GetxController {
     // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     String? token = SharedPreferenceUtil().getData(SUDefVal.kToken);
     if (token != null) {
-      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-      log('decodedToken : \n ${decodedToken['name']}');
-      name = decodedToken['name'];
-      if (name.isNotEmpty && name != '') {
-        HttpManager.instance.updateHeaders({
-          'Content-Type': 'application/json; charset=utf-8',
-          'Authorization': 'Bearer $token'
-        });
-        getUserInfo();
+      try {
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+        log('decodedToken : \n ${decodedToken['name']}');
+        name = decodedToken['name'];
+        if (name.isNotEmpty && name != '') {
+          HttpManager.instance.updateHeaders({
+            'Content-Type': 'application/json; charset=utf-8',
+            'Authorization': 'Bearer $token'
+          });
+          getUserInfo();
+        }
+      } catch (e) {
+        var params = {
+          "title": '登录',
+          "url": SUUrl.kLoginWebUrl,
+          "need_back": false
+        };
+        // SURouterHelper.pathPage(SURouterPath.webViewPath, params);
+        SURouterHelper.pathOffAllPage(SURouterPath.webViewPath, params);
+        // 处理解码异常
       }
     } else {
       var params = {
@@ -115,8 +126,13 @@ class SUHomeLogic extends GetxController {
         bObj.backgroundImage = aMap[assistantName]?.metadata?.backgroundImage;
         bObj.displayName = aMap[assistantName]?.displayName;
         bObj.description = aMap[assistantName]?.description;
-        bObj.lastMessage = aMap[assistantName]?.metadata?.greetings?.last ?? '';
-        bObj.lastTime = aMap[assistantName]?.createTime;
+        if (bObj.lastMessage == null || bObj.lastMessage == '') {
+          bObj.lastMessage =
+              aMap[assistantName]?.metadata?.greetings?.last ?? '';
+        }
+        if (bObj.lastTime == null || bObj.lastTime == '') {
+          bObj.lastTime = aMap[assistantName]?.createTime;
+        }
         bObj.assistantName = aMap[assistantName]?.displayName;
 
         mapValues.add({
@@ -153,6 +169,8 @@ class SUHomeLogic extends GetxController {
     if (pageIndex == index) {
       return;
     }
+    debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>-----index = $index');
+
     pageIndex = index;
 
     SUUtils.getCurrentContext(completionHandler: (context) async {
@@ -161,14 +179,19 @@ class SUHomeLogic extends GetxController {
     final logicDis = Get.find<SUDiscoverLogic>();
 
     if ((dataSource?.length ?? 0) > index) {
+      // dataSource!.forEach((element) {
+      //   debugPrint(
+      //       '>>>>>>>>>>>>>>>>>>>>>>>>>>-----index = ${element.displayName}');
+      //   debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>-----name = ${element.name}');
+      //   debugPrint(
+      //       '>>>>>>>>>>>>>>>>>>>>>>>>>>-----assistantId = ${logicDis.assistantId}');
+      // });
       final listModel = dataSource![pageIndex];
       logicDis.assistantId = listModel.name!;
       List<SUSessionModel>? adults = threadData
           ?.where((user) => user.assistant == logicDis.assistantId)
           .toList();
       debugPrint('>>>>>>>>>>>>>>>>>>>>>>>>>>-----debug = ${adults?.length}');
-      debugPrint(
-          '>>>>>>>>>>>>>>>>>>>>>>>>>>-----logicDis.assistantId = ${logicDis.assistantId}');
 
       if ((adults?.length ?? 0) > 0) {
         logicDis.threadName = adults?.last?.name ?? '';
@@ -292,7 +315,28 @@ class SUHomeLogic extends GetxController {
         });
   }
 
-  // 查询表数据
+// 仅查询表数据
+  Future<void> onlyFetchTableData() async {
+    try {
+      final sessionDao = SessionListDao(DatabaseHelper.instance.database);
+      // final data = await chatContentDao.getAll();
+
+      final data = await sessionDao.getAll();
+      //List<SUChatContentModel> chatContentList = data.map((json) => SUChatContentModel.fromJson(json)).toList();
+      threadData = <SUSessionModel>[];
+
+      debugPrint('sessionDao 表中的数据: $data');
+      for (var json in data) {
+        SUSessionModel chatContent = SUSessionModel.fromJson(json);
+        threadData?.add(chatContent);
+      }
+      debugPrint('sessionDao 表中的数据: $data');
+    } catch (error) {
+      debugPrint('find error: $error');
+    }
+  }
+
+  // 初始化，只能首次调用 查询表数据
   Future<void> fetchTableData() async {
     try {
       final sessionDao = SessionListDao(DatabaseHelper.instance.database);
@@ -309,20 +353,6 @@ class SUHomeLogic extends GetxController {
       }
       // dataList = dataList!.reversed.toList();
       getAssistantsList();
-    } catch (error) {
-      debugPrint('find error: $error');
-    }
-  }
-
-  // 仅查询表数据
-  Future<void> fetchTableDataOnly() async {
-    try {
-      final sessionDao = SessionListDao(DatabaseHelper.instance.database);
-      // final data = await chatContentDao.getAll();
-
-      final data = await sessionDao.getAll();
-      //List<SUChatContentModel> chatContentList = data.map((json) => SUChatContentModel.fromJson(json)).toList();
-      debugPrint('-----------------------sessionDao 表中的数据: $data');
     } catch (error) {
       debugPrint('find error: $error');
     }
@@ -363,9 +393,13 @@ class SUHomeLogic extends GetxController {
                     aMap[assistantName]?.metadata?.backgroundImage;
                 bObj.displayName = aMap[assistantName]?.displayName;
                 bObj.description = aMap[assistantName]?.description;
-                bObj.lastMessage =
-                    aMap[assistantName]?.metadata?.greetings?.last ?? '';
-                bObj.lastTime = aMap[assistantName]?.createTime;
+                if (bObj.lastMessage == null || bObj.lastMessage == '') {
+                  bObj.lastMessage =
+                      aMap[assistantName]?.metadata?.greetings?.last ?? '';
+                }
+                if (bObj.lastTime == null || bObj.lastTime == '') {
+                  bObj.lastTime = aMap[assistantName]?.createTime;
+                }
                 bObj.assistantName = aMap[assistantName]?.displayName;
 
                 mapValues.add({
@@ -387,7 +421,6 @@ class SUHomeLogic extends GetxController {
               }
             }
             await sessionListDao.batchInsert(mapValues);
-            // fetchTableDataOnly();
 
             if ((dataSource?.length ?? 0) > 0) {
               final listModel = dataSource![0];

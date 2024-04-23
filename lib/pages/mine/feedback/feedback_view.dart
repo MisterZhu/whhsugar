@@ -34,7 +34,7 @@ class FeedbackPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                '感谢您对TigerBot的使用，您提出的宝贵建议，我们将在3个工作日内进行处理！',
+                '感谢您对Sugar的使用，您提出的宝贵建议，我们将在3个工作日内进行处理！',
                 style: TextStyle(
                     fontSize: 16.0.sp,
                     // fontWeight: FontWeight.bold,

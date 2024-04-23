@@ -26,10 +26,10 @@ class SUSearchLogic extends GetxController {
     getAssistantsList();
   }
 
-  void clickItemAction(int index) {
+  void clickItemAction(SUAssistantModel listModel) {
     final SUHomeLogic homeLogic = Get.find<SUHomeLogic>();
 
-    final listModel = dataSource![index];
+    // final listModel = dataSource![index];
     final assistantId = listModel.name!;
     // Iterable<SUSessionModel>? adults = threadData
     //     ?.where((user) => user.assistant == logicDis.assistantId);

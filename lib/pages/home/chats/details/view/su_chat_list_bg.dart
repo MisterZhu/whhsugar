@@ -68,6 +68,7 @@ class SUChatListBg extends StatelessWidget {
                           shrinkWrap: true,
                           physics: const BouncingScrollPhysics(
                               parent: AlwaysScrollableScrollPhysics()),
+                          // physics: const ClampingScrollPhysics(),
                           controller: logic.state.scrollController,
                           itemCount: dataList.length,
                           itemBuilder: (BuildContext context, int index) {

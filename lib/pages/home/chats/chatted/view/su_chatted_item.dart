@@ -67,14 +67,17 @@ class SUChattedItem extends StatelessWidget {
                       ),
                       Row(
                         children: [
-                          Text(
-                            model?.lastMessage ?? '',
-                            style: TextStyle(
-                                fontWeight: FontWeight.normal,
-                                color: SUColorSingleton().textSecColor,
-                                fontSize: SUColorSingleton().textSecFont12),
+                          Expanded(
+                            child: Text(
+                              maxLines: 1,
+                              model?.lastMessage ?? '',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.normal,
+                                  color: SUColorSingleton().textSecColor,
+                                  fontSize: SUColorSingleton().textSecFont12),
+                            ),
                           ),
-                          Spacer(), // 让左右两侧的 Text 分散布局
+                          // Spacer(), // 让左右两侧的 Text 分散布局
                           // Image.network('Your Image URL'),
                         ],
                       ),

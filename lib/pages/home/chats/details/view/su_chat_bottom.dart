@@ -68,17 +68,17 @@ class SUChatBottom extends StatelessWidget {
           color: SUColorSingleton().introTextColor,
         ),
       ),
-      SizedBox(
-        height: 4.0.w,
-      ),
-      Text(
-        '13,721 Followers 236,152 Connector',
-        style: TextStyle(
-          fontSize: SUColorSingleton().textTimeFont10,
-          fontWeight: FontWeight.w400,
-          color: SUColorSingleton().introTextColor,
-        ),
-      ),
+      // SizedBox(
+      //   height: 4.0.w,
+      // ),
+      // Text(
+      //   '13,721 Followers 236,152 Connector',
+      //   style: TextStyle(
+      //     fontSize: SUColorSingleton().textTimeFont10,
+      //     fontWeight: FontWeight.w400,
+      //     color: SUColorSingleton().introTextColor,
+      //   ),
+      // ),
       SizedBox(
         height: 12.w,
       ),
