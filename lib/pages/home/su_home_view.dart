@@ -99,7 +99,7 @@ class SUHomePage extends StatelessWidget {
                         : SUColorSingleton().naviSecColor,
                     shadows: [
                       Shadow(
-                          color: SUColorSingleton().saveBtnBgColor,
+                          color: SUColorSingleton().naviDisSecColor,
                           blurRadius: 0.5)
                     ],
                   ),
@@ -124,7 +124,7 @@ class SUHomePage extends StatelessWidget {
                         : SUColorSingleton().naviDefColor,
                     shadows: [
                       Shadow(
-                          color: SUColorSingleton().saveBtnBgColor,
+                          color: SUColorSingleton().naviDisSecColor,
                           blurRadius: 0.5)
                     ],
                   ),

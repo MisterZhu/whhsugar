@@ -76,6 +76,8 @@ class SUSearchItem extends StatelessWidget {
                       height: 7.h,
                     ),
                     Text(
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis, // 超出部分用省略号表示
                       model?.description ?? '',
                       style: TextStyle(
                         color: SUColorSingleton().textDEColor,

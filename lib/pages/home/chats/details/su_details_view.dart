@@ -58,8 +58,7 @@ class SUDetailsPage extends StatelessWidget {
   /// body
   Widget body() {
     return FutureBuilder<String>(
-      future: logicDet.getImageColor(
-          '', logicDet.bgUrl), // 调用 getImageColor 方法获取图片主要颜色
+      future: logicDet.getImageColor('', logicDet.bgUrl),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Container(

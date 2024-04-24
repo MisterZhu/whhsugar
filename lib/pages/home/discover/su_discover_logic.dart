@@ -79,6 +79,10 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
   //   homeLogic.dataSource![homeLogic.pageIndex] = assistantModel;
   //   update([SUDefVal.kChatBottom]);
   // }
+  ///重置消息列表
+  void resetDataList() {
+    dataList = <SUChatContentModel>[];
+  }
 
   ///添加我的消息
   void addMineMessage(String content) {
@@ -182,7 +186,7 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
   }
 
   // 条件sessionName查询聊天表数据
-  void _fetchTableData() async {
+  void fetchTableData() async {
     try {
       final chatContentDao = ChatContentDao(DatabaseHelper.instance.database);
       // final data = await chatContentDao.getAll();
@@ -380,7 +384,7 @@ class SUDiscoverLogic extends GetxController with WidgetsBindingObserver {
 
             assistantModel.metadata?.needRefresh = false;
             assistantModel.metadata?.messages = messageData;
-            _fetchTableData();
+            fetchTableData();
           }
         },
         failure: (err) {

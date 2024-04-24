@@ -419,7 +419,7 @@ class SUDetailsLogic extends GetxController {
 
   String _getPreferredColorHex() {
     print(
-        '------------------dominantColor : ${paletteGenerator.dominantColor?.color.value.toRadixString(16).substring(2)}');
+        '------------------darkMutedColor : ${paletteGenerator.darkMutedColor?.color.value.toRadixString(16).substring(2)}');
     if (paletteGenerator.darkMutedColor != null &&
         paletteGenerator.darkMutedColor!.color != Colors.transparent) {
       return '#${paletteGenerator.darkMutedColor!.color.value.toRadixString(16).substring(2)}';

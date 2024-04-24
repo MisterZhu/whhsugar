@@ -177,7 +177,7 @@ class SUHomeLogic extends GetxController {
       FocusScope.of(context).requestFocus(FocusNode());
     });
     final logicDis = Get.find<SUDiscoverLogic>();
-
+    logicDis.resetDataList();
     if ((dataSource?.length ?? 0) > index) {
       // dataSource!.forEach((element) {
       //   debugPrint(
@@ -199,7 +199,7 @@ class SUHomeLogic extends GetxController {
         if (logicDis.assistantModel.metadata?.needRefresh == true) {
           logicDis.getMessagesList();
         } else {
-          logicDis.update([SUDefVal.kChatBottom]);
+          logicDis.fetchTableData();
         }
       } else {
         logicDis.threadName = '';
@@ -268,7 +268,7 @@ class SUHomeLogic extends GetxController {
         },
         failure: (err) {
           LoadingUtil.hide();
-          // LoadingUtil.info(text: '登录失败');
+          LoadingUtil.info(text: err['message']);
         });
   }
 

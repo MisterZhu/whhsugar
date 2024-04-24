@@ -70,9 +70,10 @@ class SUDefVal {
 
   /// 主色-粉
   static const Color chatThemePinkColor = Color(0xFFFF98AC);
+  static const Color chatThemePinkColor11 = Color(0xFF36464f);
 
   /// 主色-
-  static const String defBgColor = '#837577';
+  static const String defBgColor = '#36464f';
 
   /************************* 常量配置 *************************/
 

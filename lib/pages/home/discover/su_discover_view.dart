@@ -79,12 +79,26 @@ class SUDiscoverPage extends StatelessWidget {
             builder: (logic) {
               final dataSourceLength = logicHome.dataSource?.length ?? 0;
               if (dataSourceLength <= 0) {
-                return Container(
-                  color: Colors.grey[200], // Placeholder color
-                  child: const Center(
-                    child: CircularProgressIndicator(), // Loading indicator
-                  ),
-                );
+                return Container();
+                // return Container(
+                //   color: Colors.grey[200], // Placeholder color
+                //   child: Center(
+                //     child: ElevatedButton(
+                //       style: ElevatedButton.styleFrom(
+                //         backgroundColor:
+                //             SUColorSingleton().saveBtnBgColor, // 设置背景色为黑色
+                //       ),
+                //       onPressed: () {
+                //         logicHome.getUserInfo();
+                //       },
+                //       child: Texts.normal(
+                //         'reload'.tr,
+                //         maxLines: 1,
+                //         color: SUColorSingleton().textColor,
+                //       ),
+                //     ), // Loading indicator
+                //   ),
+                // );
               }
               return Stack(
                 children: [
@@ -130,7 +144,7 @@ class SUDiscoverPage extends StatelessWidget {
     // debugPrint('-------------buildPage');
     return FutureBuilder<String>(
       future: logicDet.getImageColor(model.metadata?.backgroundColor ?? '',
-          model.metadata?.backgroundImage ?? ''), // 调用 getImageColor 方法获取图片主要颜色
+          model.metadata?.backgroundImage ?? ''),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return discoverWidget(
